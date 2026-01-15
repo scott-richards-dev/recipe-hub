@@ -1,0 +1,837 @@
+[
+  {
+    "id": "carbonara-v1",
+    "recipeId": "carbonara",
+    "bookId": "italian",
+    "version": 1,
+    "timestamp": "2025-11-01T10:00:00Z",
+    "author": "Chef Mario",
+    "notes": "Original recipe with basic instructions",
+    "data": {
+      "name": "Spaghetti Carbonara",
+      "description": "A classic Roman pasta dish.",
+      "cookTime": "20 min",
+      "servings": 4,
+      "difficulty": "Medium",
+      "ingredients": [
+        "400g spaghetti",
+        "200g pancetta",
+        "3 eggs",
+        "100g Pecorino Romano cheese",
+        "Black pepper",
+        "Salt"
+      ],
+      "instructions": [
+        "Cook spaghetti in salted water.",
+        "Fry pancetta until crispy.",
+        "Mix eggs with cheese.",
+        "Combine everything and serve."
+      ]
+    }
+  },
+  {
+    "id": "carbonara-v2",
+    "recipeId": "carbonara",
+    "bookId": "italian",
+    "version": 2,
+    "timestamp": "2025-12-15T14:30:00Z",
+    "author": "Chef Luigi",
+    "notes": "Enhanced with more detailed instructions",
+    "data": {
+      "name": "Authentic Spaghetti Carbonara",
+      "description": "A classic Roman pasta dish made with eggs, cheese, and pancetta.",
+      "cookTime": "25 min",
+      "servings": 4,
+      "difficulty": "Medium",
+      "ingredients": [
+        "400g spaghetti",
+        "200g pancetta or guanciale",
+        "4 large eggs",
+        "100g Pecorino Romano cheese, grated",
+        "Black pepper to taste",
+        "Salt for pasta water"
+      ],
+      "instructions": [
+        "Bring a large pot of salted water to boil and cook spaghetti.",
+        "While pasta cooks, dice pancetta and cook in a skillet until crispy.",
+        "In a bowl, whisk together eggs and grated cheese.",
+        "Reserve 1 cup of pasta water, then drain pasta.",
+        "Remove skillet from heat, add pasta to pancetta.",
+        "Quickly stir in egg mixture, adding pasta water to create a creamy sauce.",
+        "Season generously with black pepper and serve immediately."
+      ]
+    }
+  },
+  {
+    "id": "margherita-v1",
+    "recipeId": "margherita",
+    "bookId": "italian",
+    "version": 1,
+    "timestamp": "2025-10-20T11:00:00Z",
+    "author": "Chef Giovanni",
+    "notes": "Basic margherita pizza recipe",
+    "data": {
+      "name": "Pizza Margherita",
+      "description": "Simple pizza with tomato and cheese.",
+      "cookTime": "25 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "ingredients": [
+        "1 pizza dough",
+        "200g tomato sauce",
+        "200g mozzarella",
+        "Fresh basil",
+        "Olive oil"
+      ],
+      "instructions": [
+        "Preheat oven to 475°F.",
+        "Roll out dough.",
+        "Add sauce and cheese.",
+        "Bake for 12-15 minutes.",
+        "Top with basil."
+      ]
+    }
+  },
+  {
+    "id": "margherita-v2",
+    "recipeId": "margherita",
+    "bookId": "italian",
+    "version": 2,
+    "timestamp": "2025-12-05T16:45:00Z",
+    "author": "Chef Paolo",
+    "notes": "Enhanced with better ingredients and technique",
+    "data": {
+      "name": "Pizza Margherita",
+      "description": "Simple and delicious pizza with tomato sauce, mozzarella, and fresh basil.",
+      "cookTime": "30 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "ingredients": [
+        "1 pizza dough",
+        "200g crushed tomatoes",
+        "200g fresh mozzarella",
+        "Fresh basil leaves",
+        "2 tbsp olive oil",
+        "Salt and pepper"
+      ],
+      "instructions": [
+        "Preheat oven to 475°F (245°C).",
+        "Roll out pizza dough on a floured surface.",
+        "Spread crushed tomatoes over dough, leaving a border.",
+        "Tear mozzarella and distribute over sauce.",
+        "Drizzle with olive oil, season with salt and pepper.",
+        "Bake for 12-15 minutes until crust is golden.",
+        "Top with fresh basil leaves and serve hot."
+      ]
+    }
+  },
+  {
+    "id": "margherita-v3",
+    "recipeId": "margherita",
+    "bookId": "italian",
+    "version": 3,
+    "timestamp": "2026-01-10T09:30:00Z",
+    "author": "Chef Francesca",
+    "notes": "Added San Marzano tomatoes for authentic flavor",
+    "data": {
+      "name": "Pizza Margherita",
+      "description": "Authentic Neapolitan pizza with San Marzano tomatoes, buffalo mozzarella, and fresh basil.",
+      "cookTime": "30 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "ingredients": [
+        "1 pizza dough (Neapolitan style)",
+        "200g San Marzano crushed tomatoes",
+        "200g buffalo mozzarella",
+        "Fresh basil leaves",
+        "2 tbsp extra virgin olive oil",
+        "Sea salt and black pepper"
+      ],
+      "instructions": [
+        "Preheat oven to 500°F (260°C) with pizza stone inside.",
+        "Roll out pizza dough on a floured surface to 12-inch diameter.",
+        "Spread San Marzano tomatoes over dough, leaving 1-inch border.",
+        "Tear buffalo mozzarella into pieces and distribute evenly.",
+        "Drizzle with extra virgin olive oil, season with sea salt and black pepper.",
+        "Transfer to preheated pizza stone and bake for 10-12 minutes until crust is golden and bubbly.",
+        "Remove from oven and immediately top with fresh basil leaves.",
+        "Drizzle with more olive oil and serve hot."
+      ]
+    }
+  },
+  {
+    "id": "pad-thai-v1",
+    "recipeId": "pad-thai",
+    "bookId": "asian",
+    "version": 1,
+    "timestamp": "2025-09-15T13:20:00Z",
+    "author": "Chef Somchai",
+    "notes": "Traditional Pad Thai recipe",
+    "data": {
+      "name": "Pad Thai",
+      "description": "Classic Thai noodle dish.",
+      "cookTime": "25 min",
+      "servings": 4,
+      "difficulty": "Medium",
+      "ingredients": [
+        "200g rice noodles",
+        "2 eggs",
+        "200g shrimp",
+        "3 tbsp fish sauce",
+        "2 tbsp tamarind",
+        "Sugar",
+        "Peanuts",
+        "Bean sprouts"
+      ],
+      "instructions": [
+        "Soak noodles in water.",
+        "Make sauce with fish sauce, tamarind, and sugar.",
+        "Stir-fry shrimp and eggs.",
+        "Add noodles and sauce.",
+        "Top with peanuts and bean sprouts."
+      ]
+    }
+  },
+  {
+    "id": "pad-thai-v2",
+    "recipeId": "pad-thai",
+    "bookId": "asian",
+    "version": 2,
+    "timestamp": "2025-11-28T10:15:00Z",
+    "author": "Chef Niran",
+    "notes": "Improved with detailed measurements and technique",
+    "data": {
+      "name": "Pad Thai",
+      "description": "Thailand's famous stir-fried noodle dish with a perfect balance of sweet, sour, and savory.",
+      "cookTime": "30 min",
+      "servings": 4,
+      "difficulty": "Medium",
+      "ingredients": [
+        "200g rice noodles",
+        "2 eggs",
+        "200g shrimp or tofu",
+        "3 tbsp fish sauce",
+        "2 tbsp tamarind paste",
+        "2 tbsp sugar",
+        "Bean sprouts",
+        "Peanuts",
+        "Lime wedges",
+        "Green onions"
+      ],
+      "instructions": [
+        "Soak rice noodles in warm water for 20 minutes.",
+        "Mix fish sauce, tamarind paste, and sugar for the sauce.",
+        "Heat wok, scramble eggs and set aside.",
+        "Stir-fry shrimp or tofu until cooked.",
+        "Add drained noodles and sauce, toss until coated.",
+        "Add eggs back, stir in bean sprouts.",
+        "Serve with peanuts, lime, and green onions."
+      ]
+    }
+  },
+  {
+    "id": "ramen-v1",
+    "recipeId": "ramen",
+    "bookId": "asian",
+    "version": 1,
+    "timestamp": "2025-10-05T08:45:00Z",
+    "author": "Chef Takeshi",
+    "notes": "Simplified ramen for home cooking",
+    "data": {
+      "name": "Tonkotsu Ramen",
+      "description": "Japanese pork bone broth ramen.",
+      "cookTime": "1.5 hours",
+      "servings": 4,
+      "difficulty": "Hard",
+      "ingredients": [
+        "1kg pork bones",
+        "500g ramen noodles",
+        "4 eggs",
+        "200g pork belly",
+        "Green onions",
+        "Nori",
+        "Soy sauce"
+      ],
+      "instructions": [
+        "Simmer pork bones for hours.",
+        "Cook noodles.",
+        "Prepare toppings.",
+        "Assemble bowls and serve."
+      ]
+    }
+  },
+  {
+    "id": "ramen-v2",
+    "recipeId": "ramen",
+    "bookId": "asian",
+    "version": 2,
+    "timestamp": "2026-01-05T15:00:00Z",
+    "author": "Chef Yuki",
+    "notes": "Enhanced with detailed preparation steps",
+    "data": {
+      "name": "Tonkotsu Ramen",
+      "description": "Rich, creamy Japanese pork bone broth with tender noodles and toppings.",
+      "cookTime": "2 hours",
+      "servings": 4,
+      "difficulty": "Hard",
+      "ingredients": [
+        "1kg pork bones",
+        "500g ramen noodles",
+        "4 soft-boiled eggs",
+        "200g pork belly, sliced",
+        "Green onions, sliced",
+        "Nori seaweed",
+        "2 tbsp soy sauce",
+        "1 tbsp sesame oil"
+      ],
+      "instructions": [
+        "Simmer pork bones for 12 hours to create rich broth (or use 2 hours with pressure cooker).",
+        "Strain broth and season with soy sauce and sesame oil.",
+        "Cook ramen noodles according to package directions.",
+        "Prepare soft-boiled eggs and slice pork belly.",
+        "Grill pork belly until crispy.",
+        "Assemble bowls with noodles, pour hot broth over them.",
+        "Top with pork belly, soft-boiled eggs, green onions, and nori.",
+        "Serve immediately while hot."
+      ]
+    }
+  },
+  {
+    "id": "chocolate-cake-v1",
+    "recipeId": "chocolate-cake",
+    "bookId": "desserts",
+    "version": 1,
+    "timestamp": "2025-11-10T14:00:00Z",
+    "author": "Chef Sophie",
+    "notes": "Classic lava cake recipe",
+    "data": {
+      "name": "Chocolate Lava Cake",
+      "description": "Individual chocolate cakes with molten center.",
+      "cookTime": "20 min",
+      "servings": 4,
+      "difficulty": "Medium",
+      "ingredients": [
+        "100g dark chocolate",
+        "100g butter",
+        "2 eggs",
+        "2 egg yolks",
+        "50g sugar",
+        "50g flour"
+      ],
+      "instructions": [
+        "Preheat oven to 425°F.",
+        "Melt chocolate and butter.",
+        "Mix eggs with sugar.",
+        "Combine and add flour.",
+        "Pour into ramekins and bake 12 minutes."
+      ]
+    }
+  },
+  {
+    "id": "chocolate-cake-v2",
+    "recipeId": "chocolate-cake",
+    "bookId": "desserts",
+    "version": 2,
+    "timestamp": "2025-12-20T16:30:00Z",
+    "author": "Chef Pierre",
+    "notes": "Refined technique for perfect molten center",
+    "data": {
+      "name": "Chocolate Lava Cake",
+      "description": "Decadent individual chocolate cakes with a molten center.",
+      "cookTime": "25 min",
+      "servings": 4,
+      "difficulty": "Medium",
+      "ingredients": [
+        "100g dark chocolate",
+        "100g butter",
+        "2 eggs",
+        "2 egg yolks",
+        "50g sugar",
+        "50g flour",
+        "Butter for greasing",
+        "Cocoa powder for dusting"
+      ],
+      "instructions": [
+        "Preheat oven to 425°F (220°C).",
+        "Melt chocolate and butter together.",
+        "Whisk eggs, egg yolks, and sugar until thick.",
+        "Fold in melted chocolate mixture.",
+        "Sift in flour and fold gently.",
+        "Grease ramekins with butter and dust with cocoa powder.",
+        "Pour batter into ramekins, filling 3/4 full.",
+        "Bake for 12-14 minutes until edges are set but center is soft.",
+        "Let cool for 1 minute, then invert onto plates.",
+        "Serve immediately with ice cream or whipped cream."
+      ]
+    }
+  },
+  {
+    "id": "cheesecake-v1",
+    "recipeId": "cheesecake",
+    "bookId": "desserts",
+    "version": 1,
+    "timestamp": "2025-10-01T12:00:00Z",
+    "author": "Chef Rachel",
+    "notes": "Traditional New York style cheesecake",
+    "data": {
+      "name": "New York Cheesecake",
+      "description": "Creamy cheesecake with graham cracker crust.",
+      "cookTime": "1 hour",
+      "servings": 8,
+      "difficulty": "Medium",
+      "ingredients": [
+        "200g graham crackers",
+        "100g butter",
+        "800g cream cheese",
+        "200g sugar",
+        "4 eggs",
+        "2 tsp vanilla",
+        "200ml sour cream"
+      ],
+      "instructions": [
+        "Make crust with graham crackers and butter.",
+        "Beat cream cheese with sugar.",
+        "Add eggs and vanilla.",
+        "Pour over crust and bake 60 minutes.",
+        "Cool and refrigerate."
+      ]
+    }
+  },
+  {
+    "id": "quinoa-bowl-v1",
+    "recipeId": "quinoa-bowl",
+    "bookId": "healthy",
+    "version": 1,
+    "timestamp": "2025-09-25T09:00:00Z",
+    "author": "Chef Emma",
+    "notes": "Basic Buddha bowl recipe",
+    "data": {
+      "name": "Buddha Bowl",
+      "description": "Healthy bowl with quinoa and vegetables.",
+      "cookTime": "25 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "ingredients": [
+        "200g quinoa",
+        "200g chickpeas",
+        "1 sweet potato",
+        "100g kale",
+        "1 avocado",
+        "Tahini",
+        "Lemon"
+      ],
+      "instructions": [
+        "Cook quinoa.",
+        "Roast sweet potato and chickpeas.",
+        "Prepare kale.",
+        "Make tahini dressing.",
+        "Assemble bowl."
+      ]
+    }
+  },
+  {
+    "id": "quinoa-bowl-v2",
+    "recipeId": "quinoa-bowl",
+    "bookId": "healthy",
+    "version": 2,
+    "timestamp": "2025-11-18T11:30:00Z",
+    "author": "Chef Noah",
+    "notes": "Enhanced with detailed preparation and dressing recipe",
+    "data": {
+      "name": "Buddha Bowl",
+      "description": "Nutritious bowl with quinoa, roasted vegetables, and tahini dressing.",
+      "cookTime": "30 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "ingredients": [
+        "200g quinoa",
+        "200g chickpeas",
+        "1 sweet potato, cubed",
+        "100g kale",
+        "1 avocado, sliced",
+        "3 tbsp tahini",
+        "1 lemon, juiced",
+        "2 tbsp olive oil"
+      ],
+      "instructions": [
+        "Cook quinoa according to package directions.",
+        "Toss sweet potato cubes with olive oil, salt, and pepper.",
+        "Roast sweet potato at 400°F (200°C) for 25 minutes.",
+        "In the last 10 minutes, add chickpeas to the baking sheet.",
+        "Massage kale with a bit of lemon juice and olive oil.",
+        "Make tahini dressing by mixing tahini, lemon juice, and water.",
+        "Assemble bowls with quinoa as base.",
+        "Top with roasted vegetables, kale, and avocado.",
+        "Drizzle with tahini dressing and serve."
+      ]
+    }
+  },
+  {
+    "id": "salmon-v1",
+    "recipeId": "salmon",
+    "bookId": "healthy",
+    "version": 1,
+    "timestamp": "2025-10-12T10:45:00Z",
+    "author": "Chef Olivia",
+    "notes": "Simple grilled salmon",
+    "data": {
+      "name": "Grilled Salmon",
+      "description": "Heart-healthy grilled salmon.",
+      "cookTime": "20 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "ingredients": [
+        "2 salmon fillets",
+        "300g asparagus",
+        "Olive oil",
+        "Lemon",
+        "Salt and pepper"
+      ],
+      "instructions": [
+        "Season salmon.",
+        "Grill salmon 4-5 minutes per side.",
+        "Grill asparagus.",
+        "Serve with lemon."
+      ]
+    }
+  },
+  {
+    "id": "salmon-v2",
+    "recipeId": "salmon",
+    "bookId": "healthy",
+    "version": 2,
+    "timestamp": "2025-12-08T14:20:00Z",
+    "author": "Chef Liam",
+    "notes": "Enhanced with herbs and detailed grilling technique",
+    "data": {
+      "name": "Grilled Salmon with Asparagus",
+      "description": "Heart-healthy grilled salmon with roasted asparagus and lemon.",
+      "cookTime": "25 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "ingredients": [
+        "2 salmon fillets (150g each)",
+        "300g asparagus",
+        "2 tbsp olive oil",
+        "1 lemon",
+        "2 garlic cloves, minced",
+        "Fresh dill",
+        "Salt and pepper"
+      ],
+      "instructions": [
+        "Preheat grill or grill pan to medium-high heat.",
+        "Season salmon with salt, pepper, and minced garlic.",
+        "Drizzle salmon with olive oil.",
+        "Trim asparagus and toss with olive oil, salt, and pepper.",
+        "Grill salmon skin-side down for 4-5 minutes.",
+        "Flip and cook for another 3-4 minutes until done.",
+        "Grill asparagus for 5-7 minutes, turning occasionally.",
+        "Serve salmon and asparagus with lemon wedges and fresh dill."
+      ]
+    }
+  },
+  {
+    "id": "salmon-v3",
+    "recipeId": "salmon",
+    "bookId": "healthy",
+    "version": 3,
+    "timestamp": "2026-01-12T13:00:00Z",
+    "author": "Chef Ava",
+    "notes": "Added honey-mustard glaze option",
+    "data": {
+      "name": "Grilled Salmon with Asparagus",
+      "description": "Heart-healthy grilled salmon with honey-mustard glaze, roasted asparagus, and lemon.",
+      "cookTime": "25 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "ingredients": [
+        "2 salmon fillets (150g each)",
+        "300g asparagus",
+        "2 tbsp olive oil",
+        "1 lemon",
+        "2 garlic cloves, minced",
+        "Fresh dill",
+        "1 tbsp honey",
+        "1 tbsp Dijon mustard",
+        "Salt and pepper"
+      ],
+      "instructions": [
+        "Preheat grill or grill pan to medium-high heat.",
+        "Mix honey and Dijon mustard to make glaze.",
+        "Season salmon with salt, pepper, and minced garlic.",
+        "Brush salmon with honey-mustard glaze.",
+        "Drizzle salmon with olive oil.",
+        "Trim asparagus and toss with olive oil, salt, and pepper.",
+        "Grill salmon skin-side down for 4-5 minutes.",
+        "Brush with more glaze, flip and cook for another 3-4 minutes until done.",
+        "Grill asparagus for 5-7 minutes, turning occasionally.",
+        "Serve salmon and asparagus with lemon wedges and fresh dill."
+      ]
+    }
+  },
+  {
+    "id": "mac-cheese-v1",
+    "recipeId": "mac-cheese",
+    "bookId": "comfort",
+    "version": 1,
+    "timestamp": "2025-11-05T15:15:00Z",
+    "author": "Chef Sarah",
+    "notes": "Classic mac and cheese",
+    "data": {
+      "name": "Mac and Cheese",
+      "description": "Creamy comfort food.",
+      "cookTime": "25 min",
+      "servings": 4,
+      "difficulty": "Easy",
+      "ingredients": [
+        "400g macaroni",
+        "3 tbsp butter",
+        "3 tbsp flour",
+        "500ml milk",
+        "300g cheddar cheese"
+      ],
+      "instructions": [
+        "Cook macaroni.",
+        "Make cheese sauce with butter, flour, milk, and cheese.",
+        "Mix pasta with sauce.",
+        "Serve hot."
+      ]
+    }
+  },
+  {
+    "id": "mac-cheese-v2",
+    "recipeId": "mac-cheese",
+    "bookId": "comfort",
+    "version": 2,
+    "timestamp": "2026-01-08T12:45:00Z",
+    "author": "Chef Michael",
+    "notes": "Enhanced with multiple cheeses and optional baking",
+    "data": {
+      "name": "Creamy Mac and Cheese",
+      "description": "The ultimate comfort food with a rich, creamy cheese sauce.",
+      "cookTime": "30 min",
+      "servings": 4,
+      "difficulty": "Easy",
+      "ingredients": [
+        "400g elbow macaroni",
+        "3 tbsp butter",
+        "3 tbsp flour",
+        "500ml milk",
+        "300g cheddar cheese, grated",
+        "100g mozzarella cheese, grated",
+        "Salt and pepper",
+        "Breadcrumbs for topping (optional)"
+      ],
+      "instructions": [
+        "Cook macaroni according to package directions, drain.",
+        "In a large pot, melt butter over medium heat.",
+        "Whisk in flour to create a roux, cook for 1 minute.",
+        "Gradually add milk, whisking constantly until smooth.",
+        "Bring to a simmer and cook until thickened.",
+        "Remove from heat and stir in cheeses until melted.",
+        "Season with salt and pepper.",
+        "Add cooked macaroni and stir to coat.",
+        "Optional: Transfer to baking dish, top with breadcrumbs, and broil until golden."
+      ]
+    }
+  },
+  {
+    "id": "chicken-soup-v1",
+    "recipeId": "chicken-soup",
+    "bookId": "comfort",
+    "version": 1,
+    "timestamp": "2025-09-30T11:00:00Z",
+    "author": "Chef Helen",
+    "notes": "Traditional chicken soup",
+    "data": {
+      "name": "Chicken Soup",
+      "description": "Warming soup with chicken and vegetables.",
+      "cookTime": "40 min",
+      "servings": 6,
+      "difficulty": "Easy",
+      "ingredients": [
+        "500g chicken breast",
+        "2 carrots",
+        "2 celery stalks",
+        "1 onion",
+        "1.5L chicken broth",
+        "200g noodles"
+      ],
+      "instructions": [
+        "Boil chicken in broth.",
+        "Add vegetables.",
+        "Add noodles.",
+        "Serve hot."
+      ]
+    }
+  },
+  {
+    "id": "chicken-soup-v2",
+    "recipeId": "chicken-soup",
+    "bookId": "comfort",
+    "version": 2,
+    "timestamp": "2025-12-10T09:30:00Z",
+    "author": "Chef David",
+    "notes": "Enhanced with herbs and aromatics",
+    "data": {
+      "name": "Homemade Chicken Soup",
+      "description": "Warming chicken soup with vegetables and noodles.",
+      "cookTime": "45 min",
+      "servings": 6,
+      "difficulty": "Easy",
+      "ingredients": [
+        "500g chicken breast",
+        "2 carrots, sliced",
+        "2 celery stalks, sliced",
+        "1 onion, diced",
+        "2 garlic cloves, minced",
+        "1.5L chicken broth",
+        "200g egg noodles",
+        "Fresh parsley",
+        "Bay leaves",
+        "Salt and pepper"
+      ],
+      "instructions": [
+        "In a large pot, add chicken broth and bring to a boil.",
+        "Add chicken breast, reduce heat and simmer for 20 minutes.",
+        "Remove chicken, shred it, and set aside.",
+        "In the same pot, add carrots, celery, onion, and garlic.",
+        "Add bay leaves and simmer for 15 minutes until vegetables are tender.",
+        "Add egg noodles and cook according to package directions.",
+        "Return shredded chicken to the pot.",
+        "Season with salt and pepper to taste.",
+        "Remove bay leaves and garnish with fresh parsley before serving."
+      ]
+    }
+  },
+  {
+    "id": "quesadilla-v1",
+    "recipeId": "quesadilla",
+    "bookId": "quick",
+    "version": 1,
+    "timestamp": "2025-11-22T16:00:00Z",
+    "author": "Chef Carlos",
+    "notes": "Simple cheese quesadilla",
+    "data": {
+      "name": "Cheese Quesadilla",
+      "description": "Quick quesadilla with melted cheese.",
+      "cookTime": "8 min",
+      "servings": 1,
+      "difficulty": "Easy",
+      "ingredients": [
+        "2 flour tortillas",
+        "100g cheese",
+        "Butter"
+      ],
+      "instructions": [
+        "Heat skillet.",
+        "Place tortilla, add cheese.",
+        "Top with second tortilla.",
+        "Cook until golden on both sides.",
+        "Cut and serve."
+      ]
+    }
+  },
+  {
+    "id": "quesadilla-v2",
+    "recipeId": "quesadilla",
+    "bookId": "quick",
+    "version": 2,
+    "timestamp": "2026-01-02T10:30:00Z",
+    "author": "Chef Maria",
+    "notes": "Added optional fillings and serving suggestions",
+    "data": {
+      "name": "Cheese Quesadilla",
+      "description": "Quick and easy quesadilla with melted cheese and optional fillings.",
+      "cookTime": "10 min",
+      "servings": 1,
+      "difficulty": "Easy",
+      "ingredients": [
+        "2 flour tortillas",
+        "100g cheese (cheddar or Mexican blend)",
+        "1 tbsp butter",
+        "Optional: bell peppers, onions, jalapeños",
+        "Sour cream for serving",
+        "Salsa for serving"
+      ],
+      "instructions": [
+        "Heat a skillet over medium heat.",
+        "Place one tortilla in the skillet.",
+        "Sprinkle cheese evenly over the tortilla.",
+        "Add any optional fillings if desired.",
+        "Top with second tortilla.",
+        "Cook for 2-3 minutes until bottom is golden.",
+        "Flip and cook for another 2-3 minutes.",
+        "Remove from heat and cut into wedges.",
+        "Serve with sour cream and salsa."
+      ]
+    }
+  },
+  {
+    "id": "omelette-v1",
+    "recipeId": "omelette",
+    "bookId": "quick",
+    "version": 1,
+    "timestamp": "2025-12-01T08:00:00Z",
+    "author": "Chef Julia",
+    "notes": "Basic omelette recipe",
+    "data": {
+      "name": "Veggie Omelette",
+      "description": "Simple omelette with vegetables.",
+      "cookTime": "6 min",
+      "servings": 1,
+      "difficulty": "Easy",
+      "ingredients": [
+        "3 eggs",
+        "Butter",
+        "Bell peppers",
+        "Mushrooms",
+        "Cheese"
+      ],
+      "instructions": [
+        "Beat eggs.",
+        "Cook vegetables in butter.",
+        "Add eggs and cook.",
+        "Add cheese and fold.",
+        "Serve."
+      ]
+    }
+  },
+  {
+    "id": "omelette-v2",
+    "recipeId": "omelette",
+    "bookId": "quick",
+    "version": 2,
+    "timestamp": "2026-01-14T07:30:00Z",
+    "author": "Chef Antoine",
+    "notes": "Enhanced with proper technique and measurements",
+    "data": {
+      "name": "Veggie Omelette",
+      "description": "Fluffy omelette filled with fresh vegetables.",
+      "cookTime": "8 min",
+      "servings": 1,
+      "difficulty": "Easy",
+      "ingredients": [
+        "3 eggs",
+        "2 tbsp milk",
+        "1 tbsp butter",
+        "50g bell peppers, diced",
+        "50g mushrooms, sliced",
+        "30g cheese, grated",
+        "Salt and pepper",
+        "Fresh herbs (optional)"
+      ],
+      "instructions": [
+        "Beat eggs with milk, salt, and pepper.",
+        "Heat butter in a non-stick skillet over medium heat.",
+        "Add bell peppers and mushrooms, sauté for 2 minutes.",
+        "Pour egg mixture over vegetables.",
+        "Cook without stirring until edges start to set.",
+        "Gently lift edges to let uncooked egg flow underneath.",
+        "When almost set, sprinkle cheese on one half.",
+        "Fold omelette in half and cook for another minute.",
+        "Slide onto plate and serve immediately."
+      ]
+    }
+  }
+]

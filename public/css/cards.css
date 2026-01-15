@@ -1,0 +1,111 @@
+/* Recipe Hub - Card & Grid Styles */
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  flex: 1 1 300px;
+  max-width: calc(33.333% - 1rem);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .card {
+    max-width: calc(50% - 0.75rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    max-width: 100%;
+  }
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-lighter);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+  filter: grayscale(20%);
+}
+
+.card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Recipe Card Specific */
+.recipe-card {
+  background: var(--surface);
+  min-height: 180px;
+}
+
+.recipe-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.recipe-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.75rem;
+  background: var(--background);
+  border-radius: 20px;
+  font-weight: 500;
+}

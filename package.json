@@ -1,0 +1,21 @@
+{
+  "name": "recipe-hub",
+  "version": "1.0.0",
+  "description": "Recipe versioning site with history tracking",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "keywords": [
+    "recipe",
+    "versioning",
+    "history"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

@@ -1,0 +1,23 @@
+/* Recipe Hub - CSS Variables */
+
+:root {
+  --primary: #7da565;
+  --primary-light: #c4d9b8;
+  --primary-lighter: #d9e3cc;
+  --primary-dark: #6a8f56;
+  --background: #f8f9fa;
+  --surface: #ffffff;
+  --surface-alt: #f8f9fa;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6c757d;
+  --text-tertiary: #adb5bd;
+  --border: #e9ecef;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse our collection of recipe books and discover your next favorite dish">
+  <title>Recipe Hub - Your Collection of Recipe Books</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/add-button.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="brand">
+          <svg class="logo" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <!-- Open Recipe Book -->
+            <g class="recipe-book">
+              <!-- Left page -->
+              <path d="M 8 12 L 8 36 Q 8 38 10 38 L 22 38 Q 24 38 24 36 L 24 12 Q 24 10 22 10 L 10 10 Q 8 10 8 12 Z" 
+                    fill="#ffffff" stroke="#7da565" stroke-width="2"/>
+              <!-- Right page -->
+              <path d="M 24 12 L 24 36 Q 24 38 26 38 L 38 38 Q 40 38 40 36 L 40 12 Q 40 10 38 10 L 26 10 Q 24 10 24 12 Z" 
+                    fill="#7da565" stroke="#7da565" stroke-width="2"/>
+              <!-- Binding -->
+              <rect x="23" y="10" width="2" height="28" fill="#7da565"/>
+              <!-- Recipe lines on left page -->
+              <line x1="12" y1="16" x2="20" y2="16" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="12" y1="20" x2="20" y2="20" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="12" y1="24" x2="18" y2="24" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <!-- Chef hat icon on right page -->
+              <circle cx="32" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
+              <path d="M 28 24 L 28 26 L 36 26 L 36 24" fill="#ffffff" opacity="0.9"/>
+              <line x1="28" y1="30" x2="36" y2="30" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+            </g>
+          </svg>
+          <div class="brand-text">
+            <h1>Recipe Hub</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="books-section" x-data="recipeBooks">
+      <div class="container">
+        <div class="grid">
+          <template x-if="error">
+            <p x-text="error"></p>
+          </template>
+          <template x-for="book in books" :key="book.id">
+            <a :href="`pages/book.html?id=${book.id}`" class="card">
+              <span class="card-icon" x-text="book.image"></span>
+              <h3 x-text="book.name"></h3>
+              <p x-text="book.description"></p>
+            </a>
+          </template>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<!-- Floating Add Button -->
+  <div x-data="addButton">
+    <div class="fab-overlay" :class="{'show': showActions}" @click="closeActions"></div>
+    <div class="fab-container">
+      <div class="fab-actions" :class="{'show': showActions}">
+        <button class="fab-action-button" @click="createBook" aria-label="Add new recipe book">
+          <span class="fab-action-icon">📚</span>
+          <span class="fab-action-label">New Book</span>
+        </button>
+        <button class="fab-action-button" @click="createRecipe" aria-label="Add new recipe">
+          <span class="fab-action-icon">🍳</span>
+          <span class="fab-action-label">New Recipe</span>
+        </button>
+      </div>
+      <button class="fab-button" @click="toggleActions" aria-label="Add new book or recipe">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

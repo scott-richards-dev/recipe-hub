@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Compare recipe versions side by side">
+  <title>Compare Versions - Recipe Hub</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/cards.css">
+  <link rel="stylesheet" href="../css/compare.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html" aria-label="Home">
+          <svg class="breadcrumb-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <g class="recipe-book">
+              <path d="M 8 12 L 8 36 Q 8 38 10 38 L 22 38 Q 24 38 24 36 L 24 12 Q 24 10 22 10 L 10 10 Q 8 10 8 12 Z" 
+                    fill="#ffffff" stroke="#7da565" stroke-width="2"/>
+              <path d="M 24 12 L 24 36 Q 24 38 26 38 L 38 38 Q 40 38 40 36 L 40 12 Q 40 10 38 10 L 26 10 Q 24 10 24 12 Z" 
+                    fill="#7da565" stroke="#7da565" stroke-width="2"/>
+              <rect x="23" y="10" width="2" height="28" fill="#7da565"/>
+              <line x1="12" y1="16" x2="20" y2="16" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="12" y1="20" x2="20" y2="20" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="12" y1="24" x2="18" y2="24" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <circle cx="32" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
+              <path d="M 28 24 L 28 26 L 36 26 L 36 24" fill="#ffffff" opacity="0.9"/>
+              <line x1="28" y1="30" x2="36" y2="30" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+            </g>
+          </svg>
+        </a>
+        <span class="separator">/</span>
+        <a href="#" x-data="compareVersions" :href="`book.html?id=${bookId}`" class="breadcrumb-link"><span x-text="bookName">Recipe Book</span></a>
+        <span class="separator">/</span>
+        <a href="#" x-data="compareVersions" :href="`recipe.html?id=${recipeId}&book=${bookId}`" class="breadcrumb-link"><span x-text="recipeName">Recipe</span></a>
+        <span class="separator">/</span>
+        <span class="current-page"><span>History</span></span>
+      </nav>
+    </div>
+  </header>
+
+  <main x-data="compareVersions">
+    <div class="container compare-container">
+      <div class="compare-page-wrapper">
+        <div class="compare-header">
+          <!-- Back to Recipe Button -->
+          <div class="back-to-recipe-wrapper">
+            <a :href="`recipe.html?id=${recipeId}&book=${bookId}`" class="btn-back-to-recipe">
+              <span class="btn-arrow-left">←</span>
+              <span>Back to Recipe</span>
+            </a>
+          </div>
+          
+          <div class="compare-title-section">
+            <h1 x-text="recipeName">Recipe History</h1>
+            <p class="compare-subtitle">View changes between recipe versions</p>
+          </div>
+        </div>
+
+        <!-- Version Selector -->
+        <div class="version-selector-container">
+          <div class="version-selector">
+            <select x-model="selectedV1" @change="compareVersions" class="version-select">
+              <option value="">Select base version</option>
+              <template x-for="version in allVersions" :key="version.id">
+                <option :value="version.id" x-text="`v${version.version} - ${new Date(version.timestamp).toLocaleString()}`"></option>
+              </template>
+            </select>
+          </div>
+          <div class="comparison-arrow">
+            <span>→</span>
+          </div>
+          <div class="version-selector">
+            <select x-model="selectedV2" @change="compareVersions" class="version-select">
+              <option value="">Select compare version</option>
+              <template x-for="version in allVersions" :key="version.id">
+                <option :value="version.id" x-text="`v${version.version} - ${new Date(version.timestamp).toLocaleString()}`"></option>
+              </template>
+            </select>
+          </div>
+        </div>
+
+        <!-- Version Info Cards -->
+        <div class="version-info-cards" x-show="version1Data && version2Data" x-html="versionInfoHTML">
+        </div>
+
+        <!-- Comparison Stats -->
+        <div class="comparison-stats" x-show="stats.additions > 0 || stats.deletions > 0 || stats.changes > 0">
+          <div class="stat-card additions">
+            <div class="stat-number" x-text="stats.additions"></div>
+            <div class="stat-label">Additions</div>
+          </div>
+          <div class="stat-card deletions">
+            <div class="stat-number" x-text="stats.deletions"></div>
+            <div class="stat-label">Deletions</div>
+          </div>
+          <div class="stat-card changes">
+            <div class="stat-number" x-text="stats.changes"></div>
+            <div class="stat-label">Changes</div>
+          </div>
+        </div>
+
+        <!-- Comparison View -->
+        <div class="comparison-container">
+          <template x-if="!selectedV1 || !selectedV2">
+            <div class="empty-state">
+              <div class="empty-state-icon">📋</div>
+              <h2>Select versions to compare</h2>
+              <p>Choose two versions from the dropdowns above to see their differences</p>
+            </div>
+          </template>
+          <div x-show="selectedV1 && selectedV2" x-html="comparisonHTML"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/compare.js"></script>
+</body>
+</html>

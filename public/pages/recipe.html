@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Recipe details, ingredients, and step-by-step instructions">
+  <title>Recipe - Recipe Hub</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/cards.css">
+  <link rel="stylesheet" href="../css/recipe.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html" aria-label="Home">
+          <svg class="breadcrumb-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <g class="recipe-book">
+              <path d="M 8 12 L 8 36 Q 8 38 10 38 L 22 38 Q 24 38 24 36 L 24 12 Q 24 10 22 10 L 10 10 Q 8 10 8 12 Z" 
+                    fill="#ffffff" stroke="#7da565" stroke-width="2"/>
+              <path d="M 24 12 L 24 36 Q 24 38 26 38 L 38 38 Q 40 38 40 36 L 40 12 Q 40 10 38 10 L 26 10 Q 24 10 24 12 Z" 
+                    fill="#7da565" stroke="#7da565" stroke-width="2"/>
+              <rect x="23" y="10" width="2" height="28" fill="#7da565"/>
+              <line x1="12" y1="16" x2="20" y2="16" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="12" y1="20" x2="20" y2="20" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="12" y1="24" x2="18" y2="24" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <circle cx="32" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
+              <path d="M 28 24 L 28 26 L 36 26 L 36 24" fill="#ffffff" opacity="0.9"/>
+              <line x1="28" y1="30" x2="36" y2="30" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+            </g>
+          </svg>
+        </a>
+        <span class="separator">/</span>
+        <a href="#" x-data="recipeDetail" :href="`book.html?id=${bookId}`" class="breadcrumb-link"><span x-text="bookName">Recipe Book</span></a>
+        <span class="separator">/</span>
+        <span x-data="recipeDetail" class="current-page"><span x-text="recipe.name">Recipe</span></span>
+      </nav>
+    </div>
+  </header>
+
+  <main x-data="recipeDetail">
+    <div class="container recipe-container">
+      <article class="recipe-detail">
+        <header class="recipe-header">
+          <!-- Version & Engagement Info at Top -->
+          <div class="recipe-metadata-top">
+            <div class="metadata-top-items">
+              <div class="metadata-badge">
+                <span class="metadata-icon">👁️</span>
+                <span x-text="viewCount.toLocaleString()" class="badge-value"></span>
+                <span class="badge-label">views</span>
+              </div>
+            </div>
+            
+            <!-- Revisions Link (conditionally shown) -->
+            <div class="revisions-link-wrapper" x-show="hasRevisions">
+              <button @click="goToRevisions" class="btn-revisions">
+                <span class="metadata-icon">📜</span>
+                <span>See Previous Versions</span>
+                <span class="btn-arrow">→</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="recipe-title-section">
+            <h1 x-text="recipe.name"></h1>
+            <p x-text="recipe.description" class="recipe-description"></p>
+          </div>
+          
+          <!-- Primary Recipe Stats Below Title -->
+          <div class="recipe-metadata-bottom">
+            <div class="metadata-stats">
+              <div class="metadata-item">
+                <span class="metadata-icon">⏱️</span>
+                <div class="metadata-content">
+                  <span class="metadata-label">Cook Time</span>
+                  <span x-text="recipe.cookTime || '—'" class="metadata-value"></span>
+                </div>
+              </div>
+              <div class="metadata-item">
+                <span class="metadata-icon">🍽️</span>
+                <div class="metadata-content">
+                  <span class="metadata-label">Servings</span>
+                  <span x-text="recipe.servings || '—'" class="metadata-value"></span>
+                </div>
+              </div>
+              <div class="metadata-item">
+                <span class="metadata-icon">📊</span>
+                <div class="metadata-content">
+                  <span class="metadata-label">Difficulty</span>
+                  <span x-text="recipe.difficulty || '—'" class="metadata-value"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="recipe-content">
+          <aside class="ingredients-section">
+            <header class="section-header">
+              <h2>Ingredients</h2>
+              <div class="serving-size-controls">
+                <div class="serving-buttons">
+                  <button @click="setMultiplier(0.5)" :class="{ 'serving-btn': true, 'active': multiplier === 0.5 }" title="Half servings">0.5×</button>
+                  <button @click="setMultiplier(1)" :class="{ 'serving-btn': true, 'active': multiplier === 1 }" title="Original servings">1×</button>
+                  <button @click="setMultiplier(2)" :class="{ 'serving-btn': true, 'active': multiplier === 2 }" title="Double servings">2×</button>
+                  <button @click="setMultiplier(4)" :class="{ 'serving-btn': true, 'active': multiplier === 4 }" title="Quadruple servings">4×</button>
+                </div>
+              </div>
+            </header>
+            <div class="section-content">
+              <ul class="ingredients-list">
+                <template x-for="(ingredient, index) in recipe.ingredients" :key="index">
+                  <li class="ingredient-item" :class="{ 'checked': checkedIngredients[index] }" @click="handleIngredientClick($event, index)">
+                    <input type="checkbox" :id="`ingredient-${index}`" class="ingredient-checkbox" x-model="checkedIngredients[index]">
+                    <label :for="`ingredient-${index}`" class="ingredient-label" x-html="formatIngredient(ingredient, index)"></label>
+                    <template x-if="isConvertible(ingredient.metric)">
+                      <button @click.stop="toggleUnit(index)" class="unit-convert-btn" title="Toggle unit system">⇄</button>
+                    </template>
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </aside>
+
+          <section class="instructions-section">
+            <header class="section-header">
+              <h2>Instructions</h2>
+            </header>
+            <div class="section-content">
+              <div class="instructions-list">
+                <template x-for="(instruction, index) in recipe.instructions" :key="index">
+                  <div class="instruction-step">
+                    <div class="step-number" x-text="index + 1"></div>
+                    <div class="step-text" x-text="instruction"></div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </section>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <script src="../js/recipe.js"></script>
+</body>
+</html>

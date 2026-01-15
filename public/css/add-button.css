@@ -1,0 +1,323 @@
+/* Floating Add Button */
+
+.fab-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .fab-container {
+    bottom: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fab-container {
+    bottom: 9rem;
+  }
+}
+
+.fab-button {
+  width: 56px;
+  height: 56px;
+  background: var(--primary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-button svg {
+  width: 28px;
+  height: 28px;
+  stroke: white;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.fab-button:hover {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+  box-shadow: 0 8px 28px rgba(125, 165, 101, 0.3);
+}
+
+.fab-button:active {
+  transform: scale(0.95);
+}
+
+@media (min-width: 768px) {
+  .fab-button {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .fab-button svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fab-button {
+    width: 96px;
+    height: 96px;
+  }
+  
+  .fab-button svg {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Floating Action Menu */
+
+.fab-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.fab-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.fab-actions {
+  display: flex;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fab-actions.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.fab-action-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+  min-width: 100px;
+  font-family: inherit;
+}
+
+.fab-action-button:hover {
+  background: var(--surface);
+  border-color: var(--primary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.fab-action-button:active {
+  transform: translateY(-2px);
+}
+
+.fab-action-icon {
+  font-size: 2rem;
+}
+
+.fab-action-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .fab-actions {
+    gap: 1rem;
+  }
+  
+  .fab-action-button {
+    min-width: 120px;
+    padding: 1.25rem;
+  }
+  
+  .fab-action-icon {
+    font-size: 2.5rem;
+  }
+  
+  .fab-action-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fab-actions {
+    gap: 1.25rem;
+  }
+  
+  .fab-action-button {
+    min-width: 140px;
+    padding: 1.5rem;
+  }
+  
+  .fab-action-icon {
+    font-size: 3rem;
+  }
+  
+  .fab-action-label {
+    font-size: 1rem;
+  }
+}
+
+/* Modal/Dialog for choosing what to create */
+
+.add-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.add-modal-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.add-modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  max-width: 400px;
+  width: calc(100% - 2rem);
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0;
+}
+
+.add-modal-overlay.show .add-modal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.add-modal-header {
+  margin-bottom: 1.5rem;
+}
+
+.add-modal-header h2 {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.add-modal-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.add-modal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.add-option-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface-alt);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+}
+
+.add-option-button:hover {
+  background: var(--primary-lighter);
+  border-color: var(--primary-light);
+  transform: translateX(4px);
+}
+
+.add-option-button:active {
+  transform: translateX(2px);
+}
+
+.add-option-icon {
+  font-size: 1.5rem;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.add-option-text h3 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.add-option-text p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.add-modal-cancel {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.add-modal-cancel:hover {
+  background: var(--surface-alt);
+  border-color: var(--primary-light);
+}
+
+.add-modal-cancel:active {
+  transform: scale(0.98);
+}

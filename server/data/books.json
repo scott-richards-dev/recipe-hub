@@ -1,0 +1,32 @@
+[
+  {
+    "id": "italian",
+    "name": "Italian Classics by Fresh Chefs",
+    "description": "Traditional Italian recipes",
+    "image": "🍝"
+  },
+  {
+    "id": "asian",
+    "name": "Asian Fusion",
+    "description": "Delicious Asian dishes",
+    "image": "🍜"
+  },
+  {
+    "id": "desserts",
+    "name": "Sweet Treats",
+    "description": "Delightful desserts",
+    "image": "🍰"
+  },
+  {
+    "id": "healthy",
+    "name": "Healthy Living",
+    "description": "Nutritious meals",
+    "image": "🥗"
+  },
+  {
+    "id": "comfort",
+    "name": "Comfort Food",
+    "description": "Soul-warming dishes",
+    "image": "🍲"
+  }
+]
