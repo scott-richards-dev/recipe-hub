@@ -1,32 +1,37 @@
 [
   {
     "id": "italian",
-    "name": "Italian Classics by Fresh Chefs",
+    "name": "Italian Classics by French Chefs",
     "description": "Traditional Italian recipes",
-    "image": "🍝"
+    "image": "🍝",
+    "recipeCount": 2
   },
   {
     "id": "asian",
     "name": "Asian Fusion",
-    "description": "Delicious Asian dishes",
-    "image": "🍜"
+    "description": "Delicious Asian dishes designed by Moon people",
+    "image": "🍲",
+    "recipeCount": 2
   },
   {
     "id": "desserts",
     "name": "Sweet Treats",
     "description": "Delightful desserts",
-    "image": "🍰"
+    "image": "🍰",
+    "recipeCount": 2
   },
   {
     "id": "healthy",
     "name": "Healthy Living",
     "description": "Nutritious meals",
-    "image": "🥗"
+    "image": "🥗",
+    "recipeCount": 2
   },
   {
     "id": "comfort",
     "name": "Comfort Food",
     "description": "Soul-warming dishes",
-    "image": "🍲"
+    "image": "🍲",
+    "recipeCount": 2
   }
 ]

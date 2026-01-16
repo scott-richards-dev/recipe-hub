@@ -20,7 +20,13 @@
 
 @media (min-width: 1024px) {
   .fab-container {
-    bottom: 9rem;
+    bottom: 5rem;
+  }
+}
+
+@media (min-width: 1800px) {
+  .fab-container {
+    bottom: 7rem;
   }
 }
 

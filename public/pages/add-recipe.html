@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Add a new recipe to your collection">
+  <title x-data="addRecipeForm" x-text="isEditMode ? 'Edit Recipe - Recipe Hub' : 'Add Recipe - Recipe Hub'">Add Recipe - Recipe Hub</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/form.css">
+  <link rel="stylesheet" href="../css/toast.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="../js/toast.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html" aria-label="Home">
+          <svg class="breadcrumb-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <g class="recipe-book">
+              <path d="M 8 12 L 8 36 Q 8 38 10 38 L 22 38 Q 24 38 24 36 L 24 12 Q 24 10 22 10 L 10 10 Q 8 10 8 12 Z" 
+                    fill="#ffffff" stroke="#7da565" stroke-width="2"/>
+              <path d="M 24 12 L 24 36 Q 24 38 26 38 L 38 38 Q 40 38 40 36 L 40 12 Q 40 10 38 10 L 26 10 Q 24 10 24 12 Z" 
+                    fill="#7da565" stroke="#7da565" stroke-width="2"/>
+              <rect x="23" y="10" width="2" height="28" fill="#7da565"/>
+              <line x1="12" y1="16" x2="20" y2="16" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="12" y1="20" x2="20" y2="20" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="12" y1="24" x2="18" y2="24" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <circle cx="32" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
+              <path d="M 28 24 L 28 26 L 36 26 L 36 24" fill="#ffffff" opacity="0.9"/>
+              <line x1="28" y1="30" x2="36" y2="30" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+            </g>
+          </svg>
+        </a>
+        <span class="separator">/</span>
+        <span class="current-page" x-data="addRecipeForm" x-text="isEditMode ? 'Edit Recipe' : 'Create Recipe'">Create Recipe</span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="form-section" x-data="addRecipeForm">
+      <div class="container">
+        <div class="form-header">
+          <h1 x-text="isEditMode ? 'Edit Recipe' : 'Add a New Recipe'">Add a New Recipe</h1>
+          <p x-text="isEditMode ? 'Update your recipe details' : 'Share your favorite recipe with the collection'">Share your favorite recipe with the collection</p>
+        </div>
+
+        <form @submit.prevent="submitForm" class="form-container">
+          <div class="form-group">
+            <label for="recipeName" class="form-label">Recipe Name *</label>
+            <input 
+              type="text" 
+              id="recipeName" 
+              x-model="formData.name"
+              class="form-input"
+              placeholder="e.g., Chocolate Chip Cookies"
+              required
+              maxlength="100"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="recipeDescription" class="form-label">Description *</label>
+            <textarea 
+              id="recipeDescription" 
+              x-model="formData.description"
+              class="form-input form-textarea"
+              placeholder="Describe the recipe..."
+              required
+              maxlength="500"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bookIds">Add to Books <span class="form-hint">(optional)</span></label>
+            <select 
+              id="bookIds"
+              x-model="selectedBookId"
+              @change="toggleBookSelection"
+              class="form-input"
+            >
+              <option value="">Select a book...</option>
+              <template x-for="book in books" :key="book.id">
+                <option 
+                  :value="book.id" 
+                  x-text="`${book.image} ${book.name}`"
+                  :disabled="formData.bookIds.includes(book.id)"
+                ></option>
+              </template>
+            </select>
+            <div x-show="formData.bookIds.length > 0" class="selected-books">
+              <template x-for="bookId in formData.bookIds" :key="bookId">
+                <span class="selected-book-tag">
+                  <span x-text="getBookName(bookId)"></span>
+                  <button 
+                    type="button" 
+                    @click="removeBook(bookId)"
+                    class="tag-remove"
+                    aria-label="Remove book"
+                  >
+                    &times;
+                  </button>
+                </span>
+              </template>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cookTime" class="form-label">Cook Time *</label>
+              <input 
+                type="text" 
+                id="cookTime" 
+                x-model="formData.cookTime"
+                class="form-input"
+                placeholder="e.g., 30 min"
+                required
+                maxlength="20"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="servings" class="form-label">Servings *</label>
+              <input 
+                type="number" 
+                id="servings" 
+                x-model="formData.servings"
+                class="form-input"
+                placeholder="e.g., 4"
+                required
+                min="1"
+                max="100"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ingredients * <span class="drag-hint">Drag to reorder</span></label>
+            <template x-for="(ingredient, index) in formData.ingredients" :key="index">
+              <div 
+                class="ingredient-item"
+                :class="{ 'dragging': draggedIngredientIndex === index, 'drag-over': dragOverIngredientIndex === index }"
+                draggable="true"
+                @dragstart="startDragIngredient($event, index)"
+                @dragend="endDragIngredient"
+                @dragover.prevent="dragOverIngredient(index)"
+                @drop="dropIngredient(index)"
+              >
+                <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+                <input 
+                  type="text" 
+                  x-model="formData.ingredients[index]"
+                  class="form-input"
+                  :placeholder="`Ingredient ${index + 1}`"
+                  required
+                />
+                <button 
+                  type="button" 
+                  @click="removeIngredient(index)"
+                  class="btn-remove"
+                  :disabled="formData.ingredients.length === 1"
+                  aria-label="Remove ingredient"
+                >
+                  &times;
+                </button>
+              </div>
+            </template>
+            <button 
+              type="button" 
+              @click="addIngredient"
+              class="btn btn-add"
+            >
+              + Add Ingredient
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Instructions * <span class="drag-hint">Drag to reorder</span></label>
+            <template x-for="(instruction, index) in formData.instructions" :key="index">
+              <div 
+                class="instruction-item"
+                :class="{ 'dragging': draggedInstructionIndex === index, 'drag-over': dragOverInstructionIndex === index }"
+                draggable="true"
+                @dragstart="startDragInstruction($event, index)"
+                @dragend="endDragInstruction"
+                @dragover.prevent="dragOverInstruction(index)"
+                @drop="dropInstruction(index)"
+              >
+                <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+                <textarea 
+                  x-model="formData.instructions[index]"
+                  class="form-input form-textarea"
+                  :placeholder="`Step ${index + 1}`"
+                  required
+                  rows="2"
+                ></textarea>
+                <button 
+                  type="button" 
+                  @click="removeInstruction(index)"
+                  class="btn-remove"
+                  :disabled="formData.instructions.length === 1"
+                  aria-label="Remove instruction"
+                >
+                  &times;
+                </button>
+              </div>
+            </template>
+            <button 
+              type="button" 
+              @click="addInstruction"
+              class="btn btn-add"
+            >
+              + Add Instruction
+            </button>
+          </div>
+
+          <div class="form-actions">
+            <button 
+              type="button" 
+              @click="cancel" 
+              class="btn btn-secondary"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              :disabled="submitting"
+            >
+              <span x-show="!submitting" x-text="isEditMode ? 'Update Recipe' : 'Add Recipe'">Add Recipe</span>
+              <span x-show="submitting" x-text="isEditMode ? 'Updating...' : 'Adding...'">Adding...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/add-recipe.js"></script>
+</body>
+</html>

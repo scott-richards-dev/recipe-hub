@@ -7,14 +7,32 @@
       "description": "A classic Roman pasta dish made with eggs, cheese, pancetta, and black pepper.",
       "cookTime": "25 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
-        { "amount": 400, "metric": "g", "name": "spaghetti" },
-        { "amount": 200, "metric": "g", "name": "pancetta or guanciale" },
-        { "amount": 4, "name": "large eggs" },
-        { "amount": 100, "metric": "g", "name": "Pecorino Romano cheese, grated" },
-        { "name": "Black pepper to taste" },
-        { "name": "Salt for pasta water" }
+        {
+          "amount": 400,
+          "metric": "g",
+          "name": "spaghetti"
+        },
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "pancetta or guanciale"
+        },
+        {
+          "amount": 4,
+          "name": "large eggs"
+        },
+        {
+          "amount": 100,
+          "metric": "g",
+          "name": "Pecorino Romano cheese, grated"
+        },
+        {
+          "name": "Black pepper to taste"
+        },
+        {
+          "name": "Salt for pasta water"
+        }
       ],
       "instructions": [
         "Bring a large pot of salted water to boil and cook spaghetti according to package directions.",
@@ -24,7 +42,8 @@
         "Remove skillet from heat, add pasta to pancetta.",
         "Quickly stir in egg mixture, adding pasta water to create a creamy sauce.",
         "Season generously with black pepper and serve immediately."
-      ]
+      ],
+      "viewCount": 1133
     },
     {
       "id": "margherita",
@@ -33,14 +52,32 @@
       "description": "Simple and delicious pizza with tomato sauce, mozzarella, and fresh basil.",
       "cookTime": "30 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
-        { "amount": 1, "name": "pizza dough" },
-        { "amount": 200, "metric": "g", "name": "crushed tomatoes" },
-        { "amount": 200, "metric": "g", "name": "fresh mozzarella" },
-        { "name": "Fresh basil leaves" },
-        { "amount": 2, "metric": "tbsp", "name": "olive oil" },
-        { "name": "Salt and pepper" }
+        {
+          "amount": 1,
+          "name": "pizza dough"
+        },
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "crushed tomatoes"
+        },
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "fresh mozzarella"
+        },
+        {
+          "name": "Fresh basil leaves"
+        },
+        {
+          "amount": 2,
+          "metric": "tbsp",
+          "name": "olive oil"
+        },
+        {
+          "name": "Salt and pepper"
+        }
       ],
       "instructions": [
         "Preheat oven to 475°F (245°C).",
@@ -50,7 +87,8 @@
         "Drizzle with olive oil, season with salt and pepper.",
         "Bake for 12-15 minutes until crust is golden.",
         "Top with fresh basil leaves and serve hot."
-      ]
+      ],
+      "viewCount": 4589
     }
   ],
   "asian": [
@@ -61,18 +99,48 @@
       "description": "Thailand's famous stir-fried noodle dish with a perfect balance of sweet, sour, and savory.",
       "cookTime": "30 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
-        { "amount": 200, "metric": "g", "name": "rice noodles" },
-        { "amount": 2, "name": "eggs" },
-        { "amount": 200, "metric": "g", "name": "shrimp or tofu" },
-        { "amount": 3, "metric": "tbsp", "name": "fish sauce" },
-        { "amount": 2, "metric": "tbsp", "name": "tamarind paste" },
-        { "amount": 2, "metric": "tbsp", "name": "sugar" },
-        { "name": "Bean sprouts" },
-        { "name": "Peanuts" },
-        { "name": "Lime wedges" },
-        { "name": "Green onions" }
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "rice noodles"
+        },
+        {
+          "amount": 2,
+          "name": "eggs"
+        },
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "shrimp or tofu"
+        },
+        {
+          "amount": 3,
+          "metric": "tbsp",
+          "name": "fish sauce"
+        },
+        {
+          "amount": 2,
+          "metric": "tbsp",
+          "name": "tamarind paste"
+        },
+        {
+          "amount": 2,
+          "metric": "tbsp",
+          "name": "sugar"
+        },
+        {
+          "name": "Bean sprouts"
+        },
+        {
+          "name": "Peanuts"
+        },
+        {
+          "name": "Lime wedges"
+        },
+        {
+          "name": "Green onions"
+        }
       ],
       "instructions": [
         "Soak rice noodles in warm water for 20 minutes.",
@@ -82,7 +150,8 @@
         "Add drained noodles and sauce, toss until coated.",
         "Add eggs back, stir in bean sprouts.",
         "Serve with peanuts, lime, and green onions."
-      ]
+      ],
+      "viewCount": 393
     },
     {
       "id": "ramen",
@@ -91,16 +160,42 @@
       "description": "Rich, creamy Japanese pork bone broth with tender noodles and toppings.",
       "cookTime": "2 hours",
       "servings": 4,
-      "difficulty": "Hard",
       "ingredients": [
-        { "amount": 1, "metric": "kg", "name": "pork bones" },
-        { "amount": 500, "metric": "g", "name": "ramen noodles" },
-        { "amount": 4, "name": "soft-boiled eggs" },
-        { "amount": 200, "metric": "g", "name": "pork belly, sliced" },
-        { "name": "Green onions, sliced" },
-        { "name": "Nori seaweed" },
-        { "amount": 2, "metric": "tbsp", "name": "soy sauce" },
-        { "amount": 1, "metric": "tbsp", "name": "sesame oil" }
+        {
+          "amount": 1,
+          "metric": "kg",
+          "name": "pork bones"
+        },
+        {
+          "amount": 500,
+          "metric": "g",
+          "name": "ramen noodles"
+        },
+        {
+          "amount": 4,
+          "name": "soft-boiled eggs"
+        },
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "pork belly, sliced"
+        },
+        {
+          "name": "Green onions, sliced"
+        },
+        {
+          "name": "Nori seaweed"
+        },
+        {
+          "amount": 2,
+          "metric": "tbsp",
+          "name": "soy sauce"
+        },
+        {
+          "amount": 1,
+          "metric": "tbsp",
+          "name": "sesame oil"
+        }
       ],
       "instructions": [
         "Simmer pork bones for 12 hours to create rich broth (or use 2 hours with pressure cooker).",
@@ -111,7 +206,8 @@
         "Assemble bowls with noodles, pour hot broth over them.",
         "Top with pork belly, soft-boiled eggs, green onions, and nori.",
         "Serve immediately while hot."
-      ]
+      ],
+      "viewCount": 1538
     }
   ],
   "desserts": [
@@ -122,16 +218,41 @@
       "description": "Decadent individual chocolate cakes with a molten center.",
       "cookTime": "25 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
-        { "amount": 100, "metric": "g", "name": "dark chocolate" },
-        { "amount": 100, "metric": "g", "name": "butter" },
-        { "amount": 2, "name": "eggs" },
-        { "amount": 2, "name": "egg yolks" },
-        { "amount": 50, "metric": "g", "name": "sugar" },
-        { "amount": 50, "metric": "g", "name": "flour" },
-        { "name": "Butter for greasing" },
-        { "name": "Cocoa powder for dusting" }
+        {
+          "amount": 100,
+          "metric": "g",
+          "name": "dark chocolate"
+        },
+        {
+          "amount": 100,
+          "metric": "g",
+          "name": "butter"
+        },
+        {
+          "amount": 2,
+          "name": "eggs"
+        },
+        {
+          "amount": 2,
+          "name": "egg yolks"
+        },
+        {
+          "amount": 50,
+          "metric": "g",
+          "name": "sugar"
+        },
+        {
+          "amount": 50,
+          "metric": "g",
+          "name": "flour"
+        },
+        {
+          "name": "Butter for greasing"
+        },
+        {
+          "name": "Cocoa powder for dusting"
+        }
       ],
       "instructions": [
         "Preheat oven to 425°F (220°C).",
@@ -144,7 +265,8 @@
         "Bake for 12-14 minutes until edges are set but center is soft.",
         "Let cool for 1 minute, then invert onto plates.",
         "Serve immediately with ice cream or whipped cream."
-      ]
+      ],
+      "viewCount": 385
     },
     {
       "id": "cheesecake",
@@ -153,15 +275,41 @@
       "description": "Classic creamy cheesecake with a graham cracker crust.",
       "cookTime": "1 hour",
       "servings": 8,
-      "difficulty": "Medium",
       "ingredients": [
-        { "amount": 200, "metric": "g", "name": "graham crackers, crushed" },
-        { "amount": 100, "metric": "g", "name": "butter, melted" },
-        { "amount": 800, "metric": "g", "name": "cream cheese, softened" },
-        { "amount": 200, "metric": "g", "name": "sugar" },
-        { "amount": 4, "name": "eggs" },
-        { "amount": 2, "metric": "tsp", "name": "vanilla extract" },
-        { "amount": 200, "metric": "ml", "name": "sour cream" }
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "graham crackers, crushed"
+        },
+        {
+          "amount": 100,
+          "metric": "g",
+          "name": "butter, melted"
+        },
+        {
+          "amount": 800,
+          "metric": "g",
+          "name": "cream cheese, softened"
+        },
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "sugar"
+        },
+        {
+          "amount": 4,
+          "name": "eggs"
+        },
+        {
+          "amount": 2,
+          "metric": "tsp",
+          "name": "vanilla extract"
+        },
+        {
+          "amount": 200,
+          "metric": "ml",
+          "name": "sour cream"
+        }
       ],
       "instructions": [
         "Preheat oven to 325°F (165°C).",
@@ -175,7 +323,8 @@
         "Bake for 50-60 minutes until center is almost set.",
         "Turn off oven and leave cheesecake inside for 1 hour.",
         "Refrigerate for at least 4 hours before serving."
-      ]
+      ],
+      "viewCount": 1887
     }
   ],
   "healthy": [
@@ -186,16 +335,44 @@
       "description": "Nutritious bowl with quinoa, roasted vegetables, and tahini dressing.",
       "cookTime": "30 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
-        { "amount": 200, "metric": "g", "name": "quinoa" },
-        { "amount": 200, "metric": "g", "name": "chickpeas" },
-        { "amount": 1, "name": "sweet potato, cubed" },
-        { "amount": 100, "metric": "g", "name": "kale" },
-        { "amount": 1, "name": "avocado, sliced" },
-        { "amount": 3, "metric": "tbsp", "name": "tahini" },
-        { "amount": 1, "name": "lemon, juiced" },
-        { "amount": 2, "metric": "tbsp", "name": "olive oil" }
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "quinoa"
+        },
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "chickpeas"
+        },
+        {
+          "amount": 1,
+          "name": "sweet potato, cubed"
+        },
+        {
+          "amount": 100,
+          "metric": "g",
+          "name": "kale"
+        },
+        {
+          "amount": 1,
+          "name": "avocado, sliced"
+        },
+        {
+          "amount": 3,
+          "metric": "tbsp",
+          "name": "tahini"
+        },
+        {
+          "amount": 1,
+          "name": "lemon, juiced"
+        },
+        {
+          "amount": 2,
+          "metric": "tbsp",
+          "name": "olive oil"
+        }
       ],
       "instructions": [
         "Cook quinoa according to package directions.",
@@ -207,7 +384,8 @@
         "Assemble bowls with quinoa as base.",
         "Top with roasted vegetables, kale, and avocado.",
         "Drizzle with tahini dressing and serve."
-      ]
+      ],
+      "viewCount": 4681
     },
     {
       "id": "salmon",
@@ -216,15 +394,35 @@
       "description": "Heart-healthy grilled salmon with roasted asparagus and lemon.",
       "cookTime": "25 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
-        { "amount": 2, "name": "salmon fillets (150g each)" },
-        { "amount": 300, "metric": "g", "name": "asparagus" },
-        { "amount": 2, "metric": "tbsp", "name": "olive oil" },
-        { "amount": 1, "name": "lemon" },
-        { "amount": 2, "name": "garlic cloves, minced" },
-        { "name": "Fresh dill" },
-        { "name": "Salt and pepper" }
+        {
+          "amount": 2,
+          "name": "salmon fillets (150g each)"
+        },
+        {
+          "amount": 300,
+          "metric": "g",
+          "name": "asparagus"
+        },
+        {
+          "amount": 2,
+          "metric": "tbsp",
+          "name": "olive oil"
+        },
+        {
+          "amount": 1,
+          "name": "lemon"
+        },
+        {
+          "amount": 2,
+          "name": "garlic cloves, minced"
+        },
+        {
+          "name": "Fresh dill"
+        },
+        {
+          "name": "Salt and pepper"
+        }
       ],
       "instructions": [
         "Preheat grill or grill pan to medium-high heat.",
@@ -235,7 +433,8 @@
         "Flip and cook for another 3-4 minutes until done.",
         "Grill asparagus for 5-7 minutes, turning occasionally.",
         "Serve salmon and asparagus with lemon wedges and fresh dill."
-      ]
+      ],
+      "viewCount": 239
     }
   ],
   "comfort": [
@@ -246,16 +445,43 @@
       "description": "The ultimate comfort food with a rich, creamy cheese sauce.",
       "cookTime": "30 min",
       "servings": 4,
-      "difficulty": "Easy",
       "ingredients": [
-        { "amount": 400, "metric": "g", "name": "elbow macaroni" },
-        { "amount": 3, "metric": "tbsp", "name": "butter" },
-        { "amount": 3, "metric": "tbsp", "name": "flour" },
-        { "amount": 500, "metric": "ml", "name": "milk" },
-        { "amount": 300, "metric": "g", "name": "cheddar cheese, grated" },
-        { "amount": 100, "metric": "g", "name": "mozzarella cheese, grated" },
-        { "name": "Salt and pepper" },
-        { "name": "Breadcrumbs for topping (optional)" }
+        {
+          "amount": 400,
+          "metric": "g",
+          "name": "elbow macaroni"
+        },
+        {
+          "amount": 3,
+          "metric": "tbsp",
+          "name": "butter"
+        },
+        {
+          "amount": 3,
+          "metric": "tbsp",
+          "name": "flour"
+        },
+        {
+          "amount": 500,
+          "metric": "ml",
+          "name": "milk"
+        },
+        {
+          "amount": 300,
+          "metric": "g",
+          "name": "cheddar cheese, grated"
+        },
+        {
+          "amount": 100,
+          "metric": "g",
+          "name": "mozzarella cheese, grated"
+        },
+        {
+          "name": "Salt and pepper"
+        },
+        {
+          "name": "Breadcrumbs for topping (optional)"
+        }
       ],
       "instructions": [
         "Cook macaroni according to package directions, drain.",
@@ -267,7 +493,8 @@
         "Season with salt and pepper.",
         "Add cooked macaroni and stir to coat.",
         "Optional: Transfer to baking dish, top with breadcrumbs, and broil until golden."
-      ]
+      ],
+      "viewCount": 2091
     },
     {
       "id": "chicken-soup",
@@ -276,18 +503,47 @@
       "description": "Warming chicken soup with vegetables and noodles.",
       "cookTime": "45 min",
       "servings": 6,
-      "difficulty": "Easy",
       "ingredients": [
-        { "amount": 500, "metric": "g", "name": "chicken breast" },
-        { "amount": 2, "name": "carrots, sliced" },
-        { "amount": 2, "name": "celery stalks, sliced" },
-        { "amount": 1, "name": "onion, diced" },
-        { "amount": 2, "name": "garlic cloves, minced" },
-        { "amount": 1.5, "metric": "L", "name": "chicken broth" },
-        { "amount": 200, "metric": "g", "name": "egg noodles" },
-        { "name": "Fresh parsley" },
-        { "name": "Bay leaves" },
-        { "name": "Salt and pepper" }
+        {
+          "amount": 500,
+          "metric": "g",
+          "name": "chicken breast"
+        },
+        {
+          "amount": 2,
+          "name": "carrots, sliced"
+        },
+        {
+          "amount": 2,
+          "name": "celery stalks, sliced"
+        },
+        {
+          "amount": 1,
+          "name": "onion, diced"
+        },
+        {
+          "amount": 2,
+          "name": "garlic cloves, minced"
+        },
+        {
+          "amount": 1.5,
+          "metric": "L",
+          "name": "chicken broth"
+        },
+        {
+          "amount": 200,
+          "metric": "g",
+          "name": "egg noodles"
+        },
+        {
+          "name": "Fresh parsley"
+        },
+        {
+          "name": "Bay leaves"
+        },
+        {
+          "name": "Salt and pepper"
+        }
       ],
       "instructions": [
         "In a large pot, add chicken broth and bring to a boil.",
@@ -299,7 +555,8 @@
         "Return shredded chicken to the pot.",
         "Season with salt and pepper to taste.",
         "Remove bay leaves and garnish with fresh parsley before serving."
-      ]
+      ],
+      "viewCount": 1819
     }
   ],
   "quick": [
@@ -310,14 +567,30 @@
       "description": "Quick and easy quesadilla with melted cheese and optional fillings.",
       "cookTime": "10 min",
       "servings": 1,
-      "difficulty": "Easy",
       "ingredients": [
-        { "amount": 2, "name": "flour tortillas" },
-        { "amount": 100, "metric": "g", "name": "cheese (cheddar or Mexican blend)" },
-        { "amount": 1, "metric": "tbsp", "name": "butter" },
-        { "name": "Optional: bell peppers, onions, jalapeños" },
-        { "name": "Sour cream for serving" },
-        { "name": "Salsa for serving" }
+        {
+          "amount": 2,
+          "name": "flour tortillas"
+        },
+        {
+          "amount": 100,
+          "metric": "g",
+          "name": "cheese (cheddar or Mexican blend)"
+        },
+        {
+          "amount": 1,
+          "metric": "tbsp",
+          "name": "butter"
+        },
+        {
+          "name": "Optional: bell peppers, onions, jalapeños"
+        },
+        {
+          "name": "Sour cream for serving"
+        },
+        {
+          "name": "Salsa for serving"
+        }
       ],
       "instructions": [
         "Heat a skillet over medium heat.",
@@ -329,7 +602,8 @@
         "Flip and cook for another 2-3 minutes.",
         "Remove from heat and cut into wedges.",
         "Serve with sour cream and salsa."
-      ]
+      ],
+      "viewCount": 4264
     },
     {
       "id": "omelette",
@@ -338,16 +612,42 @@
       "description": "Fluffy omelette filled with fresh vegetables.",
       "cookTime": "8 min",
       "servings": 1,
-      "difficulty": "Easy",
       "ingredients": [
-        { "amount": 3, "name": "eggs" },
-        { "amount": 2, "metric": "tbsp", "name": "milk" },
-        { "amount": 1, "metric": "tbsp", "name": "butter" },
-        { "amount": 50, "metric": "g", "name": "bell peppers, diced" },
-        { "amount": 50, "metric": "g", "name": "mushrooms, sliced" },
-        { "amount": 30, "metric": "g", "name": "cheese, grated" },
-        { "name": "Salt and pepper" },
-        { "name": "Fresh herbs (optional)" }
+        {
+          "amount": 3,
+          "name": "eggs"
+        },
+        {
+          "amount": 2,
+          "metric": "tbsp",
+          "name": "milk"
+        },
+        {
+          "amount": 1,
+          "metric": "tbsp",
+          "name": "butter"
+        },
+        {
+          "amount": 50,
+          "metric": "g",
+          "name": "bell peppers, diced"
+        },
+        {
+          "amount": 50,
+          "metric": "g",
+          "name": "mushrooms, sliced"
+        },
+        {
+          "amount": 30,
+          "metric": "g",
+          "name": "cheese, grated"
+        },
+        {
+          "name": "Salt and pepper"
+        },
+        {
+          "name": "Fresh herbs (optional)"
+        }
       ],
       "instructions": [
         "Beat eggs with milk, salt, and pepper.",
@@ -359,7 +659,8 @@
         "When almost set, sprinkle cheese on one half.",
         "Fold omelette in half and cook for another minute.",
         "Slide onto plate and serve immediately."
-      ]
+      ],
+      "viewCount": 851
     }
   ]
 }

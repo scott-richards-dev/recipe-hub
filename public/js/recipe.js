@@ -165,7 +165,7 @@ document.addEventListener('alpine:init', () => {
       description: '',
       cookTime: '',
       servings: '',
-      difficulty: '',
+      viewCount: 0,
       ingredients: [],
       instructions: []
     },
@@ -196,18 +196,24 @@ document.addEventListener('alpine:init', () => {
           }
         }
         
-        // Note: viewCount remains client-side generated for now
-        // Could be moved to backend with recipe view tracking
-        this.viewCount = Math.floor(Math.random() * 5000) + 100;
-        
         const response = await fetch(`${API_URL}/recipes/${this.recipeId}`);
         this.recipe = await response.json();
         document.title = `${this.recipe.name} - Recipe Hub`;
+        
+        // Use viewCount from recipe data, fallback to random if not available
+        this.viewCount = this.recipe.viewCount || Math.floor(Math.random() * 5000) + 100;
         
         // Check for versions
         await this.checkVersions();
       } catch (error) {
         console.error('Error loading recipe:', error);
+      }
+      
+      // Check for success message from add-recipe
+      const successMessage = sessionStorage.getItem('successMessage');
+      if (successMessage) {
+        Toast.success(successMessage, 'Success', { duration: 4000 });
+        sessionStorage.removeItem('successMessage');
       }
     },
     
@@ -225,6 +231,10 @@ document.addEventListener('alpine:init', () => {
     
     goToRevisions() {
       window.location.href = `compare.html?recipeId=${this.recipeId}&bookId=${this.bookId}`;
+    },
+    
+    editRecipe() {
+      window.location.href = `add-recipe.html?id=${this.recipeId}&book=${this.bookId}`;
     },
     
     setMultiplier(value) {
@@ -273,6 +283,13 @@ document.addEventListener('alpine:init', () => {
       
       // For other areas, manually toggle
       this.checkedIngredients[index] = !this.checkedIngredients[index];
+    },
+    
+    deleteRecipe() {
+      if (confirm(`Are you sure you want to delete "${this.recipe.name}"? This action cannot be undone.`)) {
+        // TODO: Implement delete functionality
+        Toast.info('Delete functionality coming soon!', 'Not Implemented');
+      }
     }
   }));
 });

@@ -33,51 +33,52 @@
 }
 
 .page-header {
-  padding: 2.5rem 0;
+  padding: 1.5rem 0;
   background: var(--background);
 }
 
 /* Book Header */
 .book-header {
   text-align: center;
-  padding: 2.5rem 2rem;
+  padding: 1.25rem 1.5rem;
   background: var(--surface);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
+  position: relative;
 }
 
 .book-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
   display: inline-block;
   line-height: 1;
 }
 
 .book-header h1 {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   letter-spacing: -0.03em;
   line-height: 1.2;
 }
 
 .book-header p {
   color: var(--text-secondary);
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.6;
   max-width: 600px;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 0.75rem;
 }
 
 .stats {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
   border-top: 1px solid var(--border);
 }
 
@@ -85,4 +86,44 @@
   font-size: 0.875rem;
   color: var(--text-secondary);
   font-weight: 500;
+}
+/* Edit Book Button */
+.btn-edit-book {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+.btn-edit-book:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-edit-book:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-edit-book .edit-icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
 }

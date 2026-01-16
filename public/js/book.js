@@ -35,10 +35,21 @@ document.addEventListener('alpine:init', () => {
         // Fetch recipes for this book
         const response = await fetch(`${API_URL}/books/${this.bookId}`);
         this.recipes = await response.json();
+        
+        // Check for success message from add-book
+        const successMessage = sessionStorage.getItem('successMessage');
+        if (successMessage) {
+          Toast.success(successMessage, 'Success', { duration: 4000 });
+          sessionStorage.removeItem('successMessage');
+        }
       } catch (error) {
         console.error('Error loading book data:', error);
         this.error = 'Error loading book data. Please try again later.';
       }
+    },
+    
+    editBook() {
+      window.location.href = `add-book.html?id=${this.bookId}`;
     }
   }));
 
@@ -55,14 +66,12 @@ document.addEventListener('alpine:init', () => {
     },
     
     createBook() {
-      // For now, show an alert. In the future, this can navigate to a form page.
-      alert('Create new recipe book functionality coming soon!');
+      window.location.href = 'add-book.html';
       this.showActions = false;
     },
     
     createRecipe() {
-      // For now, show an alert. In the future, this can navigate to a form page.
-      alert('Create new recipe functionality coming soon!');
+      window.location.href = 'add-recipe.html';
       this.showActions = false;
     }
   }));

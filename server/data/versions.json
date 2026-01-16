@@ -12,7 +12,6 @@
       "description": "A classic Roman pasta dish.",
       "cookTime": "20 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
         "400g spaghetti",
         "200g pancetta",
@@ -26,7 +25,8 @@
         "Fry pancetta until crispy.",
         "Mix eggs with cheese.",
         "Combine everything and serve."
-      ]
+      ],
+      "viewCount": 2730
     }
   },
   {
@@ -42,7 +42,6 @@
       "description": "A classic Roman pasta dish made with eggs, cheese, and pancetta.",
       "cookTime": "25 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
         "400g spaghetti",
         "200g pancetta or guanciale",
@@ -59,7 +58,8 @@
         "Remove skillet from heat, add pasta to pancetta.",
         "Quickly stir in egg mixture, adding pasta water to create a creamy sauce.",
         "Season generously with black pepper and serve immediately."
-      ]
+      ],
+      "viewCount": 554
     }
   },
   {
@@ -75,7 +75,6 @@
       "description": "Simple pizza with tomato and cheese.",
       "cookTime": "25 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
         "1 pizza dough",
         "200g tomato sauce",
@@ -89,7 +88,8 @@
         "Add sauce and cheese.",
         "Bake for 12-15 minutes.",
         "Top with basil."
-      ]
+      ],
+      "viewCount": 3991
     }
   },
   {
@@ -105,7 +105,6 @@
       "description": "Simple and delicious pizza with tomato sauce, mozzarella, and fresh basil.",
       "cookTime": "30 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
         "1 pizza dough",
         "200g crushed tomatoes",
@@ -122,7 +121,8 @@
         "Drizzle with olive oil, season with salt and pepper.",
         "Bake for 12-15 minutes until crust is golden.",
         "Top with fresh basil leaves and serve hot."
-      ]
+      ],
+      "viewCount": 1926
     }
   },
   {
@@ -138,7 +138,6 @@
       "description": "Authentic Neapolitan pizza with San Marzano tomatoes, buffalo mozzarella, and fresh basil.",
       "cookTime": "30 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
         "1 pizza dough (Neapolitan style)",
         "200g San Marzano crushed tomatoes",
@@ -156,7 +155,8 @@
         "Transfer to preheated pizza stone and bake for 10-12 minutes until crust is golden and bubbly.",
         "Remove from oven and immediately top with fresh basil leaves.",
         "Drizzle with more olive oil and serve hot."
-      ]
+      ],
+      "viewCount": 3789
     }
   },
   {
@@ -172,7 +172,6 @@
       "description": "Classic Thai noodle dish.",
       "cookTime": "25 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
         "200g rice noodles",
         "2 eggs",
@@ -189,7 +188,8 @@
         "Stir-fry shrimp and eggs.",
         "Add noodles and sauce.",
         "Top with peanuts and bean sprouts."
-      ]
+      ],
+      "viewCount": 3424
     }
   },
   {
@@ -205,7 +205,6 @@
       "description": "Thailand's famous stir-fried noodle dish with a perfect balance of sweet, sour, and savory.",
       "cookTime": "30 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
         "200g rice noodles",
         "2 eggs",
@@ -226,7 +225,8 @@
         "Add drained noodles and sauce, toss until coated.",
         "Add eggs back, stir in bean sprouts.",
         "Serve with peanuts, lime, and green onions."
-      ]
+      ],
+      "viewCount": 2679
     }
   },
   {
@@ -242,7 +242,6 @@
       "description": "Japanese pork bone broth ramen.",
       "cookTime": "1.5 hours",
       "servings": 4,
-      "difficulty": "Hard",
       "ingredients": [
         "1kg pork bones",
         "500g ramen noodles",
@@ -257,7 +256,8 @@
         "Cook noodles.",
         "Prepare toppings.",
         "Assemble bowls and serve."
-      ]
+      ],
+      "viewCount": 3029
     }
   },
   {
@@ -273,7 +273,6 @@
       "description": "Rich, creamy Japanese pork bone broth with tender noodles and toppings.",
       "cookTime": "2 hours",
       "servings": 4,
-      "difficulty": "Hard",
       "ingredients": [
         "1kg pork bones",
         "500g ramen noodles",
@@ -293,7 +292,8 @@
         "Assemble bowls with noodles, pour hot broth over them.",
         "Top with pork belly, soft-boiled eggs, green onions, and nori.",
         "Serve immediately while hot."
-      ]
+      ],
+      "viewCount": 3829
     }
   },
   {
@@ -309,7 +309,6 @@
       "description": "Individual chocolate cakes with molten center.",
       "cookTime": "20 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
         "100g dark chocolate",
         "100g butter",
@@ -324,7 +323,8 @@
         "Mix eggs with sugar.",
         "Combine and add flour.",
         "Pour into ramekins and bake 12 minutes."
-      ]
+      ],
+      "viewCount": 1549
     }
   },
   {
@@ -340,7 +340,6 @@
       "description": "Decadent individual chocolate cakes with a molten center.",
       "cookTime": "25 min",
       "servings": 4,
-      "difficulty": "Medium",
       "ingredients": [
         "100g dark chocolate",
         "100g butter",
@@ -362,7 +361,8 @@
         "Bake for 12-14 minutes until edges are set but center is soft.",
         "Let cool for 1 minute, then invert onto plates.",
         "Serve immediately with ice cream or whipped cream."
-      ]
+      ],
+      "viewCount": 3394
     }
   },
   {
@@ -378,7 +378,6 @@
       "description": "Creamy cheesecake with graham cracker crust.",
       "cookTime": "1 hour",
       "servings": 8,
-      "difficulty": "Medium",
       "ingredients": [
         "200g graham crackers",
         "100g butter",
@@ -394,7 +393,8 @@
         "Add eggs and vanilla.",
         "Pour over crust and bake 60 minutes.",
         "Cool and refrigerate."
-      ]
+      ],
+      "viewCount": 4559
     }
   },
   {
@@ -410,7 +410,6 @@
       "description": "Healthy bowl with quinoa and vegetables.",
       "cookTime": "25 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
         "200g quinoa",
         "200g chickpeas",
@@ -426,7 +425,8 @@
         "Prepare kale.",
         "Make tahini dressing.",
         "Assemble bowl."
-      ]
+      ],
+      "viewCount": 2869
     }
   },
   {
@@ -442,7 +442,6 @@
       "description": "Nutritious bowl with quinoa, roasted vegetables, and tahini dressing.",
       "cookTime": "30 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
         "200g quinoa",
         "200g chickpeas",
@@ -463,7 +462,8 @@
         "Assemble bowls with quinoa as base.",
         "Top with roasted vegetables, kale, and avocado.",
         "Drizzle with tahini dressing and serve."
-      ]
+      ],
+      "viewCount": 184
     }
   },
   {
@@ -479,7 +479,6 @@
       "description": "Heart-healthy grilled salmon.",
       "cookTime": "20 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
         "2 salmon fillets",
         "300g asparagus",
@@ -492,7 +491,8 @@
         "Grill salmon 4-5 minutes per side.",
         "Grill asparagus.",
         "Serve with lemon."
-      ]
+      ],
+      "viewCount": 469
     }
   },
   {
@@ -508,7 +508,6 @@
       "description": "Heart-healthy grilled salmon with roasted asparagus and lemon.",
       "cookTime": "25 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
         "2 salmon fillets (150g each)",
         "300g asparagus",
@@ -527,7 +526,8 @@
         "Flip and cook for another 3-4 minutes until done.",
         "Grill asparagus for 5-7 minutes, turning occasionally.",
         "Serve salmon and asparagus with lemon wedges and fresh dill."
-      ]
+      ],
+      "viewCount": 4677
     }
   },
   {
@@ -543,7 +543,6 @@
       "description": "Heart-healthy grilled salmon with honey-mustard glaze, roasted asparagus, and lemon.",
       "cookTime": "25 min",
       "servings": 2,
-      "difficulty": "Easy",
       "ingredients": [
         "2 salmon fillets (150g each)",
         "300g asparagus",
@@ -566,7 +565,8 @@
         "Brush with more glaze, flip and cook for another 3-4 minutes until done.",
         "Grill asparagus for 5-7 minutes, turning occasionally.",
         "Serve salmon and asparagus with lemon wedges and fresh dill."
-      ]
+      ],
+      "viewCount": 399
     }
   },
   {
@@ -582,7 +582,6 @@
       "description": "Creamy comfort food.",
       "cookTime": "25 min",
       "servings": 4,
-      "difficulty": "Easy",
       "ingredients": [
         "400g macaroni",
         "3 tbsp butter",
@@ -595,7 +594,8 @@
         "Make cheese sauce with butter, flour, milk, and cheese.",
         "Mix pasta with sauce.",
         "Serve hot."
-      ]
+      ],
+      "viewCount": 3127
     }
   },
   {
@@ -611,7 +611,6 @@
       "description": "The ultimate comfort food with a rich, creamy cheese sauce.",
       "cookTime": "30 min",
       "servings": 4,
-      "difficulty": "Easy",
       "ingredients": [
         "400g elbow macaroni",
         "3 tbsp butter",
@@ -632,7 +631,8 @@
         "Season with salt and pepper.",
         "Add cooked macaroni and stir to coat.",
         "Optional: Transfer to baking dish, top with breadcrumbs, and broil until golden."
-      ]
+      ],
+      "viewCount": 4074
     }
   },
   {
@@ -648,7 +648,6 @@
       "description": "Warming soup with chicken and vegetables.",
       "cookTime": "40 min",
       "servings": 6,
-      "difficulty": "Easy",
       "ingredients": [
         "500g chicken breast",
         "2 carrots",
@@ -662,7 +661,8 @@
         "Add vegetables.",
         "Add noodles.",
         "Serve hot."
-      ]
+      ],
+      "viewCount": 3623
     }
   },
   {
@@ -678,7 +678,6 @@
       "description": "Warming chicken soup with vegetables and noodles.",
       "cookTime": "45 min",
       "servings": 6,
-      "difficulty": "Easy",
       "ingredients": [
         "500g chicken breast",
         "2 carrots, sliced",
@@ -701,7 +700,8 @@
         "Return shredded chicken to the pot.",
         "Season with salt and pepper to taste.",
         "Remove bay leaves and garnish with fresh parsley before serving."
-      ]
+      ],
+      "viewCount": 2643
     }
   },
   {
@@ -717,7 +717,6 @@
       "description": "Quick quesadilla with melted cheese.",
       "cookTime": "8 min",
       "servings": 1,
-      "difficulty": "Easy",
       "ingredients": [
         "2 flour tortillas",
         "100g cheese",
@@ -729,7 +728,8 @@
         "Top with second tortilla.",
         "Cook until golden on both sides.",
         "Cut and serve."
-      ]
+      ],
+      "viewCount": 4205
     }
   },
   {
@@ -745,7 +745,6 @@
       "description": "Quick and easy quesadilla with melted cheese and optional fillings.",
       "cookTime": "10 min",
       "servings": 1,
-      "difficulty": "Easy",
       "ingredients": [
         "2 flour tortillas",
         "100g cheese (cheddar or Mexican blend)",
@@ -764,7 +763,8 @@
         "Flip and cook for another 2-3 minutes.",
         "Remove from heat and cut into wedges.",
         "Serve with sour cream and salsa."
-      ]
+      ],
+      "viewCount": 3759
     }
   },
   {
@@ -780,7 +780,6 @@
       "description": "Simple omelette with vegetables.",
       "cookTime": "6 min",
       "servings": 1,
-      "difficulty": "Easy",
       "ingredients": [
         "3 eggs",
         "Butter",
@@ -794,7 +793,8 @@
         "Add eggs and cook.",
         "Add cheese and fold.",
         "Serve."
-      ]
+      ],
+      "viewCount": 507
     }
   },
   {
@@ -810,7 +810,6 @@
       "description": "Fluffy omelette filled with fresh vegetables.",
       "cookTime": "8 min",
       "servings": 1,
-      "difficulty": "Easy",
       "ingredients": [
         "3 eggs",
         "2 tbsp milk",
@@ -831,7 +830,8 @@
         "When almost set, sprinkle cheese on one half.",
         "Fold omelette in half and cook for another minute.",
         "Slide onto plate and serve immediately."
-      ]
+      ],
+      "viewCount": 1921
     }
   }
 ]

@@ -11,8 +11,10 @@
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/cards.css">
   <link rel="stylesheet" href="../css/add-button.css">
+  <link rel="stylesheet" href="../css/toast.css">
   <link rel="stylesheet" href="../css/responsive.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="../js/toast.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -45,6 +47,13 @@
     <section class="page-header">
       <div class="container">
         <div class="book-header">
+          <button class="btn-edit-book" @click="editBook" title="Edit book details">
+            <svg class="edit-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Edit Book</span>
+          </button>
           <div class="book-icon" x-text="bookIcon"></div>
           <h1 x-text="bookName"></h1>
           <p x-text="bookDescription"></p>
@@ -65,9 +74,9 @@
             <a :href="`recipe.html?id=${recipe.id}&book=${bookId}`" class="card recipe-card">
               <h3 x-text="recipe.name"></h3>
               <div class="recipe-meta">
-                <span x-text="`⏱️ ${recipe.cookTime}`"></span>
-                <span x-text="`🍽️ ${recipe.servings} servings`"></span>
-                <span x-text="`📊 ${recipe.difficulty}`"></span>
+                <span x-text="`⏱️ ${recipe.cookTime}`" title="Cook Time"></span>
+                <span x-text="`🍽️ ${recipe.servings}`" title="Servings"></span>
+                <span title="View Count">👁️ <span x-text="(recipe.viewCount || 0).toLocaleString()"></span></span>
               </div>
             </a>
           </template>

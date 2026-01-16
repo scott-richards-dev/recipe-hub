@@ -11,8 +11,10 @@
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/cards.css">
   <link rel="stylesheet" href="../css/recipe.css">
+  <link rel="stylesheet" href="../css/toast.css">
   <link rel="stylesheet" href="../css/responsive.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="../js/toast.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -47,29 +49,51 @@
     <div class="container recipe-container">
       <article class="recipe-detail">
         <header class="recipe-header">
-          <!-- Version & Engagement Info at Top -->
-          <div class="recipe-metadata-top">
-            <div class="metadata-top-items">
-              <div class="metadata-badge">
-                <span class="metadata-icon">👁️</span>
-                <span x-text="viewCount.toLocaleString()" class="badge-value"></span>
-                <span class="badge-label">views</span>
-              </div>
-            </div>
-            
-            <!-- Revisions Link (conditionally shown) -->
-            <div class="revisions-link-wrapper" x-show="hasRevisions">
-              <button @click="goToRevisions" class="btn-revisions">
-                <span class="metadata-icon">📜</span>
-                <span>See Previous Versions</span>
-                <span class="btn-arrow">→</span>
-              </button>
-            </div>
-          </div>
-          
           <div class="recipe-title-section">
             <h1 x-text="recipe.name"></h1>
             <p x-text="recipe.description" class="recipe-description"></p>
+          </div>
+          
+          <!-- Action Buttons Below Title/Description -->
+          <div class="recipe-action-buttons">
+            <button class="btn-edit-recipe" @click="editRecipe" title="Edit recipe details">
+              <svg class="edit-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Edit Recipe</span>
+            </button>
+            
+            <button @click="goToRevisions" class="btn-revisions" x-show="hasRevisions">
+              <svg class="revisions-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 3v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 21v-5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>See Previous Versions</span>
+            </button>
+            
+            <!-- Recipe Options Menu -->
+            <div class="recipe-menu-wrapper" x-data="{ menuOpen: false }" @click.away="menuOpen = false">
+              <button class="recipe-menu-btn" @click="menuOpen = !menuOpen" aria-label="Recipe options">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="recipe-menu-dropdown" x-show="menuOpen" x-transition:enter="menu-enter" x-transition:leave="menu-leave">
+                <button class="recipe-menu-item delete" @click="deleteRecipe()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>Delete Recipe</span>
+                </button>
+              </div>
+            </div>
           </div>
           
           <!-- Primary Recipe Stats Below Title -->
@@ -90,10 +114,10 @@
                 </div>
               </div>
               <div class="metadata-item">
-                <span class="metadata-icon">📊</span>
+                <span class="metadata-icon">👁️</span>
                 <div class="metadata-content">
-                  <span class="metadata-label">Difficulty</span>
-                  <span x-text="recipe.difficulty || '—'" class="metadata-value"></span>
+                  <span class="metadata-label">View Count</span>
+                  <span x-text="viewCount.toLocaleString()" class="metadata-value"></span>
                 </div>
               </div>
             </div>

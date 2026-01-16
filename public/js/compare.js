@@ -121,7 +121,7 @@ document.addEventListener('alpine:init', () => {
         { label: 'Description', key: 'description' },
         { label: 'Cook Time', key: 'cookTime' },
         { label: 'Servings', key: 'servings' },
-        { label: 'Difficulty', key: 'difficulty' }
+        { label: 'View Count', key: 'viewCount' }
       ];
       
       let hasChanges = false;

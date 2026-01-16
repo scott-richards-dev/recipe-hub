@@ -10,6 +10,13 @@ document.addEventListener('alpine:init', () => {
       try {
         const response = await fetch(`${API_URL}/books`);
         this.books = await response.json();
+        
+        // Check for success message from add-book or add-recipe
+        const successMessage = sessionStorage.getItem('successMessage');
+        if (successMessage) {
+          Toast.success(successMessage, 'Success', { duration: 4000 });
+          sessionStorage.removeItem('successMessage');
+        }
       } catch (error) {
         console.error('Error loading recipe books:', error);
         this.error = 'Error loading recipe books. Please try again later.';
@@ -30,14 +37,12 @@ document.addEventListener('alpine:init', () => {
     },
     
     createBook() {
-      // For now, show an alert. In the future, this can navigate to a form page.
-      alert('Create new recipe book functionality coming soon!');
+      window.location.href = 'pages/add-book.html';
       this.showActions = false;
     },
     
     createRecipe() {
-      // For now, show an alert. In the future, this can navigate to a form page.
-      alert('Create new recipe functionality coming soon!');
+      window.location.href = 'pages/add-recipe.html';
       this.showActions = false;
     }
   }));

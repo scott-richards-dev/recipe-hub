@@ -11,8 +11,10 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/cards.css">
   <link rel="stylesheet" href="css/add-button.css">
+  <link rel="stylesheet" href="css/toast.css">
   <link rel="stylesheet" href="css/responsive.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="js/toast.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -60,6 +62,7 @@
               <span class="card-icon" x-text="book.image"></span>
               <h3 x-text="book.name"></h3>
               <p x-text="book.description"></p>
+              <p class="recipe-count" x-text="`${book.recipeCount || 0} recipe${book.recipeCount === 1 ? '' : 's'}`"></p>
             </a>
           </template>
         </div>
