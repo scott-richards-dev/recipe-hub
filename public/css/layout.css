@@ -87,43 +87,156 @@
   color: var(--text-secondary);
   font-weight: 500;
 }
+
+/* Book Action Buttons Container */
+.book-action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
 /* Edit Book Button */
 .btn-edit-book {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--surface);
+  background: var(--background);
   color: var(--text-secondary);
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   transition: all 0.2s ease;
   font-family: inherit;
-  box-shadow: var(--shadow-sm);
-  z-index: 10;
 }
 
 .btn-edit-book:hover {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: white;
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background: var(--primary-lighter);
+  border-color: var(--primary-light);
+  color: var(--primary-dark);
 }
 
 .btn-edit-book:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+  transform: scale(0.98);
 }
 
 .btn-edit-book .edit-icon {
   width: 16px;
   height: 16px;
   stroke-width: 2;
+}
+
+/* Book Menu Dropdown */
+.book-menu-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.book-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.book-menu-btn:hover {
+  background: var(--primary-lighter);
+  border-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.book-menu-btn:active {
+  transform: scale(0.95);
+}
+
+.book-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 180px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.menu-enter {
+  animation: menuFadeIn 0.15s ease-out;
+}
+
+.menu-leave {
+  animation: menuFadeOut 0.1s ease-in;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes menuFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.book-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.book-menu-item:hover {
+  background: var(--surface-alt);
+}
+
+.book-menu-item.delete {
+  color: #dc2626;
+}
+
+.book-menu-item.delete:hover {
+  background: #fee;
+  color: #b91c1c;
+}
+
+.book-menu-item svg {
+  flex-shrink: 0;
 }

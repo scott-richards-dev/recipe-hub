@@ -105,9 +105,12 @@
     font-size: 2rem;
   }
 
+  .book-action-buttons {
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
   .btn-edit-book {
-    top: 0.75rem;
-    right: 0.75rem;
     padding: 0.4rem 0.85rem;
     font-size: 0.813rem;
   }
@@ -115,6 +118,16 @@
   .btn-edit-book .edit-icon {
     width: 14px;
     height: 14px;
+  }
+
+  .book-menu-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .book-menu-btn svg {
+    width: 18px;
+    height: 18px;
   }
 
   .compare-container {

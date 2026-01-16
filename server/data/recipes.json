@@ -2,7 +2,6 @@
   "italian": [
     {
       "id": "carbonara",
-      "bookId": "italian",
       "name": "Authentic Spaghetti Carbonara",
       "description": "A classic Roman pasta dish made with eggs, cheese, pancetta, and black pepper.",
       "cookTime": "25 min",
@@ -43,11 +42,14 @@
         "Quickly stir in egg mixture, adding pasta water to create a creamy sauce.",
         "Season generously with black pepper and serve immediately."
       ],
-      "viewCount": 1133
+      "viewCount": 1133,
+      "bookIds": [
+        "italian",
+        "asian"
+      ]
     },
     {
       "id": "margherita",
-      "bookId": "italian",
       "name": "Pizza Margherita",
       "description": "Simple and delicious pizza with tomato sauce, mozzarella, and fresh basil.",
       "cookTime": "30 min",
@@ -88,13 +90,15 @@
         "Bake for 12-15 minutes until crust is golden.",
         "Top with fresh basil leaves and serve hot."
       ],
-      "viewCount": 4589
+      "viewCount": 4589,
+      "bookIds": [
+        "italian"
+      ]
     }
   ],
   "asian": [
     {
       "id": "pad-thai",
-      "bookId": "asian",
       "name": "Pad Thai",
       "description": "Thailand's famous stir-fried noodle dish with a perfect balance of sweet, sour, and savory.",
       "cookTime": "30 min",
@@ -151,11 +155,13 @@
         "Add eggs back, stir in bean sprouts.",
         "Serve with peanuts, lime, and green onions."
       ],
-      "viewCount": 393
+      "viewCount": 393,
+      "bookIds": [
+        "asian"
+      ]
     },
     {
       "id": "ramen",
-      "bookId": "asian",
       "name": "Tonkotsu Ramen",
       "description": "Rich, creamy Japanese pork bone broth with tender noodles and toppings.",
       "cookTime": "2 hours",
@@ -207,13 +213,15 @@
         "Top with pork belly, soft-boiled eggs, green onions, and nori.",
         "Serve immediately while hot."
       ],
-      "viewCount": 1538
+      "viewCount": 1538,
+      "bookIds": [
+        "asian"
+      ]
     }
   ],
   "desserts": [
     {
       "id": "chocolate-cake",
-      "bookId": "desserts",
       "name": "Chocolate Lava Cake",
       "description": "Decadent individual chocolate cakes with a molten center.",
       "cookTime": "25 min",
@@ -266,11 +274,13 @@
         "Let cool for 1 minute, then invert onto plates.",
         "Serve immediately with ice cream or whipped cream."
       ],
-      "viewCount": 385
+      "viewCount": 385,
+      "bookIds": [
+        "desserts"
+      ]
     },
     {
       "id": "cheesecake",
-      "bookId": "desserts",
       "name": "New York Cheesecake",
       "description": "Classic creamy cheesecake with a graham cracker crust.",
       "cookTime": "1 hour",
@@ -324,13 +334,15 @@
         "Turn off oven and leave cheesecake inside for 1 hour.",
         "Refrigerate for at least 4 hours before serving."
       ],
-      "viewCount": 1887
+      "viewCount": 1887,
+      "bookIds": [
+        "desserts"
+      ]
     }
   ],
   "healthy": [
     {
       "id": "quinoa-bowl",
-      "bookId": "healthy",
       "name": "Buddha Bowl",
       "description": "Nutritious bowl with quinoa, roasted vegetables, and tahini dressing.",
       "cookTime": "30 min",
@@ -385,11 +397,13 @@
         "Top with roasted vegetables, kale, and avocado.",
         "Drizzle with tahini dressing and serve."
       ],
-      "viewCount": 4681
+      "viewCount": 4681,
+      "bookIds": [
+        "healthy"
+      ]
     },
     {
       "id": "salmon",
-      "bookId": "healthy",
       "name": "Grilled Salmon with Asparagus",
       "description": "Heart-healthy grilled salmon with roasted asparagus and lemon.",
       "cookTime": "25 min",
@@ -434,13 +448,15 @@
         "Grill asparagus for 5-7 minutes, turning occasionally.",
         "Serve salmon and asparagus with lemon wedges and fresh dill."
       ],
-      "viewCount": 239
+      "viewCount": 239,
+      "bookIds": [
+        "healthy"
+      ]
     }
   ],
   "comfort": [
     {
       "id": "mac-cheese",
-      "bookId": "comfort",
       "name": "Creamy Mac and Cheese",
       "description": "The ultimate comfort food with a rich, creamy cheese sauce.",
       "cookTime": "30 min",
@@ -494,11 +510,13 @@
         "Add cooked macaroni and stir to coat.",
         "Optional: Transfer to baking dish, top with breadcrumbs, and broil until golden."
       ],
-      "viewCount": 2091
+      "viewCount": 2091,
+      "bookIds": [
+        "comfort"
+      ]
     },
     {
       "id": "chicken-soup",
-      "bookId": "comfort",
       "name": "Homemade Chicken Soup",
       "description": "Warming chicken soup with vegetables and noodles.",
       "cookTime": "45 min",
@@ -556,13 +574,15 @@
         "Season with salt and pepper to taste.",
         "Remove bay leaves and garnish with fresh parsley before serving."
       ],
-      "viewCount": 1819
+      "viewCount": 1819,
+      "bookIds": [
+        "comfort"
+      ]
     }
   ],
   "quick": [
     {
       "id": "quesadilla",
-      "bookId": "quick",
       "name": "Cheese Quesadilla",
       "description": "Quick and easy quesadilla with melted cheese and optional fillings.",
       "cookTime": "10 min",
@@ -603,11 +623,13 @@
         "Remove from heat and cut into wedges.",
         "Serve with sour cream and salsa."
       ],
-      "viewCount": 4264
+      "viewCount": 4264,
+      "bookIds": [
+        "quick"
+      ]
     },
     {
       "id": "omelette",
-      "bookId": "quick",
       "name": "Veggie Omelette",
       "description": "Fluffy omelette filled with fresh vegetables.",
       "cookTime": "8 min",
@@ -660,7 +682,10 @@
         "Fold omelette in half and cook for another minute.",
         "Slide onto plate and serve immediately."
       ],
-      "viewCount": 851
+      "viewCount": 851,
+      "bookIds": [
+        "quick"
+      ]
     }
   ]
 }

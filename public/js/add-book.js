@@ -112,7 +112,12 @@ document.addEventListener('alpine:init', () => {
     },
     
     cancel() {
-      window.location.href = '../index.html';
+      if (this.isEditMode && this.bookId) {
+        // Redirect back to book page
+        window.location.href = `book.html?id=${this.bookId}`;
+      } else {
+        window.location.href = '../index.html';
+      }
     }
   }));
 });

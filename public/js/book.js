@@ -50,6 +50,13 @@ document.addEventListener('alpine:init', () => {
     
     editBook() {
       window.location.href = `add-book.html?id=${this.bookId}`;
+    },
+    
+    deleteBook() {
+      if (confirm(`Are you sure you want to delete "${this.bookName}"? This action cannot be undone.`)) {
+        // TODO: Implement delete functionality
+        Toast.info('Delete functionality coming soon!', 'Not Implemented');
+      }
     }
   }));
 

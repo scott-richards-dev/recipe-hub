@@ -99,26 +99,17 @@
           <!-- Primary Recipe Stats Below Title -->
           <div class="recipe-metadata-bottom">
             <div class="metadata-stats">
-              <div class="metadata-item">
+              <div class="metadata-item" title="Cook Time">
                 <span class="metadata-icon">⏱️</span>
-                <div class="metadata-content">
-                  <span class="metadata-label">Cook Time</span>
-                  <span x-text="recipe.cookTime || '—'" class="metadata-value"></span>
-                </div>
+                <span x-text="recipe.cookTime || '—'" class="metadata-value"></span>
               </div>
-              <div class="metadata-item">
-                <span class="metadata-icon">🍽️</span>
-                <div class="metadata-content">
-                  <span class="metadata-label">Servings</span>
-                  <span x-text="recipe.servings || '—'" class="metadata-value"></span>
-                </div>
+              <div class="metadata-item" title="Servings">
+                <span class="metadata-icon">👥</span>
+                <span x-text="recipe.servings || '—'" class="metadata-value"></span>
               </div>
-              <div class="metadata-item">
-                <span class="metadata-icon">👁️</span>
-                <div class="metadata-content">
-                  <span class="metadata-label">View Count</span>
-                  <span x-text="viewCount.toLocaleString()" class="metadata-value"></span>
-                </div>
+              <div class="metadata-item" title="View Count">
+                <span class="metadata-icon">👀</span>
+                <span x-text="viewCount.toLocaleString()" class="metadata-value"></span>
               </div>
             </div>
           </div>

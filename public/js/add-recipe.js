@@ -22,6 +22,7 @@ document.addEventListener('alpine:init', () => {
     isEditMode: false,
     recipeId: null,
     returnBookId: null,
+    bookName: '',
     
     async init() {
       // Check if we're in edit mode
@@ -77,6 +78,15 @@ document.addEventListener('alpine:init', () => {
             ? recipe.ingredients.map(ing => this.ingredientToString(ing))
             : [''];
           this.formData.instructions = recipe.instructions?.length > 0 ? recipe.instructions : [''];
+          
+          // Load book name for breadcrumb
+          const bookIdToShow = this.returnBookId || (this.formData.bookIds.length > 0 ? this.formData.bookIds[0] : null);
+          if (bookIdToShow) {
+            const book = this.books.find(b => b.id === bookIdToShow);
+            if (book) {
+              this.bookName = `${book.image} ${book.name}`;
+            }
+          }
         } else {
           Toast.error('Recipe not found', 'Error', { duration: 3000 });
           setTimeout(() => window.location.href = '../index.html', 1500);
@@ -262,7 +272,15 @@ document.addEventListener('alpine:init', () => {
     },
     
     cancel() {
-      window.location.href = '../index.html';
+      if (this.isEditMode && this.recipeId) {
+        // Redirect back to recipe page
+        const bookId = this.returnBookId || (this.formData.bookIds.length > 0 ? this.formData.bookIds[0] : '');
+        window.location.href = bookId 
+          ? `recipe.html?id=${this.recipeId}&book=${bookId}`
+          : `recipe.html?id=${this.recipeId}`;
+      } else {
+        window.location.href = '../index.html';
+      }
     }
   }));
 });

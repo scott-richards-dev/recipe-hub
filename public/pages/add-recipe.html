@@ -18,7 +18,7 @@
 <body>
   <header class="site-header">
     <div class="container">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
+      <nav class="breadcrumb" aria-label="Breadcrumb" x-data="addRecipeForm">
         <a href="../index.html" aria-label="Home">
           <svg class="breadcrumb-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <g class="recipe-book">
@@ -36,8 +36,20 @@
             </g>
           </svg>
         </a>
+        <template x-if="isEditMode && returnBookId && bookName">
+          <span>
+            <span class="separator">/</span>
+            <a :href="`book.html?id=${returnBookId}`" class="breadcrumb-link"><span x-text="bookName"></span></a>
+          </span>
+        </template>
+        <template x-if="isEditMode && recipeId">
+          <span>
+            <span class="separator">/</span>
+            <a :href="returnBookId ? `recipe.html?id=${recipeId}&book=${returnBookId}` : `recipe.html?id=${recipeId}`" class="breadcrumb-link"><span x-text="formData.name"></span></a>
+          </span>
+        </template>
         <span class="separator">/</span>
-        <span class="current-page" x-data="addRecipeForm" x-text="isEditMode ? 'Edit Recipe' : 'Create Recipe'">Create Recipe</span>
+        <span class="current-page" x-text="isEditMode ? 'Edit' : 'Create Recipe'">Create Recipe</span>
       </nav>
     </div>
   </header>

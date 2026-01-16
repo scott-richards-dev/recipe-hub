@@ -203,32 +203,22 @@
 
 .metadata-stats .metadata-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
+  gap: 0.5rem;
   padding: 1rem 1.25rem;
   background: var(--surface-alt);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   transition: var(--transition);
+  text-align: center;
+  cursor: help;
 }
 
 .metadata-stats .metadata-item:hover {
   border-color: var(--primary-light);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.metadata-icon {
-  font-size: 1.5rem;
-  line-height: 1;
-  opacity: 0.9;
-  flex-shrink: 0;
-}
-
-.metadata-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  min-width: 0;
 }
 
 .metadata-label {
@@ -237,6 +227,13 @@
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.metadata-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  opacity: 0.9;
+  flex-shrink: 0;
 }
 
 .metadata-value {
