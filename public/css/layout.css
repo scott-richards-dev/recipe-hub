@@ -177,36 +177,6 @@
   z-index: 100;
 }
 
-.menu-enter {
-  animation: menuFadeIn 0.15s ease-out;
-}
-
-.menu-leave {
-  animation: menuFadeOut 0.1s ease-in;
-}
-
-@keyframes menuFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes menuFadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-}
-
 .book-menu-item {
   display: flex;
   align-items: center;

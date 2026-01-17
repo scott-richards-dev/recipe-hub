@@ -28,32 +28,34 @@ document.addEventListener('alpine:init', () => {
     instructionSections: [{ section: '', items: [''] }],
     
     async init() {
-      // Check if we're in edit mode
       const params = new URLSearchParams(window.location.search);
       this.recipeId = params.get('id');
       this.returnBookId = params.get('book');
       
-      // Fetch available books
+      await this.loadBooks();
+      
+      if (this.recipeId) {
+        this.isEditMode = true;
+        await this.loadRecipeData();
+      } else if (this.returnBookId) {
+        this.preselectBook();
+      }
+    },
+    
+    async loadBooks() {
       try {
         const response = await fetch(`${API_URL}/books`);
         this.books = await response.json();
       } catch (error) {
         console.error('Error loading books:', error);
       }
-      
-      // If we have a recipe ID, load the recipe data
-      if (this.recipeId) {
-        this.isEditMode = true;
-        await this.loadRecipeData();
-      } else if (this.returnBookId) {
-        // Pre-select the book if coming from a book page
-        this.formData.bookIds.push(this.returnBookId);
-        
-        // Load book name for display
-        const book = this.books.find(b => b.id === this.returnBookId);
-        if (book) {
-          this.bookName = `${book.image} ${book.name}`;
-        }
+    },
+    
+    preselectBook() {
+      this.formData.bookIds.push(this.returnBookId);
+      const book = this.books.find(b => b.id === this.returnBookId);
+      if (book) {
+        this.bookName = book.name;
       }
     },
     
@@ -67,16 +69,12 @@ document.addEventListener('alpine:init', () => {
     
     // Convert ingredient object to a string for simple mode
     ingredientToString(ingredient) {
-      if (typeof ingredient === 'string') {
-        return ingredient;
-      }
+      if (typeof ingredient === 'string') return ingredient;
       
       let str = '';
       if (ingredient.amount) {
         str += ingredient.amount;
-        if (ingredient.metric) {
-          str += ' ' + ingredient.metric;
-        }
+        if (ingredient.metric) str += ' ' + ingredient.metric;
         str += ' ';
       } else if (ingredient.metric) {
         str += ingredient.metric + ' ';
@@ -87,33 +85,20 @@ document.addEventListener('alpine:init', () => {
     
     // Convert string ingredient to object for advanced mode
     stringToIngredient(str) {
-      if (typeof str === 'object') {
-        return str;
-      }
-      return {
-        amount: '',
-        metric: '',
-        name: str
-      };
+      if (typeof str === 'object') return str;
+      return { amount: '', metric: '', name: str };
     },
     
     // Toggle between simple and advanced mode
     toggleIngredientMode() {
-      // Check if switching to simple mode and if there's at least 1 ingredient
       if (this.advancedIngredientMode) {
-        // Check if there's at least 1 ingredient with any data
         const hasIngredients = this.ingredientSections.some(section => 
-          section.items.some(ing => 
-            ing.amount || ing.metric || ing.name
-          )
+          section.items.some(ing => ing.amount || ing.metric || ing.name)
         );
         
-        // Show warning only if there's at least 1 ingredient
         if (hasIngredients) {
           const confirmed = confirm('Switching to simple mode will condense the ingredients. Continue?');
-          if (!confirmed) {
-            return; // User canceled, don't switch modes
-          }
+          if (!confirmed) return;
         }
         
         // Switching to simple mode
@@ -212,7 +197,7 @@ document.addEventListener('alpine:init', () => {
           if (bookIdToShow) {
             const book = this.books.find(b => b.id === bookIdToShow);
             if (book) {
-              this.bookName = `${book.image} ${book.name}`;
+              this.bookName = book.name;
             }
           }
         } else {
@@ -286,7 +271,6 @@ document.addEventListener('alpine:init', () => {
       if (this.ingredientSections.length > 1) {
         const section = this.ingredientSections[sectionIndex];
         
-        // Check if section has any data
         const hasData = section.section || section.items.some(item => {
           if (this.advancedIngredientMode) {
             return item.amount || item.metric || item.name;
@@ -297,9 +281,7 @@ document.addEventListener('alpine:init', () => {
         
         if (hasData) {
           const confirmed = confirm('This section contains data. Are you sure you want to delete it?');
-          if (!confirmed) {
-            return; // User canceled, don't delete
-          }
+          if (!confirmed) return;
         }
         
         this.ingredientSections.splice(sectionIndex, 1);
@@ -316,7 +298,6 @@ document.addEventListener('alpine:init', () => {
     
     removeIngredientFromSection(sectionIndex, itemIndex) {
       this.ingredientSections[sectionIndex].items.splice(itemIndex, 1);
-      // If no items left, add an empty one
       if (this.ingredientSections[sectionIndex].items.length === 0) {
         if (this.advancedIngredientMode) {
           this.ingredientSections[sectionIndex].items.push({ amount: '', metric: '', name: '' });
@@ -337,14 +318,11 @@ document.addEventListener('alpine:init', () => {
       if (this.instructionSections.length > 1) {
         const section = this.instructionSections[sectionIndex];
         
-        // Check if section has any data
         const hasData = section.section || section.items.some(item => item && item.trim() !== '');
         
         if (hasData) {
           const confirmed = confirm('This section contains data. Are you sure you want to delete it?');
-          if (!confirmed) {
-            return; // User canceled, don't delete
-          }
+          if (!confirmed) return;
         }
         
         this.instructionSections.splice(sectionIndex, 1);
@@ -401,7 +379,6 @@ document.addEventListener('alpine:init', () => {
         const draggedItem = this.ingredientSections[0].items[this.draggedIngredientIndex];
         this.ingredientSections[0].items.splice(this.draggedIngredientIndex, 1);
         this.ingredientSections[0].items.splice(targetIndex, 0, draggedItem);
-        // Force reactivity update
         this.ingredientSections[0].items = [...this.ingredientSections[0].items];
       }
       this.draggedIngredientIndex = null;
@@ -428,7 +405,6 @@ document.addEventListener('alpine:init', () => {
         const draggedItem = this.instructionSections[0].items[this.draggedInstructionIndex];
         this.instructionSections[0].items.splice(this.draggedInstructionIndex, 1);
         this.instructionSections[0].items.splice(targetIndex, 0, draggedItem);
-        // Force reactivity update
         this.instructionSections[0].items = [...this.instructionSections[0].items];
       }
       this.draggedInstructionIndex = null;
@@ -438,10 +414,6 @@ document.addEventListener('alpine:init', () => {
     async submitForm() {
       this.submitting = true;
       
-      // Filter out empty ingredients and instructions
-      let cleanedIngredients, cleanedInstructions;
-      
-      // Clean ingredient sections
       const cleanedIngredientSections = this.ingredientSections
         .map(section => ({
           section: section.section,
@@ -451,14 +423,6 @@ document.addEventListener('alpine:init', () => {
         }))
         .filter(section => section.items.length > 0);
       
-      // If only one section with no name, flatten to array
-      if (cleanedIngredientSections.length === 1 && !cleanedIngredientSections[0].section) {
-        cleanedIngredients = cleanedIngredientSections[0].items;
-      } else {
-        cleanedIngredients = cleanedIngredientSections;
-      }
-      
-      // Clean instruction sections
       const cleanedInstructionSections = this.instructionSections
         .map(section => ({
           section: section.section,
@@ -466,12 +430,13 @@ document.addEventListener('alpine:init', () => {
         }))
         .filter(section => section.items.length > 0);
       
-      // If only one section with no name, flatten to array
-      if (cleanedInstructionSections.length === 1 && !cleanedInstructionSections[0].section) {
-        cleanedInstructions = cleanedInstructionSections[0].items;
-      } else {
-        cleanedInstructions = cleanedInstructionSections;
-      }
+      const cleanedIngredients = cleanedIngredientSections.length === 1 && !cleanedIngredientSections[0].section
+        ? cleanedIngredientSections[0].items
+        : cleanedIngredientSections;
+      
+      const cleanedInstructions = cleanedInstructionSections.length === 1 && !cleanedInstructionSections[0].section
+        ? cleanedInstructionSections[0].items
+        : cleanedInstructionSections;
       
       const cleanedData = {
         ...this.formData,
@@ -480,63 +445,65 @@ document.addEventListener('alpine:init', () => {
         instructions: cleanedInstructions
       };
       
-      // Validate that we have at least one ingredient and instruction
-      if (cleanedData.ingredients.length === 0) {
-        Toast.error('Please add at least one ingredient.', 'Validation Error', { duration: 5000 });
+      if (!this.validateRecipeData(cleanedData, cleanedIngredientSections, cleanedInstructionSections)) {
         this.submitting = false;
         return;
+      }
+      
+      await this.saveRecipe(cleanedData);
+    },
+    
+    validateRecipeData(cleanedData, ingredientSections, instructionSections) {
+      if (cleanedData.ingredients.length === 0) {
+        Toast.error('Please add at least one ingredient.', 'Validation Error', { duration: 5000 });
+        return false;
       }
       
       if (cleanedData.instructions.length === 0) {
         Toast.error('Please add at least one instruction.', 'Validation Error', { duration: 5000 });
-        this.submitting = false;
-        return;
+        return false;
       }
       
-      // Validate section names when there are multiple sections
-      if (cleanedIngredientSections.length > 1) {
-        const hasEmptySectionName = cleanedIngredientSections.some(section => !section.section || section.section.trim() === '');
+      if (ingredientSections.length > 1) {
+        const hasEmptySectionName = ingredientSections.some(section => !section.section || section.section.trim() === '');
         if (hasEmptySectionName) {
           Toast.error('Please provide names for all ingredient sections when using multiple sections.', 'Validation Error', { duration: 5000 });
-          this.submitting = false;
-          return;
+          return false;
         }
       }
       
-      if (cleanedInstructionSections.length > 1) {
-        const hasEmptySectionName = cleanedInstructionSections.some(section => !section.section || section.section.trim() === '');
+      if (instructionSections.length > 1) {
+        const hasEmptySectionName = instructionSections.some(section => !section.section || section.section.trim() === '');
         if (hasEmptySectionName) {
           Toast.error('Please provide names for all instruction sections when using multiple sections.', 'Validation Error', { duration: 5000 });
-          this.submitting = false;
-          return;
+          return false;
         }
       }
       
+      return true;
+    },
+    
+    async saveRecipe(cleanedData) {
       try {
         const url = this.isEditMode ? `${API_URL}/recipes/${this.recipeId}` : `${API_URL}/recipes`;
         const method = this.isEditMode ? 'PUT' : 'POST';
         
         const response = await fetch(url, {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          method,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(cleanedData)
         });
         
         const data = await response.json();
         
         if (response.ok) {
-          // Store success message in sessionStorage
           const successMsg = this.isEditMode
             ? data.message || `"${this.formData.name}" has been updated successfully!`
             : data.message || `"${this.formData.name}" has been added successfully!`;
           sessionStorage.setItem('successMessage', successMsg);
           
-          // Redirect to the recipe page
           const redirectId = this.isEditMode ? this.recipeId : data.id;
           if (redirectId) {
-            // Use return book ID if available, otherwise first book from form data
             const bookId = this.returnBookId || (this.formData.bookIds.length > 0 ? this.formData.bookIds[0] : '');
             window.location.href = bookId 
               ? `recipe.html?id=${redirectId}&book=${bookId}`
@@ -545,19 +512,13 @@ document.addEventListener('alpine:init', () => {
             window.location.href = '../index.html';
           }
         } else {
-          // Show error toast
           const errorMsg = this.isEditMode
             ? 'Failed to update recipe. Please try again.'
             : 'Failed to add recipe. Please try again.';
-          Toast.error(
-            data.error || errorMsg,
-            'Error',
-            { duration: 5000 }
-          );
+          Toast.error(data.error || errorMsg, 'Error', { duration: 5000 });
         }
       } catch (error) {
         console.error('Error saving recipe:', error);
-        // Show error toast
         Toast.error(
           'Failed to save recipe. Please check your connection and try again.',
           'Connection Error',

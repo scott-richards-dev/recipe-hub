@@ -38,23 +38,20 @@ const Toast = {
     };
 
     // Build toast content
-    let html = `
+    const titleHtml = title ? `<div class="toast-title">${title}</div>` : '';
+    const messageHtml = message ? `<div class="toast-message">${message}</div>` : '';
+    const closeButton = closable ? '<button class="toast-close" aria-label="Close">&times;</button>' : '';
+    const progressBar = duration > 0 ? '<div class="toast-progress"></div>' : '';
+
+    toast.innerHTML = `
       <div class="toast-icon">${icons[type] || icons.info}</div>
       <div class="toast-content">
-        ${title ? `<div class="toast-title">${title}</div>` : ''}
-        ${message ? `<div class="toast-message">${message}</div>` : ''}
+        ${titleHtml}
+        ${messageHtml}
       </div>
+      ${closeButton}
+      ${progressBar}
     `;
-
-    if (closable) {
-      html += `<button class="toast-close" aria-label="Close">&times;</button>`;
-    }
-
-    if (duration > 0) {
-      html += `<div class="toast-progress"></div>`;
-    }
-
-    toast.innerHTML = html;
 
     // Add close functionality
     if (closable) {
@@ -97,6 +94,11 @@ const Toast = {
   info(message, title = 'Info', options = {}) {
     return this.show({ type: 'info', title, message, ...options });
   },
+
+  warning(message, title = 'Warning', options = {}) {
+    return this.show({ type: 'warning', title, message, ...options });
+  }
+};
 
   warning(message, title = 'Warning', options = {}) {
     return this.show({ type: 'warning', title, message, ...options });

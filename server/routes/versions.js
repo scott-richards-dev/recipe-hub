@@ -1,55 +1,44 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs').promises;
-const path = require('path');
+const { readJsonFile, getDataPath } = require('../utils/fileUtils');
+const { asyncHandler, createError } = require('../middleware/errorHandler');
 
-const versionsPath = path.join(__dirname, '../data/versions.json');
+const versionsPath = getDataPath('versions.json');
 
 // Get all versions for a recipe
-router.get('/recipe/:recipeId', async (req, res) => {
-  try {
-    const data = await fs.readFile(versionsPath, 'utf8');
-    const versions = JSON.parse(data);
-    const recipeVersions = versions.filter(v => v.recipeId === req.params.recipeId);
-    res.json(recipeVersions);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to read versions' });
-  }
-});
+router.get('/recipe/:recipeId', asyncHandler(async (req, res) => {
+  const { recipeId } = req.params;
+  const versions = await readJsonFile(versionsPath);
+  const recipeVersions = versions.filter(v => v.recipeId === recipeId);
+  res.json(recipeVersions);
+}));
 
 // Get specific version
-router.get('/:id', async (req, res) => {
-  try {
-    const data = await fs.readFile(versionsPath, 'utf8');
-    const versions = JSON.parse(data);
-    const version = versions.find(v => v.id === req.params.id);
-    
-    if (!version) {
-      return res.status(404).json({ error: 'Version not found' });
-    }
-    
-    res.json(version);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to read version' });
+router.get('/:id', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const versions = await readJsonFile(versionsPath);
+  const version = versions.find(v => v.id === id);
+  
+  if (!version) {
+    throw createError('Version not found', 404);
   }
-});
+  
+  res.json(version);
+}));
 
 // Compare two versions
-router.get('/compare/:version1/:version2', async (req, res) => {
-  try {
-    const data = await fs.readFile(versionsPath, 'utf8');
-    const versions = JSON.parse(data);
-    const v1 = versions.find(v => v.id === req.params.version1);
-    const v2 = versions.find(v => v.id === req.params.version2);
-    
-    if (!v1 || !v2) {
-      return res.status(404).json({ error: 'Version not found' });
-    }
-    
-    res.json({ version1: v1, version2: v2 });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to compare versions' });
+router.get('/compare/:version1/:version2', asyncHandler(async (req, res) => {
+  const { version1, version2 } = req.params;
+  const versions = await readJsonFile(versionsPath);
+  
+  const v1 = versions.find(v => v.id === version1);
+  const v2 = versions.find(v => v.id === version2);
+  
+  if (!v1 || !v2) {
+    throw createError('One or both versions not found', 404);
   }
-});
+  
+  res.json({ version1: v1, version2: v2 });
+}));
 
 module.exports = router;

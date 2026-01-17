@@ -23,22 +23,25 @@ document.addEventListener('alpine:init', () => {
       const v1 = urlParams.get('v1');
       const v2 = urlParams.get('v2');
       
-      // Fetch book name from backend if bookId is provided
       if (this.bookId) {
-        try {
-          const booksResponse = await fetch(`${API_URL}/books`);
-          const books = await booksResponse.json();
-          const book = books.find(b => b.id === this.bookId);
-          if (book) {
-            this.bookName = book.name;
-          }
-        } catch (error) {
-          console.error('Error loading book name:', error);
-        }
+        await this.loadBookName();
       }
       
       if (this.recipeId) {
         await this.loadVersions(v1, v2);
+      }
+    },
+    
+    async loadBookName() {
+      try {
+        const booksResponse = await fetch(`${API_URL}/books`);
+        const books = await booksResponse.json();
+        const book = books.find(b => b.id === this.bookId);
+        if (book) {
+          this.bookName = book.name;
+        }
+      } catch (error) {
+        console.error('Error loading book name:', error);
       }
     },
     
@@ -83,12 +86,17 @@ document.addEventListener('alpine:init', () => {
     },
     
     displayVersionInfo() {
+      const v1Date = new Date(this.version1Data.timestamp).toLocaleString();
+      const v2Date = new Date(this.version2Data.timestamp).toLocaleString();
+      const v1Notes = this.version1Data.notes ? `<div class="version-notes">${this.version1Data.notes}</div>` : '';
+      const v2Notes = this.version2Data.notes ? `<div class="version-notes">${this.version2Data.notes}</div>` : '';
+      
       this.versionInfoHTML = `
         <div class="version-info-card">
           <h3>v${this.version1Data.version}</h3>
           <div class="version-meta">
-            <div><strong>Date:</strong> ${new Date(this.version1Data.timestamp).toLocaleString()}</div>
-            ${this.version1Data.notes ? `<div class="version-notes">${this.version1Data.notes}</div>` : ''}
+            <div><strong>Date:</strong> ${v1Date}</div>
+            ${v1Notes}
           </div>
         </div>
         <div class="comparison-arrow">
@@ -97,8 +105,8 @@ document.addEventListener('alpine:init', () => {
         <div class="version-info-card">
           <h3>v${this.version2Data.version}</h3>
           <div class="version-meta">
-            <div><strong>Date:</strong> ${new Date(this.version2Data.timestamp).toLocaleString()}</div>
-            ${this.version2Data.notes ? `<div class="version-notes">${this.version2Data.notes}</div>` : ''}
+            <div><strong>Date:</strong> ${v2Date}</div>
+            ${v2Notes}
           </div>
         </div>
       `;

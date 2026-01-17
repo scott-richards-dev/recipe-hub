@@ -263,18 +263,6 @@
   border-right: none;
 }
 
-.stat-card.additions {
-  background: white;
-}
-
-.stat-card.deletions {
-  background: white;
-}
-
-.stat-card.changes {
-  background: white;
-}
-
 .stat-number {
   font-size: 2.5rem;
   font-weight: 700;

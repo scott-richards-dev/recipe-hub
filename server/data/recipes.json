@@ -443,10 +443,12 @@
         },
         {
           "amount": 2,
+          "metric": "",
           "name": "eggs"
         },
         {
           "amount": 2,
+          "metric": "",
           "name": "egg yolks"
         },
         {
@@ -460,9 +462,13 @@
           "name": "flour"
         },
         {
+          "amount": "",
+          "metric": "",
           "name": "Butter for greasing"
         },
         {
+          "amount": "",
+          "metric": "",
           "name": "Cocoa powder for dusting"
         }
       ],

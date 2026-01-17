@@ -1,26 +1,5 @@
 /* Form Styles */
 
-/* Keyframe animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
 .form-section {
   padding: 3rem 0 4rem;
   background: linear-gradient(135deg, rgba(125, 165, 101, 0.03) 0%, rgba(125, 165, 101, 0.08) 100%);
@@ -97,7 +76,8 @@
   align-items: center;
 }
 
-.form-zone-header .required-indicator {
+.form-zone-header .required-indicator,
+.required-indicator {
   color: #dc3545;
   font-weight: 700;
   margin-left: 0.25rem;
@@ -107,8 +87,8 @@
   top: -2px;
 }
 
-.form-zone-header .toggle-switch {
-  margin-left: auto;
+.form-label:hover .required-indicator {
+  animation: pulse 1s ease infinite;
 }
 
 .form-label {
@@ -118,22 +98,6 @@
   margin-bottom: 0.6rem;
   font-size: 0.95rem;
   letter-spacing: -0.01em;
-}
-
-/* Mandatory indicator (asterisk) - styled when wrapped in span */
-.required-indicator {
-  color: #dc3545;
-  font-weight: 700;
-  margin-left: 0.25rem;
-  font-size: 1em;
-  display: inline-block;
-  animation: fadeIn 0.3s ease;
-  position: relative;
-  top: -1px;
-}
-
-.form-label:hover .required-indicator {
-  animation: pulse 1s ease infinite;
 }
 
 .form-input {
@@ -213,26 +177,6 @@ select.form-input option:not([value=""]) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
-}
-
-/* Drag hint */
-.drag-hint {
-  font-size: 0.75rem;
-  color: var(--text-tertiary);
-  font-weight: normal;
-  font-style: italic;
-  margin-left: 0.5rem;
-  opacity: 0.8;
-}
-
-/* Asterisk styling for text content */
-.form-label {
-  /* When asterisk is part of text content */
-}
-
-/* This approach targets the asterisk character in labels */
-@supports (initial-letter: 1) {
-  /* Future-proof for better text styling */
 }
 
 /* Dynamic list items (ingredients/instructions) */
@@ -424,6 +368,7 @@ select.form-input option:not([value=""]) {
 }
 
 .ingredient-amount[type=number] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 
@@ -480,14 +425,13 @@ select.form-input option:not([value=""]) {
   cursor: not-allowed;
 }
 
-.btn-add {
+.btn-add,
+.btn-add-item,
+.btn-add-small {
   margin-top: 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--background);
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -496,6 +440,12 @@ select.form-input option:not([value=""]) {
   transition: all 0.2s ease;
   font-family: inherit;
   justify-content: center;
+}
+
+.btn-add {
+  background: var(--background);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
 }
 
 .btn-add:hover {
@@ -504,63 +454,32 @@ select.form-input option:not([value=""]) {
   color: var(--primary-dark);
 }
 
-.btn-add:active {
-  transform: scale(0.98);
-}
-
-.btn-add-small {
-  margin-top: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--primary-lighter);
-  color: var(--primary);
-  outline-offset: -1px;
-  font-size: 0.813rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-.btn-add-small:hover {
-  background: var(--primary-light);
-  outline-color: var(--primary-dark);
-  color: var(--primary-dark);
-}
-
-.btn-add-small:active {
-  transform: scale(0.98);
-  background: var(--primary-light);
-  outline-color: var(--primary-dark);
-}
-
 .btn-add-item {
-  margin-top: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   background: var(--primary-lighter);
   color: var(--primary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
-  font-family: inherit;
-  justify-content: center;
+  border: none;
 }
 
 .btn-add-item:hover {
   background: var(--primary-light);
-  border-color: var(--primary-light);
   color: var(--primary-dark);
 }
 
-.btn-add-item:active {
+.btn-add-small {
+  background: var(--primary-lighter);
+  color: var(--primary);
+  border: none;
+  font-size: 0.813rem;
+}
+
+.btn-add-small:hover {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.btn-add:active,
+.btn-add-item:active,
+.btn-add-small:active {
   transform: scale(0.98);
 }
 
@@ -811,97 +730,4 @@ select.form-input option:not([value=""]) {
   background: var(--primary);
   border-color: var(--primary-dark);
   transform: scale(1.1);
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .drag-hint {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .form-section {
-    padding: 0;
-  }
-
-  .form-section .container {
-    padding: 0;
-  }
-
-  .form-header {
-    display: none;
-  }
-
-  .form-container {
-    padding: 1.5rem 1rem;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    box-shadow: none;
-  }
-
-  .alert {
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    max-width: none;
-  }
-  
-  .form-actions {
-    flex-direction: row;
-    gap: 0.75rem;
-  }
-  
-  .form-actions .btn-secondary {
-    flex: 1;
-    order: 1;
-  }
-  
-  .form-actions .btn-primary {
-    flex: 2;
-    order: 2;
-  }
-
-  .btn-add,
-  .btn-add-item {
-    margin-top: 0;
-  }
-
-  .emoji-picker {
-    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
-    gap: 0.25rem;
-    padding: 0.75rem;
-  }
-  
-  .emoji-option {
-    padding: 0.5rem;
-    font-size: 1.25rem;
-  }
-  
-  .ingredient-fields {
-    grid-template-columns: 50px 70px 1fr;
-    gap: 0;
-  }
-  
-  .ingredient-fields input {
-    padding: 0.875rem 0.5rem;
-    font-size: 0.95rem;
-  }
-  
-  .ingredient-name {
-    padding-left: 0.75rem !important;
-  }
-  
-  .drag-handle {
-    display: none;
-  }
-  
-  .form-label-with-toggle {
-    gap: 0.5rem;
-  }
-  
-  .toggle-switch {
-    flex-shrink: 0;
-  }
 }

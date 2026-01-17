@@ -22,7 +22,6 @@ document.addEventListener('alpine:init', () => {
     bookId: null,
     
     async init() {
-      // Check if we're in edit mode
       const params = new URLSearchParams(window.location.search);
       this.bookId = params.get('id');
       
@@ -60,23 +59,19 @@ document.addEventListener('alpine:init', () => {
         const method = this.isEditMode ? 'PUT' : 'POST';
         
         const response = await fetch(url, {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          method,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.formData)
         });
         
         const data = await response.json();
         
         if (response.ok) {
-          // Store success message in sessionStorage
           const successMsg = this.isEditMode 
             ? data.message || `"${this.formData.name}" has been updated successfully!`
             : data.message || `"${this.formData.name}" has been added successfully!`;
           sessionStorage.setItem('successMessage', successMsg);
           
-          // Redirect to the book page
           const redirectId = this.isEditMode ? this.bookId : data.id;
           if (redirectId) {
             window.location.href = `book.html?id=${redirectId}`;
@@ -84,19 +79,13 @@ document.addEventListener('alpine:init', () => {
             window.location.href = '../index.html';
           }
         } else {
-          // Show error toast
           const errorMsg = this.isEditMode 
             ? 'Failed to update book. Please try again.'
             : 'Failed to add book. Please try again.';
-          Toast.error(
-            data.error || errorMsg,
-            'Error',
-            { duration: 5000 }
-          );
+          Toast.error(data.error || errorMsg, 'Error', { duration: 5000 });
         }
       } catch (error) {
         console.error('Error saving book:', error);
-        // Show error toast
         Toast.error(
           'Failed to save book. Please check your connection and try again.',
           'Connection Error',
@@ -113,7 +102,6 @@ document.addEventListener('alpine:init', () => {
     
     cancel() {
       if (this.isEditMode && this.bookId) {
-        // Redirect back to book page
         window.location.href = `book.html?id=${this.bookId}`;
       } else {
         window.location.href = '../index.html';

@@ -210,34 +210,38 @@ document.addEventListener('alpine:init', () => {
       }
       
       try {
-        // Fetch book name from backend if bookId is provided
         if (this.bookId) {
-          const booksResponse = await fetch(`${API_URL}/books`);
-          const books = await booksResponse.json();
-          const book = books.find(b => b.id === this.bookId);
-          if (book) {
-            this.bookName = book.name;
-          }
+          await this.loadBookName();
         }
         
         const response = await fetch(`${API_URL}/recipes/${this.recipeId}`);
         this.recipe = await response.json();
         document.title = `${this.recipe.name} - Recipe Hub`;
         
-        // Use viewCount from recipe data, fallback to random if not available
         this.viewCount = this.recipe.viewCount || Math.floor(Math.random() * 5000) + 100;
         
-        // Check for versions
         await this.checkVersions();
       } catch (error) {
         console.error('Error loading recipe:', error);
       }
       
-      // Check for success message from add-recipe
       const successMessage = sessionStorage.getItem('successMessage');
       if (successMessage) {
         Toast.success(successMessage, 'Success', { duration: 4000 });
         sessionStorage.removeItem('successMessage');
+      }
+    },
+    
+    async loadBookName() {
+      try {
+        const booksResponse = await fetch(`${API_URL}/books`);
+        const books = await booksResponse.json();
+        const book = books.find(b => b.id === this.bookId);
+        if (book) {
+          this.bookName = book.name;
+        }
+      } catch (error) {
+        console.error('Error loading book name:', error);
       }
     },
     
@@ -298,11 +302,9 @@ document.addEventListener('alpine:init', () => {
     },
     
     handleIngredientClick(event, index) {
-      // Let checkbox handle its own clicks naturally
+      // Let checkbox and button handle their own clicks
       if (event.target.type === 'checkbox') return;
       if (event.target.classList.contains('unit-convert-btn')) return;
-      
-      // For label clicks, browser handles naturally via htmlFor
       if (event.target.tagName === 'LABEL' || event.target.closest('label')) return;
       
       // For other areas, manually toggle
@@ -315,7 +317,6 @@ document.addEventListener('alpine:init', () => {
     
     deleteRecipe() {
       if (confirm(`Are you sure you want to delete "${this.recipe.name}"? This action cannot be undone.`)) {
-        // TODO: Implement delete functionality
         Toast.info('Delete functionality coming soon!', 'Not Implemented');
       }
     }

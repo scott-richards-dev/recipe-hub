@@ -5,6 +5,7 @@ const recipesRouter = require('./routes/recipes');
 const booksRouter = require('./routes/books');
 const compareRouter = require('./routes/compare');
 const versionsRouter = require('./routes/versions');
+const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,12 @@ app.use('/api/versions', versionsRouter);
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
+
+// 404 handler - must come after all other routes
+app.use(notFoundHandler);
+
+// Error handler - must be last middleware
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {

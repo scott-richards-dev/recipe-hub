@@ -54,7 +54,6 @@ document.addEventListener('alpine:init', () => {
     
     deleteBook() {
       if (confirm(`Are you sure you want to delete "${this.bookName}"? This action cannot be undone.`)) {
-        // TODO: Implement delete functionality
         Toast.info('Delete functionality coming soon!', 'Not Implemented');
       }
     }
@@ -78,11 +77,9 @@ document.addEventListener('alpine:init', () => {
     },
     
     createRecipe() {
-      // Get current book ID from the page
       const params = new URLSearchParams(window.location.search);
       const bookId = params.get('id');
       
-      // If on a book page, pre-select this book in the add-recipe form
       if (bookId) {
         window.location.href = `add-recipe.html?book=${bookId}`;
       } else {

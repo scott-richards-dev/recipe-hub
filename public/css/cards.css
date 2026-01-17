@@ -29,18 +29,6 @@
   overflow: hidden;
 }
 
-@media (max-width: 1024px) {
-  .card {
-    max-width: calc(50% - 0.75rem);
-  }
-}
-
-@media (max-width: 768px) {
-  .card {
-    max-width: 100%;
-  }
-}
-
 .card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
@@ -75,12 +63,6 @@
   font-weight: 500;
 }
 
-/* Recipe Card Specific */
-.recipe-card {
-  background: var(--surface);
-  min-height: 180px;
-}
-
 /* Recipe Card with Image Placeholder */
 .recipe-card-with-image {
   padding: 0;
@@ -90,18 +72,6 @@
   max-width: calc(33.333% - 1rem);
   display: flex;
   flex-direction: column;
-}
-
-@media (max-width: 1024px) {
-  .recipe-card-with-image {
-    max-width: calc(50% - 0.75rem);
-  }
-}
-
-@media (max-width: 768px) {
-  .recipe-card-with-image {
-    max-width: 100%;
-  }
 }
 
 .recipe-image-placeholder {

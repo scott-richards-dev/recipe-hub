@@ -1,40 +1,46 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs').promises;
-const path = require('path');
+const { readJsonFile, getDataPath } = require('../utils/fileUtils');
+const { validateIds } = require('../utils/validators');
+const { asyncHandler, createError } = require('../middleware/errorHandler');
 
-const recipesPath = path.join(__dirname, '../data/recipes.json');
+const recipesPath = getDataPath('recipes.json');
+
+/**
+ * Flatten all recipes from all books into a single array
+ * @param {Object} allRecipes - All recipes organized by book
+ * @returns {Array} Flattened array of recipes
+ */
+function flattenRecipes(allRecipes) {
+  const recipeList = [];
+  for (const bookId in allRecipes) {
+    recipeList.push(...allRecipes[bookId]);
+  }
+  return recipeList;
+}
 
 // Get multiple recipe details for comparison (expects comma-separated recipe IDs)
-router.get('/', async (req, res) => {
-  const recipeIds = req.query.recipes ? req.query.recipes.split(',') : [];
+router.get('/', asyncHandler(async (req, res) => {
+  const recipeIds = req.query.recipes;
   
-  if (recipeIds.length === 0) {
-    return res.status(400).json({ error: 'No recipe IDs provided' });
+  // Validate recipe IDs
+  const validation = validateIds(recipeIds);
+  if (!validation.isValid) {
+    throw createError(validation.error, 400);
   }
 
-  try {
-    const data = await fs.readFile(recipesPath, 'utf8');
-    const allRecipes = JSON.parse(data);
-    
-    // Flatten all recipes from all books
-    const recipeList = [];
-    for (const bookId in allRecipes) {
-      recipeList.push(...allRecipes[bookId]);
-    }
-    
-    const comparisonData = recipeIds
-      .map(id => recipeList.find(r => r.id === id.trim()))
-      .filter(recipe => recipe !== undefined);
+  const allRecipes = await readJsonFile(recipesPath);
+  const recipeList = flattenRecipes(allRecipes);
+  
+  const comparisonData = validation.ids
+    .map(id => recipeList.find(r => r.id === id))
+    .filter(recipe => recipe !== undefined);
 
-    if (comparisonData.length === 0) {
-      return res.status(404).json({ error: 'No valid recipes found' });
-    }
-
-    res.json(comparisonData);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to read recipes' });
+  if (comparisonData.length === 0) {
+    throw createError('No valid recipes found', 404);
   }
-});
+
+  res.json(comparisonData);
+}));
 
 module.exports = router;
