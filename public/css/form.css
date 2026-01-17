@@ -1,5 +1,26 @@
 /* Form Styles */
 
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
 .form-section {
   padding: 3rem 0 4rem;
   background: linear-gradient(135deg, rgba(125, 165, 101, 0.03) 0%, rgba(125, 165, 101, 0.08) 100%);
@@ -26,7 +47,7 @@
 }
 
 .form-container {
-  max-width: 650px;
+  max-width: 900px;
   margin: 0 auto;
   background: white;
   padding: 2.5rem;
@@ -51,13 +72,68 @@
   margin-bottom: 1.5rem;
 }
 
+/* Form zone headers */
+.form-zone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 2rem 0 1.25rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary);
+  letter-spacing: -0.01em;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-zone-header:first-child {
+  margin-top: 0;
+}
+
+.form-zone-header-title {
+  display: flex;
+  align-items: center;
+}
+
+.form-zone-header .required-indicator {
+  color: #dc3545;
+  font-weight: 700;
+  margin-left: 0.25rem;
+  font-size: 1em;
+  display: inline-block;
+  position: relative;
+  top: -2px;
+}
+
+.form-zone-header .toggle-switch {
+  margin-left: auto;
+}
+
 .form-label {
   display: block;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-weight: 600;
+  color: var(--text-secondary);
   margin-bottom: 0.6rem;
   font-size: 0.95rem;
   letter-spacing: -0.01em;
+}
+
+/* Mandatory indicator (asterisk) - styled when wrapped in span */
+.required-indicator {
+  color: #dc3545;
+  font-weight: 700;
+  margin-left: 0.25rem;
+  font-size: 1em;
+  display: inline-block;
+  animation: fadeIn 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+
+.form-label:hover .required-indicator {
+  animation: pulse 1s ease infinite;
 }
 
 .form-input {
@@ -83,14 +159,54 @@
   transform: translateY(-1px);
 }
 
+.form-input::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
 .form-textarea {
   resize: vertical;
+}
+
+select.form-input {
+  color: #9ca3af;
+}
+
+select.form-input:has(option:checked:not([value=""])) {
+  color: var(--text-primary);
+}
+
+select.form-input option:not([value=""]) {
+  color: var(--text-primary);
 }
 
 .form-hint {
   font-size: 0.85rem;
   color: var(--text-secondary);
   margin-top: 0.25rem;
+}
+
+/* Optional indicator in labels */
+.form-label .form-hint {
+  display: inline-block;
+  margin-top: 0;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #6b7280;
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.08) 0%, rgba(107, 114, 128, 0.05) 100%);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(107, 114, 128, 0.15);
+  font-style: normal;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+}
+
+.form-label:hover .form-hint {
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.12) 0%, rgba(107, 114, 128, 0.08) 100%);
+  border-color: rgba(107, 114, 128, 0.25);
+  color: #4b5563;
 }
 
 .form-row {
@@ -105,9 +221,95 @@
   color: var(--text-tertiary);
   font-weight: normal;
   font-style: italic;
+  margin-left: 0.5rem;
+  opacity: 0.8;
+}
+
+/* Asterisk styling for text content */
+.form-label {
+  /* When asterisk is part of text content */
+}
+
+/* This approach targets the asterisk character in labels */
+@supports (initial-letter: 1) {
+  /* Future-proof for better text styling */
 }
 
 /* Dynamic list items (ingredients/instructions) */
+.form-label-with-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: nowrap;
+}
+
+.form-label-with-toggle .form-label {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toggle-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.toggle-label.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.toggle-button {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  background: var(--border);
+  border: none;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  padding: 0;
+}
+
+.toggle-button:hover {
+  background: var(--primary-light);
+}
+
+.toggle-button.advanced {
+  background: var(--primary);
+}
+
+.toggle-button.advanced:hover {
+  background: var(--primary-dark);
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-button.advanced .toggle-slider {
+  transform: translateX(22px);
+}
+
 .ingredient-item,
 .instruction-item {
   display: flex;
@@ -147,6 +349,8 @@
   user-select: none;
   display: flex;
   align-items: center;
+  justify-content: center;
+  align-self: center;
   padding: 0.5rem 0.25rem;
   line-height: 1;
   transition: color 0.2s ease;
@@ -163,6 +367,80 @@
 
 .ingredient-item input {
   flex: 1;
+}
+
+.ingredient-item-advanced {
+  flex-wrap: wrap;
+}
+
+.ingredient-fields {
+  display: grid;
+  grid-template-columns: 70px 100px 1fr;
+  gap: 0;
+  flex: 1;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: white;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.ingredient-fields:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(125, 165, 101, 0.12);
+}
+
+.ingredient-fields input {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0.875rem 0.625rem;
+  background: transparent;
+}
+
+.ingredient-fields input:focus {
+  outline: none;
+  background: rgba(125, 165, 101, 0.04);
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.ingredient-amount {
+  min-width: 0;
+  border-right: 1px solid var(--border) !important;
+  text-align: center;
+  font-weight: 500;
+}
+
+.ingredient-amount:focus {
+  border-right: 1px solid var(--primary) !important;
+}
+
+/* Hide number input spinners */
+.ingredient-amount::-webkit-outer-spin-button,
+.ingredient-amount::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ingredient-amount[type=number] {
+  -moz-appearance: textfield;
+}
+
+.ingredient-unit {
+  min-width: 0;
+  border-right: 1px solid var(--border) !important;
+  text-align: center;
+  font-weight: 500;
+}
+
+.ingredient-unit:focus {
+  border-right: 1px solid var(--primary) !important;
+}
+
+.ingredient-name {
+  min-width: 0;
+  padding-left: 0.875rem !important;
 }
 
 .instruction-item {
@@ -217,16 +495,138 @@
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
   font-family: inherit;
+  justify-content: center;
 }
 
 .btn-add:hover {
-  background: var(--primary-lighter);
+  background: var(--primary-light);
   border-color: var(--primary-light);
   color: var(--primary-dark);
 }
 
 .btn-add:active {
   transform: scale(0.98);
+}
+
+.btn-add-small {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-lighter);
+  color: var(--primary);
+  outline-offset: -1px;
+  font-size: 0.813rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-add-small:hover {
+  background: var(--primary-light);
+  outline-color: var(--primary-dark);
+  color: var(--primary-dark);
+}
+
+.btn-add-small:active {
+  transform: scale(0.98);
+  background: var(--primary-light);
+  outline-color: var(--primary-dark);
+}
+
+.btn-add-item {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-lighter);
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  justify-content: center;
+}
+
+.btn-add-item:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.btn-add-item:active {
+  transform: scale(0.98);
+}
+
+/* Button group for add buttons */
+.form-button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .form-button-group {
+    flex-direction: row;
+    gap: 0.75rem;
+  }
+  
+  .form-button-group .btn-add-item {
+    flex: 2;
+    order: 2;
+  }
+  
+  .form-button-group .btn-add {
+    flex: 1;
+    order: 1;
+  }
+}
+
+/* Section groups */
+.section-group {
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary-light);
+  border-radius: var(--radius-md);
+  background: rgba(125, 165, 101, 0.02);
+}
+
+.section-header-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-header-input .form-input {
+  flex: 1;
+  font-weight: 600;
+  color: var(--primary-dark);
+  background: #f9fafb;
+  border-left: 4px solid var(--primary);
+  padding-left: 0.875rem;
+}
+
+.section-header-input .form-input:hover:not(:focus) {
+  background: #f3f4f6;
+  border-color: var(--primary);
+}
+
+.section-header-input .form-input:focus {
+  background: white;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(125, 165, 101, 0.12);
+}
+
+.section-header-input .btn-remove {
+  flex-shrink: 0;
 }
 
 /* Selected books tags */
@@ -285,6 +685,8 @@
   gap: 1rem;
   justify-content: flex-end;
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border);
 }
 
 .btn {
@@ -412,6 +814,12 @@
 }
 
 /* Responsive */
+@media (max-width: 900px) {
+  .drag-hint {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .form-section {
     padding: 0;
@@ -441,13 +849,25 @@
   }
   
   .form-actions {
-    flex-direction: column-reverse;
+    flex-direction: row;
+    gap: 0.75rem;
   }
   
-  .btn {
-    width: 100%;
+  .form-actions .btn-secondary {
+    flex: 1;
+    order: 1;
   }
   
+  .form-actions .btn-primary {
+    flex: 2;
+    order: 2;
+  }
+
+  .btn-add,
+  .btn-add-item {
+    margin-top: 0;
+  }
+
   .emoji-picker {
     grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
     gap: 0.25rem;
@@ -457,5 +877,31 @@
   .emoji-option {
     padding: 0.5rem;
     font-size: 1.25rem;
+  }
+  
+  .ingredient-fields {
+    grid-template-columns: 50px 70px 1fr;
+    gap: 0;
+  }
+  
+  .ingredient-fields input {
+    padding: 0.875rem 0.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .ingredient-name {
+    padding-left: 0.75rem !important;
+  }
+  
+  .drag-handle {
+    display: none;
+  }
+  
+  .form-label-with-toggle {
+    gap: 0.5rem;
+  }
+  
+  .toggle-switch {
+    flex-shrink: 0;
   }
 }

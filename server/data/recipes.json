@@ -94,6 +94,140 @@
       "bookIds": [
         "italian"
       ]
+    },
+    {
+      "id": "lasagna",
+      "name": "Classic Lasagna",
+      "description": "Layers of pasta, rich meat sauce, creamy béchamel, and melted cheese.",
+      "cookTime": "2 hours",
+      "servings": 8,
+      "ingredients": [
+        {
+          "section": "Meat Sauce",
+          "items": [
+            {
+              "amount": 500,
+              "metric": "g",
+              "name": "ground beef"
+            },
+            {
+              "amount": 1,
+              "name": "onion, diced"
+            },
+            {
+              "amount": 3,
+              "name": "garlic cloves, minced"
+            },
+            {
+              "amount": 800,
+              "metric": "g",
+              "name": "crushed tomatoes"
+            },
+            {
+              "amount": 2,
+              "metric": "tbsp",
+              "name": "tomato paste"
+            },
+            {
+              "amount": 1,
+              "metric": "tsp",
+              "name": "dried oregano"
+            },
+            {
+              "amount": 1,
+              "metric": "tsp",
+              "name": "dried basil"
+            },
+            {
+              "name": "Salt and pepper to taste"
+            }
+          ]
+        },
+        {
+          "section": "Béchamel Sauce",
+          "items": [
+            {
+              "amount": 4,
+              "metric": "tbsp",
+              "name": "butter"
+            },
+            {
+              "amount": 4,
+              "metric": "tbsp",
+              "name": "flour"
+            },
+            {
+              "amount": 500,
+              "metric": "ml",
+              "name": "milk"
+            },
+            {
+              "name": "Pinch of nutmeg"
+            },
+            {
+              "name": "Salt and pepper to taste"
+            }
+          ]
+        },
+        {
+          "section": "Assembly",
+          "items": [
+            {
+              "amount": 12,
+              "name": "lasagna sheets"
+            },
+            {
+              "amount": 300,
+              "metric": "g",
+              "name": "mozzarella cheese, shredded"
+            },
+            {
+              "amount": 100,
+              "metric": "g",
+              "name": "Parmesan cheese, grated"
+            }
+          ]
+        }
+      ],
+      "instructions": [
+        {
+          "section": "Prepare Meat Sauce",
+          "items": [
+            "Heat oil in a large pan over medium-high heat.",
+            "Add ground beef and cook until browned, breaking it up as it cooks.",
+            "Add onion and garlic, sauté until softened.",
+            "Stir in crushed tomatoes, tomato paste, oregano, and basil.",
+            "Season with salt and pepper, simmer for 30 minutes."
+          ]
+        },
+        {
+          "section": "Make Béchamel Sauce",
+          "items": [
+            "Melt butter in a saucepan over medium heat.",
+            "Add flour and whisk continuously for 2 minutes.",
+            "Gradually pour in milk while whisking to prevent lumps.",
+            "Cook until sauce thickens, about 5 minutes.",
+            "Season with nutmeg, salt, and pepper."
+          ]
+        },
+        {
+          "section": "Assemble and Bake",
+          "items": [
+            "Preheat oven to 375°F (190°C).",
+            "Spread a thin layer of meat sauce in a 9x13 inch baking dish.",
+            "Layer: lasagna sheets, meat sauce, béchamel, mozzarella.",
+            "Repeat layers 3-4 times, ending with béchamel and cheese on top.",
+            "Sprinkle Parmesan over the top layer.",
+            "Cover with foil and bake for 30 minutes.",
+            "Remove foil and bake for another 15 minutes until golden.",
+            "Let stand for 10 minutes before serving."
+          ]
+        }
+      ],
+      "viewCount": 3245,
+      "bookIds": [
+        "italian"
+      ]
     }
   ],
   "asian": [
@@ -111,6 +245,7 @@
         },
         {
           "amount": 2,
+          "metric": "",
           "name": "eggs"
         },
         {
@@ -134,15 +269,23 @@
           "name": "sugar"
         },
         {
+          "amount": "",
+          "metric": "",
           "name": "Bean sprouts"
         },
         {
+          "amount": "",
+          "metric": "",
           "name": "Peanuts"
         },
         {
+          "amount": "",
+          "metric": "",
           "name": "Lime wedges"
         },
         {
+          "amount": "",
+          "metric": "",
           "name": "Green onions"
         }
       ],
@@ -168,50 +311,111 @@
       "servings": 4,
       "ingredients": [
         {
-          "amount": 1,
-          "metric": "kg",
-          "name": "pork bones"
+          "section": "Broth",
+          "items": [
+            {
+              "amount": 1,
+              "metric": "kg",
+              "name": "pork bones"
+            },
+            {
+              "amount": 1,
+              "name": "onion, quartered"
+            },
+            {
+              "amount": 4,
+              "name": "garlic cloves"
+            },
+            {
+              "amount": 1,
+              "name": "piece of ginger (2 inches)"
+            },
+            {
+              "amount": 2,
+              "metric": "tbsp",
+              "name": "soy sauce"
+            },
+            {
+              "amount": 1,
+              "metric": "tbsp",
+              "name": "sesame oil"
+            }
+          ]
         },
         {
-          "amount": 500,
-          "metric": "g",
-          "name": "ramen noodles"
+          "section": "Toppings",
+          "items": [
+            {
+              "amount": 4,
+              "name": "soft-boiled eggs, halved"
+            },
+            {
+              "amount": 200,
+              "metric": "g",
+              "name": "pork belly, sliced and cooked"
+            },
+            {
+              "name": "Green onions, sliced"
+            },
+            {
+              "name": "Nori seaweed sheets"
+            },
+            {
+              "amount": 100,
+              "metric": "g",
+              "name": "bamboo shoots"
+            },
+            {
+              "amount": 2,
+              "metric": "tsp",
+              "name": "sesame seeds"
+            }
+          ]
         },
         {
-          "amount": 4,
-          "name": "soft-boiled eggs"
-        },
-        {
-          "amount": 200,
-          "metric": "g",
-          "name": "pork belly, sliced"
-        },
-        {
-          "name": "Green onions, sliced"
-        },
-        {
-          "name": "Nori seaweed"
-        },
-        {
-          "amount": 2,
-          "metric": "tbsp",
-          "name": "soy sauce"
-        },
-        {
-          "amount": 1,
-          "metric": "tbsp",
-          "name": "sesame oil"
+          "section": "Noodles",
+          "items": [
+            {
+              "amount": 500,
+              "metric": "g",
+              "name": "fresh ramen noodles"
+            }
+          ]
         }
       ],
       "instructions": [
-        "Simmer pork bones for 12 hours to create rich broth (or use 2 hours with pressure cooker).",
-        "Strain broth and season with soy sauce and sesame oil.",
-        "Cook ramen noodles according to package directions.",
-        "Prepare soft-boiled eggs and slice pork belly.",
-        "Grill pork belly until crispy.",
-        "Assemble bowls with noodles, pour hot broth over them.",
-        "Top with pork belly, soft-boiled eggs, green onions, and nori.",
-        "Serve immediately while hot."
+        {
+          "section": "Prepare Broth",
+          "items": [
+            "Blanch pork bones in boiling water for 5 minutes, then rinse.",
+            "Place bones in a large pot with fresh water.",
+            "Add onion, garlic, and ginger to the pot.",
+            "Bring to a boil, then reduce to simmer.",
+            "Simmer for at least 2 hours (or 12 hours for richer broth).",
+            "Strain broth and stir in soy sauce and sesame oil."
+          ]
+        },
+        {
+          "section": "Prepare Toppings",
+          "items": [
+            "Boil eggs for 6-7 minutes for soft-boiled, then cool in ice water.",
+            "Peel eggs and halve them lengthwise.",
+            "Pan-fry or roast pork belly slices until crispy.",
+            "Slice green onions thinly.",
+            "Cut nori sheets into quarters."
+          ]
+        },
+        {
+          "section": "Assemble Bowls",
+          "items": [
+            "Cook ramen noodles according to package instructions.",
+            "Divide noodles among serving bowls.",
+            "Pour hot broth over noodles.",
+            "Arrange toppings: eggs, pork belly, bamboo shoots, and nori.",
+            "Garnish with green onions and sesame seeds.",
+            "Serve immediately while hot."
+          ]
+        }
       ],
       "viewCount": 1538,
       "bookIds": [

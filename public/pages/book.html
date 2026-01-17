@@ -97,9 +97,35 @@
         </template>
         <div class="grid">
           <template x-for="recipe in recipes" :key="recipe.id">
-            <a :href="`recipe.html?id=${recipe.id}&book=${bookId}`" class="card">
-              <h3 x-text="recipe.name"></h3>
-              <p x-text="recipe.description"></p>
+            <a :href="`recipe.html?id=${recipe.id}&book=${bookId}`" class="card recipe-card-with-image">
+              <div class="recipe-image-placeholder">
+                <div class="recipe-image-gradient" 
+                     :style="`--food-hue: ${[12, 30, 48, 85, 120, 38, 350, 210, 280, 320, 0, 60][(recipe.id.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0)) % 12]}; 
+                              --food-sat: ${30 + ((recipe.id.charCodeAt(0) || 0) % 15)}%;
+                              --pattern-x: ${20 + ((recipe.id.charCodeAt(1) || 0) % 60)}%; 
+                              --pattern-y: ${20 + ((recipe.id.charCodeAt(2) || 0) % 60)}%; 
+                              --pattern-size: ${35 + ((recipe.id.length * 5) % 40)}%; 
+                              --gradient-angle: ${110 + ((recipe.id.charCodeAt(recipe.id.length - 1) || 0) % 70)}deg;
+                              --splotch-x: ${15 + ((recipe.id.charCodeAt(3) || 0) % 70)}%;
+                              --splotch-y: ${15 + ((recipe.id.charCodeAt(4) || 0) % 70)}%;
+                              --splotch-size: ${30 + ((recipe.id.charCodeAt(5) || 0) % 50)}%;
+                              --light-intensity: ${0.12 + ((recipe.id.charCodeAt(6) || 0) % 10) * 0.01};
+                              --dark-intensity: ${0.05 + ((recipe.id.charCodeAt(7) || 0) % 8) * 0.01};
+                              --texture-angle: ${-45 + ((recipe.id.charCodeAt(8) || 0) % 90)}deg;
+                              --stop1: ${10 + ((recipe.id.charCodeAt(9) || 0) % 30)}%;
+                              --stop2: ${45 + ((recipe.id.charCodeAt(10) || 0) % 25)}%;
+                              --stop3: ${75 + ((recipe.id.charCodeAt(11) || 0) % 25)}%;
+                              --hue-shift1: ${10 + ((recipe.id.charCodeAt(12) || 0) % 25)};
+                              --hue-shift2: ${20 + ((recipe.id.charCodeAt(13) || 0) % 35)};
+                              --gradient-type: ${['linear', 'radial'][(recipe.id.charCodeAt(14) || 0) % 2]};
+                              --pattern-style: ${(recipe.id.charCodeAt(15) || 0) % 4}`">
+                </div>
+                <div class="recipe-image-overlay" :class="`pattern-${(recipe.id.charCodeAt(15) || 0) % 4}`"></div>
+              </div>
+              <div class="recipe-card-content">
+                <h3 x-text="recipe.name"></h3>
+                <p x-text="recipe.description"></p>
+              </div>
             </a>
           </template>
         </div>

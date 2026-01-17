@@ -78,7 +78,16 @@ document.addEventListener('alpine:init', () => {
     },
     
     createRecipe() {
-      window.location.href = 'add-recipe.html';
+      // Get current book ID from the page
+      const params = new URLSearchParams(window.location.search);
+      const bookId = params.get('id');
+      
+      // If on a book page, pre-select this book in the add-recipe form
+      if (bookId) {
+        window.location.href = `add-recipe.html?book=${bookId}`;
+      } else {
+        window.location.href = 'add-recipe.html';
+      }
       this.showActions = false;
     }
   }));

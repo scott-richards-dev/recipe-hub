@@ -129,17 +129,42 @@
               </div>
             </header>
             <div class="section-content">
-              <ul class="ingredients-list">
-                <template x-for="(ingredient, index) in recipe.ingredients" :key="index">
-                  <li class="ingredient-item" :class="{ 'checked': checkedIngredients[index] }" @click="handleIngredientClick($event, index)">
-                    <input type="checkbox" :id="`ingredient-${index}`" class="ingredient-checkbox" x-model="checkedIngredients[index]">
-                    <label :for="`ingredient-${index}`" class="ingredient-label" x-html="formatIngredient(ingredient, index)"></label>
-                    <template x-if="isConvertible(ingredient.metric)">
-                      <button @click.stop="toggleUnit(index)" class="unit-convert-btn" title="Toggle unit system">⇄</button>
-                    </template>
-                  </li>
-                </template>
-              </ul>
+              <!-- Check if ingredients have sections -->
+              <template x-if="hasIngredientSections()">
+                <div class="sectioned-ingredients">
+                  <template x-for="(section, sectionIndex) in recipe.ingredients" :key="sectionIndex">
+                    <div class="ingredient-section">
+                      <h3 class="section-title" x-text="section.section" x-show="section.section"></h3>
+                      <ul class="ingredients-list">
+                        <template x-for="(ingredient, index) in section.items" :key="index">
+                          <li class="ingredient-item" :class="{ 'checked': checkedIngredients[`${sectionIndex}-${index}`] }" @click="handleIngredientClick($event, `${sectionIndex}-${index}`)">
+                            <input type="checkbox" :id="`ingredient-${sectionIndex}-${index}`" class="ingredient-checkbox" x-model="checkedIngredients[`${sectionIndex}-${index}`]">
+                            <label :for="`ingredient-${sectionIndex}-${index}`" class="ingredient-label" x-html="formatIngredient(ingredient, `${sectionIndex}-${index}`)"></label>
+                            <template x-if="isConvertible(ingredient.metric)">
+                              <button @click.stop="toggleUnit(`${sectionIndex}-${index}`)" class="unit-convert-btn" title="Toggle unit system">⇄</button>
+                            </template>
+                          </li>
+                        </template>
+                      </ul>
+                    </div>
+                  </template>
+                </div>
+              </template>
+              
+              <!-- Flat list (legacy format) -->
+              <template x-if="!hasIngredientSections()">
+                <ul class="ingredients-list">
+                  <template x-for="(ingredient, index) in recipe.ingredients" :key="index">
+                    <li class="ingredient-item" :class="{ 'checked': checkedIngredients[index] }" @click="handleIngredientClick($event, index)">
+                      <input type="checkbox" :id="`ingredient-${index}`" class="ingredient-checkbox" x-model="checkedIngredients[index]">
+                      <label :for="`ingredient-${index}`" class="ingredient-label" x-html="formatIngredient(ingredient, index)"></label>
+                      <template x-if="isConvertible(ingredient.metric)">
+                        <button @click.stop="toggleUnit(index)" class="unit-convert-btn" title="Toggle unit system">⇄</button>
+                      </template>
+                    </li>
+                  </template>
+                </ul>
+              </template>
             </div>
           </aside>
 
@@ -148,14 +173,36 @@
               <h2>Instructions</h2>
             </header>
             <div class="section-content">
-              <div class="instructions-list">
-                <template x-for="(instruction, index) in recipe.instructions" :key="index">
-                  <div class="instruction-step">
-                    <div class="step-number" x-text="index + 1"></div>
-                    <div class="step-text" x-text="instruction"></div>
-                  </div>
-                </template>
-              </div>
+              <!-- Check if instructions have sections -->
+              <template x-if="hasInstructionSections()">
+                <div class="sectioned-instructions">
+                  <template x-for="(section, sectionIndex) in recipe.instructions" :key="sectionIndex">
+                    <div class="instruction-section">
+                      <h3 class="section-title" x-text="section.section" x-show="section.section"></h3>
+                      <div class="instructions-list">
+                        <template x-for="(instruction, index) in section.items" :key="index">
+                          <div class="instruction-step" :class="{ 'checked': checkedInstructions[`${sectionIndex}-${index}`] }" @click="toggleInstructionStep(`${sectionIndex}-${index}`)">
+                            <div class="step-number" x-text="getStepNumber(sectionIndex, index)"></div>
+                            <div class="step-text" x-text="instruction"></div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </template>
+              
+              <!-- Flat list (legacy format) -->
+              <template x-if="!hasInstructionSections()">
+                <div class="instructions-list">
+                  <template x-for="(instruction, index) in recipe.instructions" :key="index">
+                    <div class="instruction-step" :class="{ 'checked': checkedInstructions[index] }" @click="toggleInstructionStep(index)">
+                      <div class="step-number" x-text="index + 1"></div>
+                      <div class="step-text" x-text="instruction"></div>
+                    </div>
+                  </template>
+                </div>
+              </template>
             </div>
           </section>
         </div>

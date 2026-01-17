@@ -81,6 +81,157 @@
   min-height: 180px;
 }
 
+/* Recipe Card with Image Placeholder */
+.recipe-card-with-image {
+  padding: 0;
+  text-align: left;
+  min-height: 320px;
+  flex: 1 1 300px;
+  max-width: calc(33.333% - 1rem);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+  .recipe-card-with-image {
+    max-width: calc(50% - 0.75rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .recipe-card-with-image {
+    max-width: 100%;
+  }
+}
+
+.recipe-image-placeholder {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  flex-shrink: 0;
+}
+
+.recipe-image-gradient {
+  position: absolute;
+  inset: 0;
+}
+
+.recipe-image-gradient[style*="--gradient-type: linear"] {
+  background: linear-gradient(
+    var(--gradient-angle, 135deg),
+    hsl(var(--food-hue, 25), var(--food-sat, 35%), 65%) var(--stop1, 15%),
+    hsl(calc(var(--food-hue, 25) + var(--hue-shift1, 15)), calc(var(--food-sat, 35%) - 3%), 55%) var(--stop2, 55%),
+    hsl(calc(var(--food-hue, 25) + var(--hue-shift2, 30)), calc(var(--food-sat, 35%) - 7%), 48%) var(--stop3, 85%)
+  );
+  opacity: 0.88;
+}
+
+.recipe-image-gradient[style*="--gradient-type: radial"] {
+  background: radial-gradient(
+    ellipse at var(--pattern-x, 40%) var(--pattern-y, 40%),
+    hsl(var(--food-hue, 25), calc(var(--food-sat, 35%) + 5%), 68%) var(--stop1, 15%),
+    hsl(calc(var(--food-hue, 25) + var(--hue-shift1, 15)), var(--food-sat, 35%), 58%) var(--stop2, 50%),
+    hsl(calc(var(--food-hue, 25) + var(--hue-shift2, 30)), calc(var(--food-sat, 35%) - 5%), 45%) var(--stop3, 90%)
+  );
+  opacity: 0.88;
+}
+
+.recipe-image-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Pattern Style 0: Large central glow with corner shadows */
+.recipe-image-overlay.pattern-0 {
+  background: 
+    radial-gradient(ellipse at var(--pattern-x, 40%) var(--pattern-y, 40%), 
+                    rgba(255, 255, 255, var(--light-intensity, 0.18)) 0%, 
+                    transparent var(--pattern-size, 50%)),
+    radial-gradient(circle at 85% 15%, 
+                    rgba(0, 0, 0, var(--dark-intensity, 0.08)) 0%, 
+                    transparent 40%),
+    linear-gradient(var(--texture-angle, 45deg), 
+                    transparent 0%, 
+                    rgba(255, 255, 255, 0.06) 50%, 
+                    transparent 100%);
+}
+
+/* Pattern Style 1: Multiple scattered light spots */
+.recipe-image-overlay.pattern-1 {
+  background: 
+    radial-gradient(circle at var(--pattern-x, 30%) var(--pattern-y, 30%), 
+                    rgba(255, 255, 255, calc(var(--light-intensity, 0.18) * 1.2)) 0%, 
+                    transparent 35%),
+    radial-gradient(circle at var(--splotch-x, 70%) var(--splotch-y, 60%), 
+                    rgba(255, 255, 255, var(--light-intensity, 0.18)) 0%, 
+                    transparent 30%),
+    radial-gradient(circle at 50% 80%, 
+                    rgba(255, 255, 255, calc(var(--light-intensity, 0.18) * 0.8)) 0%, 
+                    transparent 25%),
+    linear-gradient(180deg, 
+                    rgba(0, 0, 0, calc(var(--dark-intensity, 0.08) * 0.6)) 0%, 
+                    transparent 40%);
+}
+
+/* Pattern Style 2: Diagonal sweep with corner accent */
+.recipe-image-overlay.pattern-2 {
+  background: 
+    linear-gradient(var(--texture-angle, 45deg), 
+                    rgba(255, 255, 255, var(--light-intensity, 0.18)) 0%, 
+                    transparent 30%,
+                    transparent 70%,
+                    rgba(0, 0, 0, var(--dark-intensity, 0.08)) 100%),
+    radial-gradient(ellipse at var(--splotch-x, 60%) var(--splotch-y, 40%), 
+                    rgba(255, 255, 255, calc(var(--light-intensity, 0.18) * 0.9)) 0%, 
+                    transparent var(--splotch-size, 45%));
+}
+
+/* Pattern Style 3: Soft vignette with central highlight */
+.recipe-image-overlay.pattern-3 {
+  background: 
+    radial-gradient(ellipse at 50% 50%, 
+                    rgba(255, 255, 255, calc(var(--light-intensity, 0.18) * 0.7)) 0%, 
+                    transparent 60%),
+    radial-gradient(ellipse at var(--pattern-x, 25%) var(--pattern-y, 35%), 
+                    rgba(255, 255, 255, var(--light-intensity, 0.18)) 0%, 
+                    transparent calc(var(--pattern-size, 50%) * 0.7)),
+    linear-gradient(calc(var(--texture-angle, 45deg) + 90deg), 
+                    rgba(0, 0, 0, var(--dark-intensity, 0.08)) 0%, 
+                    transparent 25%,
+                    transparent 75%,
+                    rgba(0, 0, 0, var(--dark-intensity, 0.08)) 100%);
+}
+
+.recipe-card-with-image:hover .recipe-image-gradient {
+  transform: scale(1.05);
+  transition: transform 0.4s ease;
+}
+
+.recipe-card-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-card-with-image h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+}
+
+.recipe-card-with-image p {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .recipe-meta {
   display: flex;
   gap: 0.75rem;

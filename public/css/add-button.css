@@ -109,18 +109,17 @@
 }
 
 .fab-actions {
-  display: flex;
+  display: none;
   gap: 0.75rem;
   opacity: 0;
   transform: translateY(20px);
-  pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .fab-actions.show {
+  display: flex;
   opacity: 1;
   transform: translateY(0);
-  pointer-events: all;
 }
 
 .fab-action-button {

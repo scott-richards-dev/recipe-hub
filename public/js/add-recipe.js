@@ -9,7 +9,7 @@ document.addEventListener('alpine:init', () => {
       cookTime: '',
       servings: '',
       bookIds: [],
-      ingredients: [''],
+      ingredients: [{ amount: '', metric: '', name: '' }],
       instructions: ['']
     },
     books: [],
@@ -23,6 +23,9 @@ document.addEventListener('alpine:init', () => {
     recipeId: null,
     returnBookId: null,
     bookName: '',
+    advancedIngredientMode: true,
+    ingredientSections: [{ section: '', items: [{ amount: '', metric: '', name: '' }] }],
+    instructionSections: [{ section: '', items: [''] }],
     
     async init() {
       // Check if we're in edit mode
@@ -42,11 +45,28 @@ document.addEventListener('alpine:init', () => {
       if (this.recipeId) {
         this.isEditMode = true;
         await this.loadRecipeData();
+      } else if (this.returnBookId) {
+        // Pre-select the book if coming from a book page
+        this.formData.bookIds.push(this.returnBookId);
+        
+        // Load book name for display
+        const book = this.books.find(b => b.id === this.returnBookId);
+        if (book) {
+          this.bookName = `${book.image} ${book.name}`;
+        }
       }
     },
     
+    // Check if recipe has advanced mode data (amount, unit, name structure)
+    hasAdvancedData(ingredients) {
+      if (!ingredients || ingredients.length === 0) return false;
+      return ingredients.some(ing => 
+        typeof ing === 'object' && (ing.amount !== undefined || ing.metric !== undefined)
+      );
+    },
+    
+    // Convert ingredient object to a string for simple mode
     ingredientToString(ingredient) {
-      // Convert ingredient object to a readable string
       if (typeof ingredient === 'string') {
         return ingredient;
       }
@@ -55,12 +75,60 @@ document.addEventListener('alpine:init', () => {
       if (ingredient.amount) {
         str += ingredient.amount;
         if (ingredient.metric) {
-          str += ingredient.metric;
+          str += ' ' + ingredient.metric;
         }
         str += ' ';
+      } else if (ingredient.metric) {
+        str += ingredient.metric + ' ';
       }
       str += ingredient.name || '';
       return str.trim();
+    },
+    
+    // Convert string ingredient to object for advanced mode
+    stringToIngredient(str) {
+      if (typeof str === 'object') {
+        return str;
+      }
+      return {
+        amount: '',
+        metric: '',
+        name: str
+      };
+    },
+    
+    // Toggle between simple and advanced mode
+    toggleIngredientMode() {
+      // Check if switching to simple mode and if there's at least 1 ingredient
+      if (this.advancedIngredientMode) {
+        // Check if there's at least 1 ingredient with any data
+        const hasIngredients = this.ingredientSections.some(section => 
+          section.items.some(ing => 
+            ing.amount || ing.metric || ing.name
+          )
+        );
+        
+        // Show warning only if there's at least 1 ingredient
+        if (hasIngredients) {
+          const confirmed = confirm('Switching to simple mode will condense the ingredients. Continue?');
+          if (!confirmed) {
+            return; // User canceled, don't switch modes
+          }
+        }
+        
+        // Switching to simple mode
+        this.ingredientSections = this.ingredientSections.map(section => ({
+          section: section.section,
+          items: section.items.map(ing => this.ingredientToString(ing))
+        }));
+      } else {
+        // Switching to advanced mode
+        this.ingredientSections = this.ingredientSections.map(section => ({
+          section: section.section,
+          items: section.items.map(ing => this.stringToIngredient(ing))
+        }));
+      }
+      this.advancedIngredientMode = !this.advancedIngredientMode;
     },
     
     async loadRecipeData() {
@@ -73,11 +141,71 @@ document.addEventListener('alpine:init', () => {
           this.formData.cookTime = recipe.cookTime;
           this.formData.servings = recipe.servings?.toString() || '';
           this.formData.bookIds = recipe.bookIds || [];
-          // Convert ingredient objects to strings for editing
-          this.formData.ingredients = recipe.ingredients?.length > 0 
-            ? recipe.ingredients.map(ing => this.ingredientToString(ing))
-            : [''];
-          this.formData.instructions = recipe.instructions?.length > 0 ? recipe.instructions : [''];
+          
+          // Check if recipe uses sections
+          const hasIngredientSections = recipe.ingredients?.length > 0 && recipe.ingredients[0]?.section !== undefined;
+          const hasInstructionSections = recipe.instructions?.length > 0 && recipe.instructions[0]?.section !== undefined;
+          
+          // Load ingredients
+          if (hasIngredientSections) {
+            // Check if any section has simple mode items (strings)
+            const isSimpleMode = recipe.ingredients.some(section => 
+              section.items?.some(item => typeof item === 'string')
+            );
+            
+            if (isSimpleMode) {
+              this.advancedIngredientMode = false;
+              this.ingredientSections = recipe.ingredients.map(section => ({
+                section: section.section || '',
+                items: section.items?.length > 0 ? section.items : ['']
+              }));
+            } else {
+              this.advancedIngredientMode = true;
+              this.ingredientSections = recipe.ingredients.map(section => ({
+                section: section.section || '',
+                items: section.items?.length > 0 
+                  ? section.items.map(item => ({
+                      amount: item.amount || '',
+                      metric: item.metric || '',
+                      name: item.name || ''
+                    }))
+                  : [{ amount: '', metric: '', name: '' }]
+              }));
+            }
+          } else {
+            // Convert flat to single section
+            const isSimpleMode = recipe.ingredients?.some(ing => typeof ing === 'string');
+            
+            if (isSimpleMode) {
+              this.advancedIngredientMode = false;
+              const items = recipe.ingredients?.length > 0 
+                ? recipe.ingredients
+                : [''];
+              this.ingredientSections = [{ section: '', items }];
+            } else {
+              this.advancedIngredientMode = true;
+              const items = recipe.ingredients?.length > 0 
+                ? recipe.ingredients.map(ing => ({
+                    amount: ing.amount || '',
+                    metric: ing.metric || '',
+                    name: ing.name || ''
+                  }))
+                : [{ amount: '', metric: '', name: '' }];
+              this.ingredientSections = [{ section: '', items }];
+            }
+          }
+          
+          // Load instructions
+          if (hasInstructionSections) {
+            this.instructionSections = recipe.instructions.map(section => ({
+              section: section.section || '',
+              items: section.items?.length > 0 ? section.items : ['']
+            }));
+          } else {
+            // Convert flat to single section
+            const items = recipe.instructions?.length > 0 ? recipe.instructions : [''];
+            this.instructionSections = [{ section: '', items }];
+          }
           
           // Load book name for breadcrumb
           const bookIdToShow = this.returnBookId || (this.formData.bookIds.length > 0 ? this.formData.bookIds[0] : null);
@@ -98,22 +226,138 @@ document.addEventListener('alpine:init', () => {
     },
     
     addIngredient() {
-      this.formData.ingredients.push('');
+      // Add to first section
+      if (this.advancedIngredientMode) {
+        this.ingredientSections[0].items.push({ amount: '', metric: '', name: '' });
+      } else {
+        this.ingredientSections[0].items.push('');
+      }
     },
     
     removeIngredient(index) {
-      if (this.formData.ingredients.length > 1) {
-        this.formData.ingredients.splice(index, 1);
+      this.ingredientSections[0].items.splice(index, 1);
+      // If no items left, add an empty one
+      if (this.ingredientSections[0].items.length === 0) {
+        if (this.advancedIngredientMode) {
+          this.ingredientSections[0].items.push({ amount: '', metric: '', name: '' });
+        } else {
+          this.ingredientSections[0].items.push('');
+        }
       }
     },
     
     addInstruction() {
-      this.formData.instructions.push('');
+      // Add to first section
+      this.instructionSections[0].items.push('');
     },
     
     removeInstruction(index) {
-      if (this.formData.instructions.length > 1) {
-        this.formData.instructions.splice(index, 1);
+      if (this.instructionSections[0].items.length > 1) {
+        this.instructionSections[0].items.splice(index, 1);
+      }
+    },
+    
+    // Helper methods for section detection
+    hasMultipleIngredientSections() {
+      return this.ingredientSections.length > 1;
+    },
+    
+    hasMultipleInstructionSections() {
+      return this.instructionSections.length > 1;
+    },
+    
+    // Section management methods
+    
+    addIngredientSection() {
+      if (this.advancedIngredientMode) {
+        this.ingredientSections.push({
+          section: '',
+          items: [{ amount: '', metric: '', name: '' }]
+        });
+      } else {
+        this.ingredientSections.push({
+          section: '',
+          items: ['']
+        });
+      }
+    },
+    
+    removeIngredientSection(sectionIndex) {
+      if (this.ingredientSections.length > 1) {
+        const section = this.ingredientSections[sectionIndex];
+        
+        // Check if section has any data
+        const hasData = section.section || section.items.some(item => {
+          if (this.advancedIngredientMode) {
+            return item.amount || item.metric || item.name;
+          } else {
+            return item && item.trim() !== '';
+          }
+        });
+        
+        if (hasData) {
+          const confirmed = confirm('This section contains data. Are you sure you want to delete it?');
+          if (!confirmed) {
+            return; // User canceled, don't delete
+          }
+        }
+        
+        this.ingredientSections.splice(sectionIndex, 1);
+      }
+    },
+    
+    addIngredientToSection(sectionIndex) {
+      if (this.advancedIngredientMode) {
+        this.ingredientSections[sectionIndex].items.push({ amount: '', metric: '', name: '' });
+      } else {
+        this.ingredientSections[sectionIndex].items.push('');
+      }
+    },
+    
+    removeIngredientFromSection(sectionIndex, itemIndex) {
+      this.ingredientSections[sectionIndex].items.splice(itemIndex, 1);
+      // If no items left, add an empty one
+      if (this.ingredientSections[sectionIndex].items.length === 0) {
+        if (this.advancedIngredientMode) {
+          this.ingredientSections[sectionIndex].items.push({ amount: '', metric: '', name: '' });
+        } else {
+          this.ingredientSections[sectionIndex].items.push('');
+        }
+      }
+    },
+    
+    addInstructionSection() {
+      this.instructionSections.push({
+        section: '',
+        items: ['']
+      });
+    },
+    
+    removeInstructionSection(sectionIndex) {
+      if (this.instructionSections.length > 1) {
+        const section = this.instructionSections[sectionIndex];
+        
+        // Check if section has any data
+        const hasData = section.section || section.items.some(item => item && item.trim() !== '');
+        
+        if (hasData) {
+          const confirmed = confirm('This section contains data. Are you sure you want to delete it?');
+          if (!confirmed) {
+            return; // User canceled, don't delete
+          }
+        }
+        
+        this.instructionSections.splice(sectionIndex, 1);
+      }
+    },
+    
+    addInstructionToSection(sectionIndex) {
+      this.instructionSections[sectionIndex].items.push('');
+    },
+    
+    removeInstructionFromSection(sectionIndex, itemIndex) {
+      if (this.instructionSections[sectionIndex].items.length > 1) {
+        this.instructionSections[sectionIndex].items.splice(itemIndex, 1);
       }
     },
     
@@ -154,11 +398,11 @@ document.addEventListener('alpine:init', () => {
     
     dropIngredient(targetIndex) {
       if (this.draggedIngredientIndex !== null && this.draggedIngredientIndex !== targetIndex) {
-        const draggedItem = this.formData.ingredients[this.draggedIngredientIndex];
-        this.formData.ingredients.splice(this.draggedIngredientIndex, 1);
-        this.formData.ingredients.splice(targetIndex, 0, draggedItem);
+        const draggedItem = this.ingredientSections[0].items[this.draggedIngredientIndex];
+        this.ingredientSections[0].items.splice(this.draggedIngredientIndex, 1);
+        this.ingredientSections[0].items.splice(targetIndex, 0, draggedItem);
         // Force reactivity update
-        this.formData.ingredients = [...this.formData.ingredients];
+        this.ingredientSections[0].items = [...this.ingredientSections[0].items];
       }
       this.draggedIngredientIndex = null;
       this.dragOverIngredientIndex = null;
@@ -181,11 +425,11 @@ document.addEventListener('alpine:init', () => {
     
     dropInstruction(targetIndex) {
       if (this.draggedInstructionIndex !== null && this.draggedInstructionIndex !== targetIndex) {
-        const draggedItem = this.formData.instructions[this.draggedInstructionIndex];
-        this.formData.instructions.splice(this.draggedInstructionIndex, 1);
-        this.formData.instructions.splice(targetIndex, 0, draggedItem);
+        const draggedItem = this.instructionSections[0].items[this.draggedInstructionIndex];
+        this.instructionSections[0].items.splice(this.draggedInstructionIndex, 1);
+        this.instructionSections[0].items.splice(targetIndex, 0, draggedItem);
         // Force reactivity update
-        this.formData.instructions = [...this.formData.instructions];
+        this.instructionSections[0].items = [...this.instructionSections[0].items];
       }
       this.draggedInstructionIndex = null;
       this.dragOverInstructionIndex = null;
@@ -195,11 +439,45 @@ document.addEventListener('alpine:init', () => {
       this.submitting = true;
       
       // Filter out empty ingredients and instructions
+      let cleanedIngredients, cleanedInstructions;
+      
+      // Clean ingredient sections
+      const cleanedIngredientSections = this.ingredientSections
+        .map(section => ({
+          section: section.section,
+          items: this.advancedIngredientMode
+            ? section.items.filter(item => item.name && item.name.trim() !== '')
+            : section.items.filter(item => typeof item === 'string' ? item.trim() !== '' : item.name && item.name.trim() !== '')
+        }))
+        .filter(section => section.items.length > 0);
+      
+      // If only one section with no name, flatten to array
+      if (cleanedIngredientSections.length === 1 && !cleanedIngredientSections[0].section) {
+        cleanedIngredients = cleanedIngredientSections[0].items;
+      } else {
+        cleanedIngredients = cleanedIngredientSections;
+      }
+      
+      // Clean instruction sections
+      const cleanedInstructionSections = this.instructionSections
+        .map(section => ({
+          section: section.section,
+          items: section.items.filter(item => item.trim() !== '')
+        }))
+        .filter(section => section.items.length > 0);
+      
+      // If only one section with no name, flatten to array
+      if (cleanedInstructionSections.length === 1 && !cleanedInstructionSections[0].section) {
+        cleanedInstructions = cleanedInstructionSections[0].items;
+      } else {
+        cleanedInstructions = cleanedInstructionSections;
+      }
+      
       const cleanedData = {
         ...this.formData,
-        servings: parseInt(this.formData.servings),
-        ingredients: this.formData.ingredients.filter(i => i.trim() !== ''),
-        instructions: this.formData.instructions.filter(i => i.trim() !== '')
+        servings: this.formData.servings ? parseInt(this.formData.servings) : undefined,
+        ingredients: cleanedIngredients,
+        instructions: cleanedInstructions
       };
       
       // Validate that we have at least one ingredient and instruction
@@ -213,6 +491,25 @@ document.addEventListener('alpine:init', () => {
         Toast.error('Please add at least one instruction.', 'Validation Error', { duration: 5000 });
         this.submitting = false;
         return;
+      }
+      
+      // Validate section names when there are multiple sections
+      if (cleanedIngredientSections.length > 1) {
+        const hasEmptySectionName = cleanedIngredientSections.some(section => !section.section || section.section.trim() === '');
+        if (hasEmptySectionName) {
+          Toast.error('Please provide names for all ingredient sections when using multiple sections.', 'Validation Error', { duration: 5000 });
+          this.submitting = false;
+          return;
+        }
+      }
+      
+      if (cleanedInstructionSections.length > 1) {
+        const hasEmptySectionName = cleanedInstructionSections.some(section => !section.section || section.section.trim() === '');
+        if (hasEmptySectionName) {
+          Toast.error('Please provide names for all instruction sections when using multiple sections.', 'Validation Error', { duration: 5000 });
+          this.submitting = false;
+          return;
+        }
       }
       
       try {

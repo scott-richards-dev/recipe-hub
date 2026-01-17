@@ -63,6 +63,8 @@
         </div>
 
         <form @submit.prevent="submitForm" class="form-container">
+          <h2 class="form-zone-header">Recipe Details</h2>
+          
           <div class="form-group">
             <label for="recipeName" class="form-label">Recipe Name *</label>
             <input 
@@ -77,20 +79,19 @@
           </div>
 
           <div class="form-group">
-            <label for="recipeDescription" class="form-label">Description *</label>
+            <label for="recipeDescription" class="form-label">Description</label>
             <textarea 
               id="recipeDescription" 
               x-model="formData.description"
               class="form-input form-textarea"
               placeholder="Describe the recipe..."
-              required
               maxlength="500"
               rows="3"
             ></textarea>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="bookIds">Add to Books <span class="form-hint">(optional)</span></label>
+            <label class="form-label" for="bookIds">Add to Books</label>
             <select 
               id="bookIds"
               x-model="selectedBookId"
@@ -125,111 +126,388 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label for="cookTime" class="form-label">Cook Time *</label>
+              <label for="cookTime" class="form-label">Cook Time</label>
               <input 
                 type="text" 
                 id="cookTime" 
                 x-model="formData.cookTime"
                 class="form-input"
                 placeholder="e.g., 30 min"
-                required
                 maxlength="20"
               />
             </div>
 
             <div class="form-group">
-              <label for="servings" class="form-label">Servings *</label>
+              <label for="servings" class="form-label">Servings</label>
               <input 
                 type="number" 
                 id="servings" 
                 x-model="formData.servings"
                 class="form-input"
                 placeholder="e.g., 4"
-                required
-                min="1"
                 max="100"
               />
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Ingredients * <span class="drag-hint">Drag to reorder</span></label>
-            <template x-for="(ingredient, index) in formData.ingredients" :key="index">
-              <div 
-                class="ingredient-item"
-                :class="{ 'dragging': draggedIngredientIndex === index, 'drag-over': dragOverIngredientIndex === index }"
-                draggable="true"
-                @dragstart="startDragIngredient($event, index)"
-                @dragend="endDragIngredient"
-                @dragover.prevent="dragOverIngredient(index)"
-                @drop="dropIngredient(index)"
+          <h2 class="form-zone-header">
+            <span class="form-zone-header-title">
+              Ingredients <span class="required-indicator">*</span>
+            </span>
+            <div class="toggle-switch">
+              <span class="toggle-label" :class="{ 'active': !advancedIngredientMode }">Simple</span>
+              <button 
+                type="button" 
+                @click="toggleIngredientMode"
+                class="toggle-button"
+                :class="{ 'advanced': advancedIngredientMode }"
+                :title="advancedIngredientMode ? 'Switch to simple mode' : 'Switch to advanced mode'"
               >
-                <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-                <input 
-                  type="text" 
-                  x-model="formData.ingredients[index]"
-                  class="form-input"
-                  :placeholder="`Ingredient ${index + 1}`"
-                  required
-                />
+                <span class="toggle-slider"></span>
+              </button>
+              <span class="toggle-label" :class="{ 'active': advancedIngredientMode }">Advanced</span>
+            </div>
+          </h2>
+          
+          <div class="form-group">
+            <!-- Multiple Sections Mode -->
+            <template x-if="hasMultipleIngredientSections()">
+              <div>
+                <template x-for="(section, sectionIndex) in ingredientSections" :key="sectionIndex">
+                  <div class="section-group">
+                    <div class="section-header-input">
+                      <input 
+                        type="text" 
+                        x-model="section.section"
+                        class="form-input"
+                        :placeholder="`Section ${sectionIndex + 1}`"
+                        :required="ingredientSections.length > 1"
+                      />
+                      <button 
+                        type="button" 
+                        @click="removeIngredientSection(sectionIndex)"
+                        class="btn-remove"
+                        x-show="ingredientSections.length > 1"
+                        aria-label="Remove section"
+                        title="Remove section"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <template x-for="(ingredient, itemIndex) in section.items" :key="itemIndex">
+                      <div>
+                        <!-- Advanced mode fields -->
+                        <div x-show="advancedIngredientMode" class="ingredient-item ingredient-item-advanced">
+                          <div class="ingredient-fields">
+                            <input 
+                              type="number" 
+                              x-model="ingredientSections[sectionIndex].items[itemIndex].amount"
+                              class="form-input ingredient-amount"
+                              placeholder="Amount"
+                              step="0.01"
+                              min="0"
+                            />
+                            <input 
+                              type="text" 
+                              x-model="ingredientSections[sectionIndex].items[itemIndex].metric"
+                              class="form-input ingredient-unit"
+                              placeholder="Unit"
+                              maxlength="20"
+                            />
+                            <input 
+                              type="text" 
+                              x-model="ingredientSections[sectionIndex].items[itemIndex].name"
+                              class="form-input ingredient-name"
+                              :placeholder="`Ingredient ${itemIndex + 1}`"
+                              :required="advancedIngredientMode"
+                            />
+                          </div>
+                          <button 
+                            type="button" 
+                            @click="removeIngredientFromSection(sectionIndex, itemIndex)"
+                            class="btn-remove"
+                            aria-label="Remove ingredient"
+                            tabindex="-1"
+                            :disabled="section.items.length === 1"
+                          >
+                            &times;
+                          </button>
+                        </div>
+                        <!-- Simple mode field -->
+                        <div x-show="!advancedIngredientMode" class="ingredient-item">
+                          <input 
+                            type="text" 
+                            x-model="ingredientSections[sectionIndex].items[itemIndex]"
+                            class="form-input"
+                            :placeholder="`Ingredient ${itemIndex + 1}`"
+                            :required="!advancedIngredientMode"
+                          />
+                          <button 
+                            type="button" 
+                            @click="removeIngredientFromSection(sectionIndex, itemIndex)"
+                            class="btn-remove"
+                            aria-label="Remove ingredient"
+                            tabindex="-1"
+                            :disabled="section.items.length === 1"
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      </div>
+                    </template>
+                    <button 
+                      type="button" 
+                      @click="addIngredientToSection(sectionIndex)"
+                      class="btn btn-add-small"
+                      style="margin-bottom: 1rem;"
+                    >
+                      + Ingredient
+                    </button>
+                  </div>
+                </template>
                 <button 
                   type="button" 
-                  @click="removeIngredient(index)"
-                  class="btn-remove"
-                  :disabled="formData.ingredients.length === 1"
-                  aria-label="Remove ingredient"
+                  @click="addIngredientSection"
+                  class="btn btn-add"
+                  style="margin-top: 0.5rem;"
                 >
-                  &times;
+                  + Section
                 </button>
               </div>
             </template>
-            <button 
-              type="button" 
-              @click="addIngredient"
-              class="btn btn-add"
-            >
-              + Add Ingredient
-            </button>
+            
+            <!-- Simple Mode (single section, simple ingredients) -->
+            <template x-if="!hasMultipleIngredientSections() && !advancedIngredientMode">
+              <div>
+                <template x-for="(ingredient, index) in ingredientSections[0].items" :key="index">
+                  <div 
+                    class="ingredient-item"
+                    :class="{ 'dragging': draggedIngredientIndex === index, 'drag-over': dragOverIngredientIndex === index }"
+                    draggable="true"
+                    @dragstart="startDragIngredient($event, index)"
+                    @dragend="endDragIngredient"
+                    @dragover.prevent="dragOverIngredient(index)"
+                    @drop="dropIngredient(index)"
+                  >
+                    <input 
+                      type="text" 
+                      x-model="ingredientSections[0].items[index]"
+                      class="form-input"
+                      :placeholder="`Ingredient ${index + 1}`"
+                      required
+                    />
+                    <button 
+                      type="button" 
+                      @click="removeIngredient(index)"
+                      class="btn-remove"
+                      aria-label="Remove ingredient"
+                      tabindex="-1"
+                      :disabled="ingredientSections[0].items.length === 1"
+                    >
+                      &times;
+                    </button>
+                    <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+                  </div>
+                </template>
+              </div>
+            </template>
+            
+            <!-- Advanced Mode (single section, advanced ingredients) -->
+            <template x-if="!hasMultipleIngredientSections() && advancedIngredientMode">
+              <div>
+                <template x-for="(ingredient, index) in ingredientSections[0].items" :key="index">
+                  <div 
+                    class="ingredient-item ingredient-item-advanced"
+                    :class="{ 'dragging': draggedIngredientIndex === index, 'drag-over': dragOverIngredientIndex === index }"
+                    draggable="true"
+                    @dragstart="startDragIngredient($event, index)"
+                    @dragend="endDragIngredient"
+                    @dragover.prevent="dragOverIngredient(index)"
+                    @drop="dropIngredient(index)"
+                  >
+                    <div class="ingredient-fields">
+                      <input 
+                        type="number" 
+                        x-model="ingredient.amount"
+                        class="form-input ingredient-amount"
+                        placeholder="Amount"
+                        step="0.01"
+                        min="0"
+                      />
+                      <input 
+                        type="text" 
+                        x-model="ingredient.metric"
+                        class="form-input ingredient-unit"
+                        placeholder="Unit"
+                        maxlength="20"
+                      />
+                      <input 
+                        type="text" 
+                        x-model="ingredient.name"
+                        class="form-input ingredient-name"
+                        :placeholder="`Ingredient ${index + 1}`"
+                        required
+                      />
+                    </div>
+                    <button 
+                      type="button" 
+                      @click="removeIngredient(index)"
+                      class="btn-remove"
+                      aria-label="Remove ingredient"
+                      tabindex="-1"                      :disabled="ingredientSections[0].items.length === 1"                    >
+                      &times;
+                    </button>
+                    <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+                  </div>
+                </template>
+              </div>
+            </template>
+            
+            <!-- Button group for ingredients -->
+            <div class="form-button-group" x-show="!hasMultipleIngredientSections()">
+              <button 
+                type="button" 
+                @click="addIngredient"
+                class="btn btn-add-item"
+              >
+                + Ingredient
+              </button>
+              <button 
+                type="button" 
+                @click="addIngredientSection"
+                class="btn btn-add"
+              >
+                + Section
+              </button>
+            </div>
           </div>
 
+          <h2 class="form-zone-header">
+            <span class="form-zone-header-title">
+              Instructions <span class="required-indicator">*</span>
+            </span>
+          </h2>
+          
           <div class="form-group">
-            <label class="form-label">Instructions * <span class="drag-hint">Drag to reorder</span></label>
-            <template x-for="(instruction, index) in formData.instructions" :key="index">
-              <div 
-                class="instruction-item"
-                :class="{ 'dragging': draggedInstructionIndex === index, 'drag-over': dragOverInstructionIndex === index }"
-                draggable="true"
-                @dragstart="startDragInstruction($event, index)"
-                @dragend="endDragInstruction"
-                @dragover.prevent="dragOverInstruction(index)"
-                @drop="dropInstruction(index)"
-              >
-                <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-                <textarea 
-                  x-model="formData.instructions[index]"
-                  class="form-input form-textarea"
-                  :placeholder="`Step ${index + 1}`"
-                  required
-                  rows="2"
-                ></textarea>
+            <!-- Multiple Sections Mode -->
+            <template x-if="hasMultipleInstructionSections()">
+              <div>
+                <template x-for="(section, sectionIndex) in instructionSections" :key="sectionIndex">
+                  <div class="section-group">
+                    <div class="section-header-input">
+                      <input 
+                        type="text" 
+                        x-model="section.section"
+                        class="form-input"
+                        :placeholder="`Section ${sectionIndex + 1}`"
+                        :required="instructionSections.length > 1"
+                      />
+                      <button 
+                        type="button" 
+                        @click="removeInstructionSection(sectionIndex)"
+                        class="btn-remove"
+                        x-show="instructionSections.length > 1"
+                        aria-label="Remove section"
+                        title="Remove section"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <template x-for="(instruction, itemIndex) in section.items" :key="itemIndex">
+                      <div class="instruction-item">
+                        <textarea 
+                          x-model="section.items[itemIndex]"
+                          class="form-input form-textarea"
+                          :placeholder="`Step ${itemIndex + 1}`"
+                          required
+                          rows="2"
+                        ></textarea>
+                        <button 
+                          type="button" 
+                          @click="removeInstructionFromSection(sectionIndex, itemIndex)"
+                          class="btn-remove"
+                          :disabled="section.items.length === 1"
+                          aria-label="Remove instruction"
+                          tabindex="-1"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    </template>
+                    <button 
+                      type="button" 
+                      @click="addInstructionToSection(sectionIndex)"
+                      class="btn btn-add-small"
+                      style="margin-bottom: 1rem;"
+                    >
+                      + Instruction
+                    </button>
+                  </div>
+                </template>
+                <button 
+                  type="button" 
+                  @click="addInstructionSection"
+                  class="btn btn-add"
+                  style="margin-top: 0.5rem;"
+                >
+                  + Section
+                </button>
+              </div>
+            </template>
+            
+            <!-- Flat Mode (single section) -->
+            <template x-if="!hasMultipleInstructionSections()">
+              <div>
+                <template x-for="(instruction, index) in instructionSections[0].items" :key="index">
+                  <div 
+                    class="instruction-item"
+                    :class="{ 'dragging': draggedInstructionIndex === index, 'drag-over': dragOverInstructionIndex === index }"
+                    draggable="true"
+                    @dragstart="startDragInstruction($event, index)"
+                    @dragend="endDragInstruction"
+                    @dragover.prevent="dragOverInstruction(index)"
+                    @drop="dropInstruction(index)"
+                  >
+                    <textarea 
+                      x-model="instructionSections[0].items[index]"
+                      class="form-input form-textarea"
+                      :placeholder="`Step ${index + 1}`"
+                      required
+                      rows="2"
+                    ></textarea>
                 <button 
                   type="button" 
                   @click="removeInstruction(index)"
                   class="btn-remove"
-                  :disabled="formData.instructions.length === 1"
+                  :disabled="instructionSections[0].items.length === 1"
                   aria-label="Remove instruction"
+                  tabindex="-1"
                 >
                   &times;
                 </button>
+                <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              </div>
+                </template>
               </div>
             </template>
-            <button 
-              type="button" 
-              @click="addInstruction"
-              class="btn btn-add"
-            >
-              + Add Instruction
-            </button>
+            
+            <!-- Button group for instructions -->
+            <div class="form-button-group" x-show="!hasMultipleInstructionSections()">
+              <button 
+                type="button" 
+                @click="addInstruction"
+                class="btn btn-add-item"
+              >
+                + Instruction
+              </button>
+              <button 
+                type="button" 
+                @click="addInstructionSection"
+                class="btn btn-add"
+              >
+                + Section
+              </button>
+            </div>
           </div>
 
           <div class="form-actions">
@@ -237,6 +515,7 @@
               type="button" 
               @click="cancel" 
               class="btn btn-secondary"
+              :disabled="submitting"
             >
               Cancel
             </button>
@@ -255,5 +534,16 @@
   </main>
 
   <script src="../js/add-recipe.js"></script>
+  <script>
+    // Style mandatory and optional indicators
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wrap asterisks in spans for better styling
+      document.querySelectorAll('.form-label').forEach(label => {
+        if (label.textContent.includes('*')) {
+          label.innerHTML = label.innerHTML.replace(/\s*\*\s*/g, ' <span class="required-indicator">*</span>');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

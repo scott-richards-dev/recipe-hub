@@ -1,7 +1,7 @@
 /* Recipe Hub - Recipe Detail Styles */
 
 .recipe-container {
-  max-width: 980px;
+  max-width: 900px;
   padding: 2rem 2rem 4rem;
 }
 
@@ -373,12 +373,13 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  min-height: 65px;
 }
 
 .section-header h2 {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-dark);
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -445,6 +446,37 @@
   padding: 0.5rem 0;
 }
 
+/* Sectioned layout */
+.sectioned-ingredients,
+.sectioned-instructions {
+  display: flex;
+  flex-direction: column;
+}
+
+.ingredient-section,
+.instruction-section {
+  position: relative;
+}
+
+.ingredient-section:not(:first-child),
+.instruction-section:not(:first-child) {
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1.5px solid var(--primary);
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  position: relative;
+  display: block;
+  border-left: 4px solid var(--primary);
+  letter-spacing: 0.3px;
+}
+
 /* Ingredients */
 .ingredients-list {
   list-style: none;
@@ -453,7 +485,7 @@
 }
 
 .ingredient-item {
-  padding: 1rem 2rem;
+  padding: 1.25rem 2rem;
   position: relative;
   border-bottom: 1px solid var(--border);
   transition: var(--transition);
@@ -462,11 +494,19 @@
   gap: 1rem;
   cursor: pointer;
   background: var(--surface);
+  min-height: 70px;
 }
 
 .ingredient-item:hover {
   background: rgba(107, 144, 128, 0.04);
   padding-left: 2.25rem;
+}
+
+.ingredient-item::after {
+  content: '';
+  width: 48px;
+  height: 32px;
+  flex-shrink: 0;
 }
 
 .ingredient-item:hover .unit-convert-btn {
@@ -538,13 +578,14 @@
 }
 
 .unit-convert-btn {
-  margin-left: auto;
-  padding: 0.35rem 0.5rem;
+  position: absolute;
+  right: 2rem;
+  padding: 0.5rem 0.75rem;
   background: var(--primary-lighter);
   color: var(--primary);
   border: 1px solid var(--primary-light);
   border-radius: var(--radius-sm);
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: bold;
   cursor: pointer;
   transition: var(--transition);
@@ -554,13 +595,13 @@
 }
 
 .unit-convert-btn:hover {
-  background: var(--primary);
-  color: white;
   transform: scale(1.1);
   box-shadow: var(--shadow-sm);
 }
 
 .unit-convert-btn:active {
+  background: var(--primary);
+  color: white;
   transform: scale(0.95);
 }
 
@@ -573,15 +614,22 @@
 .instruction-step {
   display: flex;
   gap: 0.75rem;
-  padding: 1rem 2rem;
+  padding: 1.25rem 2rem;
   color: var(--text-primary);
   border-bottom: 1px solid var(--border);
   transition: var(--transition);
-  align-items: flex-start;
+  align-items: center;
+  min-height: 70px;
 }
 
 .instruction-step:hover {
   background: var(--background);
+}
+
+.instruction-step.checked .step-text,
+.instruction-step.checked .step-number {
+  color: var(--text-tertiary);
+  opacity: 0.5;
 }
 
 .instruction-step:last-child {

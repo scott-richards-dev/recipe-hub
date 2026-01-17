@@ -171,9 +171,33 @@ document.addEventListener('alpine:init', () => {
     },
     multiplier: 1,
     checkedIngredients: {},
+    checkedInstructions: {},
     ingredientUnitStates: {},
     viewCount: 0,
     hasRevisions: false,
+    
+    // Check if ingredients are in sectioned format
+    hasIngredientSections() {
+      return this.recipe.ingredients && 
+             this.recipe.ingredients.length > 0 && 
+             this.recipe.ingredients[0].section !== undefined;
+    },
+    
+    // Check if instructions are in sectioned format
+    hasInstructionSections() {
+      return this.recipe.instructions && 
+             this.recipe.instructions.length > 0 && 
+             this.recipe.instructions[0].section !== undefined;
+    },
+    
+    // Get the step number for sectioned instructions
+    getStepNumber(sectionIndex, index) {
+      let stepCount = 0;
+      for (let i = 0; i < sectionIndex; i++) {
+        stepCount += this.recipe.instructions[i].items.length;
+      }
+      return stepCount + index + 1;
+    },
     
     async init() {
       const params = new URLSearchParams(window.location.search);
@@ -283,6 +307,10 @@ document.addEventListener('alpine:init', () => {
       
       // For other areas, manually toggle
       this.checkedIngredients[index] = !this.checkedIngredients[index];
+    },
+    
+    toggleInstructionStep(index) {
+      this.checkedInstructions[index] = !this.checkedInstructions[index];
     },
     
     deleteRecipe() {

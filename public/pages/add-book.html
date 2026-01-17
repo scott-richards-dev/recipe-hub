@@ -71,13 +71,12 @@
           </div>
 
           <div class="form-group">
-            <label for="bookDescription" class="form-label">Description *</label>
+            <label for="bookDescription" class="form-label">Description</label>
             <textarea 
               id="bookDescription" 
               x-model="formData.description"
               class="form-input form-textarea"
               placeholder="Describe what kind of recipes are in this book..."
-              required
               maxlength="500"
               rows="4"
             ></textarea>
@@ -134,5 +133,16 @@
   </main>
 
   <script src="../js/add-book.js"></script>
+  <script>
+    // Style mandatory and optional indicators
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wrap asterisks in spans for better styling
+      document.querySelectorAll('.form-label').forEach(label => {
+        if (label.textContent.includes('*')) {
+          label.innerHTML = label.innerHTML.replace(/\s*\*\s*/g, ' <span class="required-indicator">*</span>');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

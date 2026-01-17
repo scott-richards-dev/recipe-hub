@@ -5,79 +5,6 @@ const path = require('path');
 
 const recipesPath = path.join(__dirname, '../data/recipes.json');
 
-// Helper function to parse ingredient string into structured object
-function parseIngredient(ingredientStr) {
-  if (typeof ingredientStr === 'object') {
-    return ingredientStr; // Already structured
-  }
-  
-  const str = ingredientStr.trim();
-  if (!str) {
-    throw new Error('Ingredient name is required');
-  }
-  
-  const ingredient = {};
-  
-  // Common unit patterns (both full and abbreviated forms)
-  const unitPattern = '(cups?|tbsp|tsp|teaspoons?|tablespoons?|oz|ounces?|lbs?|pounds?|g|grams?|kg|kilograms?|ml|milliliters?|l|liters?|pint|quart|gallon|cloves?|pieces?|slices?|pinch|dash)';
-  
-  // Pattern 1: "Name - Amount Unit" (e.g., "Butter - 4 cups", "Flour - 2 cups")
-  const reversePattern = new RegExp(`^(.+?)\\s*[-–—]\\s*(\\d+(?:[\\.\\/]\\d+)?)\\s*${unitPattern}?\\s*$`, 'i');
-  const reverseMatch = str.match(reversePattern);
-  
-  if (reverseMatch) {
-    ingredient.name = reverseMatch[1].trim();
-    ingredient.amount = parseFloat(reverseMatch[2]);
-    if (reverseMatch[3]) {
-      ingredient.metric = reverseMatch[3].toLowerCase();
-    }
-    return ingredient;
-  }
-  
-  // Pattern 2: Standard "Amount Unit Name" (e.g., "2 cups flour", "400g spaghetti")
-  const standardPattern = new RegExp(`^(\\d+(?:[\\.\\/]\\d+)?)\\s*${unitPattern}?\\s+(.+)$`, 'i');
-  const standardMatch = str.match(standardPattern);
-  
-  if (standardMatch) {
-    ingredient.amount = parseFloat(standardMatch[1]);
-    if (standardMatch[2]) {
-      ingredient.metric = standardMatch[2].toLowerCase();
-    }
-    ingredient.name = standardMatch[3].trim();
-    return ingredient;
-  }
-  
-  // Pattern 3: "Amount Name" without unit (e.g., "3 eggs", "2 onions")
-  const noUnitPattern = /^(\d+(?:[\.\\/]\d+)?)\s+(.+)$/;
-  const noUnitMatch = str.match(noUnitPattern);
-  
-  if (noUnitMatch) {
-    ingredient.amount = parseFloat(noUnitMatch[1]);
-    ingredient.name = noUnitMatch[2].trim();
-    return ingredient;
-  }
-  
-  // Pattern 4: Fractional amounts (e.g., "1/2 cup sugar", "1 1/2 cups flour")
-  const fractionPattern = new RegExp(`^(\\d+)?\\s*(\\d+)/(\\d+)\\s*${unitPattern}?\\s+(.+)$`, 'i');
-  const fractionMatch = str.match(fractionPattern);
-  
-  if (fractionMatch) {
-    const whole = fractionMatch[1] ? parseInt(fractionMatch[1]) : 0;
-    const numerator = parseInt(fractionMatch[2]);
-    const denominator = parseInt(fractionMatch[3]);
-    ingredient.amount = whole + (numerator / denominator);
-    if (fractionMatch[4]) {
-      ingredient.metric = fractionMatch[4].toLowerCase();
-    }
-    ingredient.name = fractionMatch[5].trim();
-    return ingredient;
-  }
-  
-  // Pattern 5: Name only (e.g., "Salt to taste", "Pepper", "Water")
-  ingredient.name = str;
-  return ingredient;
-}
-
 // Get specific recipe details
 router.get('/:recipeId', async (req, res) => {
   try {
@@ -110,8 +37,8 @@ router.post('/', async (req, res) => {
     const { name, description, cookTime, servings, viewCount, ingredients, instructions } = req.body;
     
     // Validate required fields
-    if (!name || !description || !cookTime || !servings) {
-      return res.status(400).json({ error: 'Missing required fields: name, description, cookTime, and servings are required' });
+    if (!name) {
+      return res.status(400).json({ error: 'Missing required field: name is required' });
     }
     
     if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
@@ -122,8 +49,27 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'At least one instruction is required' });
     }
     
-    // Parse ingredients from strings to structured objects
-    const parsedIngredients = ingredients.map(ing => parseIngredient(ing));
+    // Validate ingredients format (either flat array or sectioned array)
+    const hasIngredientSections = ingredients[0]?.section !== undefined;
+    if (hasIngredientSections) {
+      // Validate sectioned format
+      for (const section of ingredients) {
+        if (!section.items || !Array.isArray(section.items) || section.items.length === 0) {
+          return res.status(400).json({ error: 'Each ingredient section must have at least one item' });
+        }
+      }
+    }
+    
+    // Validate instructions format (either flat array or sectioned array)
+    const hasInstructionSections = instructions[0]?.section !== undefined;
+    if (hasInstructionSections) {
+      // Validate sectioned format
+      for (const section of instructions) {
+        if (!section.items || !Array.isArray(section.items) || section.items.length === 0) {
+          return res.status(400).json({ error: 'Each instruction section must have at least one item' });
+        }
+      }
+    }
     
     // TODO: Replace with actual recipe creation logic
     // For now, return first recipe ID from first book as test data
@@ -152,8 +98,8 @@ router.put('/:recipeId', async (req, res) => {
     const { recipeId } = req.params;
     
     // Validate required fields
-    if (!name || !description || !cookTime || !servings) {
-      return res.status(400).json({ error: 'Missing required fields: name, description, cookTime, and servings are required' });
+    if (!name) {
+      return res.status(400).json({ error: 'Missing required field: name is required' });
     }
     
     if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
@@ -164,8 +110,27 @@ router.put('/:recipeId', async (req, res) => {
       return res.status(400).json({ error: 'At least one instruction is required' });
     }
     
-    // Parse ingredients from strings to structured objects
-    const parsedIngredients = ingredients.map(ing => parseIngredient(ing));
+    // Validate ingredients format (either flat array or sectioned array)
+    const hasIngredientSections = ingredients[0]?.section !== undefined;
+    if (hasIngredientSections) {
+      // Validate sectioned format
+      for (const section of ingredients) {
+        if (!section.items || !Array.isArray(section.items) || section.items.length === 0) {
+          return res.status(400).json({ error: 'Each ingredient section must have at least one item' });
+        }
+      }
+    }
+    
+    // Validate instructions format (either flat array or sectioned array)
+    const hasInstructionSections = instructions[0]?.section !== undefined;
+    if (hasInstructionSections) {
+      // Validate sectioned format
+      for (const section of instructions) {
+        if (!section.items || !Array.isArray(section.items) || section.items.length === 0) {
+          return res.status(400).json({ error: 'Each instruction section must have at least one item' });
+        }
+      }
+    }
     
     // Read all recipes
     const data = await fs.readFile(recipesPath, 'utf8');
@@ -183,7 +148,7 @@ router.put('/:recipeId', async (req, res) => {
           description,
           cookTime,
           servings,
-          ingredients: parsedIngredients,
+          ingredients: ingredients,
           instructions,
           bookIds: bookIds || allRecipes[bookId][recipeIndex].bookIds
         };
