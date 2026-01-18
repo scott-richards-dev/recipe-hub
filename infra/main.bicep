@@ -12,8 +12,8 @@ param webAppName string = 'app-recipe-hub-${environmentName}'
 
 @description('The SKU for the App Service Plan')
 param appServicePlanSku object = {
-  name: 'B1'
-  tier: 'Basic'
+  name: 'F1'
+  tier: 'Free'
   capacity: 1
 }
 
@@ -59,7 +59,6 @@ resource webApp 'Microsoft.Web/sites@2023-12-01' = {
     httpsOnly: true
     siteConfig: {
       linuxFxVersion: 'NODE|${nodeVersion}'
-      alwaysOn: true
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'
       http20Enabled: true
