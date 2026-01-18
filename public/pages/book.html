@@ -12,39 +12,120 @@
   <link rel="stylesheet" href="../css/cards.css">
   <link rel="stylesheet" href="../css/add-button.css">
   <link rel="stylesheet" href="../css/toast.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/empty-state.css">
+  <link rel="stylesheet" href="../css/loading.css">
   <link rel="stylesheet" href="../css/responsive.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <!-- App Scripts -->
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth-init.js"></script>
   <script src="../js/toast.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body>
+<body x-data="recipeBook">
   <header class="site-header">
     <div class="container">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html" aria-label="Home">
-          <svg class="breadcrumb-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <div class="header-content">
+        <a href="../index.html" class="brand" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 1rem;">
+          <svg class="logo" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <!-- Open Recipe Book -->
             <g class="recipe-book">
+              <!-- Left page -->
               <path d="M 8 12 L 8 36 Q 8 38 10 38 L 22 38 Q 24 38 24 36 L 24 12 Q 24 10 22 10 L 10 10 Q 8 10 8 12 Z" 
                     fill="#ffffff" stroke="#7da565" stroke-width="2"/>
+              <!-- Right page -->
               <path d="M 24 12 L 24 36 Q 24 38 26 38 L 38 38 Q 40 38 40 36 L 40 12 Q 40 10 38 10 L 26 10 Q 24 10 24 12 Z" 
                     fill="#7da565" stroke="#7da565" stroke-width="2"/>
+              <!-- Binding -->
               <rect x="23" y="10" width="2" height="28" fill="#7da565"/>
+              <!-- Recipe lines on left page -->
               <line x1="12" y1="16" x2="20" y2="16" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
               <line x1="12" y1="20" x2="20" y2="20" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
               <line x1="12" y1="24" x2="18" y2="24" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <!-- Chef hat icon on right page -->
               <circle cx="32" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
               <path d="M 28 24 L 28 26 L 36 26 L 36 24" fill="#ffffff" opacity="0.9"/>
               <line x1="28" y1="30" x2="36" y2="30" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
             </g>
           </svg>
+          <div class="brand-text">
+            <h1>Recipe Hub</h1>
+          </div>
         </a>
-        <span class="separator">/</span>
-        <span class="current-page" x-data="recipeBook"><span x-text="bookName">Recipe Book</span></span>
-      </nav>
+        <!-- User Menu -->
+        <div x-data="userMenu" class="user-menu" x-show="isAuthenticated" x-cloak>
+          <button @click="toggleDropdown" class="user-button" :aria-label="'User menu for ' + userName" :aria-expanded="showDropdown">
+            <div class="user-avatar" x-text="userInitials"></div>
+            <div class="user-button-text">
+              <span class="user-button-name" x-text="userName"></span>
+            </div>
+            <svg class="user-button-chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div x-show="showDropdown" @click.away="closeDropdown" class="user-dropdown" x-cloak>
+            <div class="user-info">
+              <div class="user-info-name" x-text="userName"></div>
+              <div class="user-info-email" x-text="userEmail"></div>
+            </div>
+            <button @click="signOut" class="user-dropdown-item signout">Sign Out</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main x-data="recipeBook">
-    <section class="page-header">
+  <main>
+    <!-- Loading state -->
+    <div x-show="isLoading" class="loading-state-wrapper">
+      <div class="container">
+        <!-- Skeleton book info card -->
+        <div class="skeleton-book-info-card">
+          <div class="skeleton skeleton-book-icon-large"></div>
+          <div class="skeleton-book-info-text">
+            <div class="skeleton skeleton-book-title-large"></div>
+            <div class="skeleton skeleton-book-description-text"></div>
+            <div class="skeleton skeleton-book-stats"></div>
+          </div>
+        </div>
+        
+        <!-- Skeleton recipe cards -->
+        <div class="skeleton-recipes-grid">
+          <div class="skeleton-recipe-card">
+            <div class="skeleton skeleton-recipe-image"></div>
+            <div class="skeleton-recipe-card-body">
+              <div class="skeleton skeleton-recipe-title"></div>
+              <div class="skeleton skeleton-recipe-desc"></div>
+              <div class="skeleton skeleton-recipe-desc-short"></div>
+            </div>
+          </div>
+          <div class="skeleton-recipe-card">
+            <div class="skeleton skeleton-recipe-image"></div>
+            <div class="skeleton-recipe-card-body">
+              <div class="skeleton skeleton-recipe-title"></div>
+              <div class="skeleton skeleton-recipe-desc"></div>
+              <div class="skeleton skeleton-recipe-desc-short"></div>
+            </div>
+          </div>
+          <div class="skeleton-recipe-card">
+            <div class="skeleton skeleton-recipe-image"></div>
+            <div class="skeleton-recipe-card-body">
+              <div class="skeleton skeleton-recipe-title"></div>
+              <div class="skeleton skeleton-recipe-desc"></div>
+              <div class="skeleton skeleton-recipe-desc-short"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <section class="page-header" x-show="!isLoading" x-cloak>
       <div class="container">
         <div class="book-header">
           <div class="book-icon" x-text="bookIcon"></div>
@@ -83,19 +164,34 @@
             </div>
           </div>
           
-          <div class="stats">
-            <span class="stat-item" x-text="`${recipes.length} recipes`"></span>
+          <div class="stats" x-show="!error">
+            <span class="stat-item" x-text="`${recipes.length} ${recipes.length === 1 ? 'recipe' : 'recipes'}`"></span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="recipes-section">
+    <section class="recipes-section" x-show="!isLoading" x-cloak>
       <div class="container">
         <template x-if="error">
           <p x-text="error"></p>
         </template>
-        <div class="grid">
+        
+        <!-- Empty state when no recipes -->
+        <div x-show="!isLoading && !error && recipes.length === 0" class="empty-state" x-cloak>
+          <div class="empty-state-icon">🍳</div>
+          <h2 class="empty-state-title">No Recipes Yet</h2>
+          <p class="empty-state-description">This book doesn't have any recipes yet. Start adding some delicious recipes!</p>
+          <button @click="window.location.href=`add-recipe.html?book=${bookId}`" class="empty-state-button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2"/>
+              <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            Add Your First Recipe
+          </button>
+        </div>
+        
+        <div class="grid" x-show="recipes.length > 0">
           <template x-for="recipe in recipes" :key="recipe.id">
             <a :href="`recipe.html?id=${recipe.id}&book=${bookId}`" class="card recipe-card-with-image">
               <div class="recipe-image-placeholder">
@@ -134,7 +230,7 @@
   </main>
 
   <!-- Floating Add Button -->
-  <div x-data="addButton">
+  <div x-data="addButton" x-show="!isLoading && recipes.length > 0" x-cloak>
     <div class="fab-overlay" :class="{'show': showActions}" @click="closeActions"></div>
     <div class="fab-container">
       <div class="fab-actions" :class="{'show': showActions}">

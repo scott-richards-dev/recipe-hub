@@ -11,42 +11,100 @@
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/cards.css">
   <link rel="stylesheet" href="../css/compare.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/loading.css">
   <link rel="stylesheet" href="../css/responsive.css">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <!-- App Scripts -->
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth-init.js"></script>
+  <script src="../js/toast.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html" aria-label="Home">
-          <svg class="breadcrumb-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <div class="header-content">
+        <a href="../index.html" class="brand" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 1rem;">
+          <svg class="logo" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <!-- Open Recipe Book -->
             <g class="recipe-book">
+              <!-- Left page -->
               <path d="M 8 12 L 8 36 Q 8 38 10 38 L 22 38 Q 24 38 24 36 L 24 12 Q 24 10 22 10 L 10 10 Q 8 10 8 12 Z" 
                     fill="#ffffff" stroke="#7da565" stroke-width="2"/>
+              <!-- Right page -->
               <path d="M 24 12 L 24 36 Q 24 38 26 38 L 38 38 Q 40 38 40 36 L 40 12 Q 40 10 38 10 L 26 10 Q 24 10 24 12 Z" 
                     fill="#7da565" stroke="#7da565" stroke-width="2"/>
+              <!-- Binding -->
               <rect x="23" y="10" width="2" height="28" fill="#7da565"/>
+              <!-- Recipe lines on left page -->
               <line x1="12" y1="16" x2="20" y2="16" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
               <line x1="12" y1="20" x2="20" y2="20" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
               <line x1="12" y1="24" x2="18" y2="24" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <!-- Chef hat icon on right page -->
               <circle cx="32" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
               <path d="M 28 24 L 28 26 L 36 26 L 36 24" fill="#ffffff" opacity="0.9"/>
               <line x1="28" y1="30" x2="36" y2="30" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
             </g>
           </svg>
+          <div class="brand-text">
+            <h1>Recipe Hub</h1>
+          </div>
         </a>
-        <span class="separator">/</span>
-        <a href="#" x-data="compareVersions" :href="`book.html?id=${bookId}`" class="breadcrumb-link"><span x-text="bookName">Recipe Book</span></a>
-        <span class="separator">/</span>
-        <a href="#" x-data="compareVersions" :href="`recipe.html?id=${recipeId}&book=${bookId}`" class="breadcrumb-link"><span x-text="recipeName">Recipe</span></a>
-        <span class="separator">/</span>
-        <span class="current-page"><span>History</span></span>
-      </nav>
+        <!-- User Menu -->
+        <div x-data="userMenu" class="user-menu" x-show="isAuthenticated" x-cloak>
+          <button @click="toggleDropdown" class="user-button" :aria-label="'User menu for ' + userName" :aria-expanded="showDropdown">
+            <div class="user-avatar" x-text="userInitials"></div>
+            <div class="user-button-text">
+              <span class="user-button-name" x-text="userName"></span>
+            </div>
+            <svg class="user-button-chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div x-show="showDropdown" @click.away="closeDropdown" class="user-dropdown" x-cloak>
+            <div class="user-info">
+              <div class="user-info-name" x-text="userName"></div>
+              <div class="user-info-email" x-text="userEmail"></div>
+            </div>
+            <button @click="signOut" class="user-dropdown-item signout">Sign Out</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
   <main x-data="compareVersions">
-    <div class="container compare-container">
+    <!-- Loading state -->
+    <div x-show="isLoading" class="loading-container" style="min-height: 500px;">
+      <div class="container">
+        <div class="skeleton-compare">
+          <div class="skeleton skeleton-compare-title" style="width: 300px; height: 32px; margin: 0 auto 2rem;"></div>
+          <div class="skeleton-version-selector" style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
+            <div class="skeleton" style="width: 250px; height: 40px;"></div>
+            <div class="skeleton" style="width: 50px; height: 40px;"></div>
+            <div class="skeleton" style="width: 250px; height: 40px;"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+            <div>
+              <div class="skeleton" style="width: 100%; height: 200px; margin-bottom: 1rem;"></div>
+              <div class="skeleton" style="width: 100%; height: 300px;"></div>
+            </div>
+            <div>
+              <div class="skeleton" style="width: 100%; height: 200px; margin-bottom: 1rem;"></div>
+              <div class="skeleton" style="width: 100%; height: 300px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container compare-container" x-show="!isLoading" x-cloak>
       <div class="compare-page-wrapper">
         <div class="compare-header">
           <!-- Back to Recipe Button -->
@@ -69,7 +127,7 @@
             <select x-model="selectedV1" @change="compareVersions" class="version-select">
               <option value="">Select base version</option>
               <template x-for="version in allVersions" :key="version.id">
-                <option :value="version.id" x-text="`v${version.version} - ${new Date(version.timestamp).toLocaleString()}`"></option>
+                <option :value="version.id" x-text="getVersionDisplayText(version)"></option>
               </template>
             </select>
           </div>
@@ -80,7 +138,7 @@
             <select x-model="selectedV2" @change="compareVersions" class="version-select">
               <option value="">Select compare version</option>
               <template x-for="version in allVersions" :key="version.id">
-                <option :value="version.id" x-text="`v${version.version} - ${new Date(version.timestamp).toLocaleString()}`"></option>
+                <option :value="version.id" x-text="getVersionDisplayText(version)"></option>
               </template>
             </select>
           </div>

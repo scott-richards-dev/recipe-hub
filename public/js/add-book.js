@@ -20,20 +20,29 @@ document.addEventListener('alpine:init', () => {
     submitting: false,
     isEditMode: false,
     bookId: null,
+    loading: false,
     
     async init() {
       const params = new URLSearchParams(window.location.search);
       this.bookId = params.get('id');
       
+      // Set loading state immediately if in edit mode to show skeleton first
       if (this.bookId) {
         this.isEditMode = true;
+        this.loading = true;
+      }
+      
+      // Check auth first
+      await initAuthenticatedPage();
+      
+      if (this.bookId) {
         await this.loadBookData();
       }
     },
     
     async loadBookData() {
       try {
-        const response = await fetch(`${API_URL}/books`);
+        const response = await authService.fetchWithAuth(`${API_URL}/books`);
         const books = await response.json();
         const book = books.find(b => b.id === this.bookId);
         
@@ -48,6 +57,8 @@ document.addEventListener('alpine:init', () => {
       } catch (error) {
         console.error('Error loading book data:', error);
         Toast.error('Failed to load book data', 'Error', { duration: 3000 });
+      } finally {
+        this.loading = false;
       }
     },
     
@@ -58,7 +69,7 @@ document.addEventListener('alpine:init', () => {
         const url = this.isEditMode ? `${API_URL}/books/${this.bookId}` : `${API_URL}/books`;
         const method = this.isEditMode ? 'PUT' : 'POST';
         
-        const response = await fetch(url, {
+        const response = await authService.fetchWithAuth(url, {
           method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.formData)

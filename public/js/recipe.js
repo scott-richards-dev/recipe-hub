@@ -175,6 +175,8 @@ document.addEventListener('alpine:init', () => {
     ingredientUnitStates: {},
     viewCount: 0,
     hasRevisions: false,
+    isLoading: true,
+    wakeLock: null,
     
     // Check if ingredients are in sectioned format
     hasIngredientSections() {
@@ -200,6 +202,9 @@ document.addEventListener('alpine:init', () => {
     },
     
     async init() {
+      // Check auth first
+      await initAuthenticatedPage();
+      
       const params = new URLSearchParams(window.location.search);
       this.recipeId = params.get('id');
       this.bookId = params.get('book');
@@ -209,12 +214,13 @@ document.addEventListener('alpine:init', () => {
         return;
       }
       
+      this.isLoading = true;
       try {
         if (this.bookId) {
           await this.loadBookName();
         }
         
-        const response = await fetch(`${API_URL}/recipes/${this.recipeId}`);
+        const response = await authService.fetchWithAuth(`${API_URL}/recipes/${this.recipeId}`);
         this.recipe = await response.json();
         document.title = `${this.recipe.name} - Recipe Hub`;
         
@@ -223,6 +229,8 @@ document.addEventListener('alpine:init', () => {
         await this.checkVersions();
       } catch (error) {
         console.error('Error loading recipe:', error);
+      } finally {
+        this.isLoading = false;
       }
       
       const successMessage = sessionStorage.getItem('successMessage');
@@ -230,11 +238,49 @@ document.addEventListener('alpine:init', () => {
         Toast.success(successMessage, 'Success', { duration: 4000 });
         sessionStorage.removeItem('successMessage');
       }
+      
+      // Request wake lock on mobile to keep screen awake while viewing recipe
+      this.requestWakeLock();
+    },
+    
+    async requestWakeLock() {
+      // Only request wake lock if supported and on mobile
+      if ('wakeLock' in navigator) {
+        try {
+          this.wakeLock = await navigator.wakeLock.request('screen');
+          console.log('Screen wake lock activated');
+          
+          // Re-request wake lock when page becomes visible again
+          this.wakeLock.addEventListener('release', () => {
+            console.log('Screen wake lock released');
+          });
+          
+          // Handle visibility change to re-acquire lock
+          document.addEventListener('visibilitychange', async () => {
+            if (document.visibilityState === 'visible' && this.wakeLock === null) {
+              await this.requestWakeLock();
+            }
+          });
+        } catch (err) {
+          console.log('Wake lock error:', err.message);
+        }
+      }
+    },
+    
+    async releaseWakeLock() {
+      if (this.wakeLock !== null) {
+        try {
+          await this.wakeLock.release();
+          this.wakeLock = null;
+        } catch (err) {
+          console.log('Error releasing wake lock:', err.message);
+        }
+      }
     },
     
     async loadBookName() {
       try {
-        const booksResponse = await fetch(`${API_URL}/books`);
+        const booksResponse = await authService.fetchWithAuth(`${API_URL}/books`);
         const books = await booksResponse.json();
         const book = books.find(b => b.id === this.bookId);
         if (book) {
@@ -247,7 +293,7 @@ document.addEventListener('alpine:init', () => {
     
     async checkVersions() {
       try {
-        const response = await fetch(`${API_URL}/versions/recipe/${this.recipeId}`);
+        const response = await authService.fetchWithAuth(`${API_URL}/versions/recipe/${this.recipeId}`);
         if (response.ok) {
           const versions = await response.json();
           this.hasRevisions = versions && versions.length >= 2;
@@ -315,9 +361,30 @@ document.addEventListener('alpine:init', () => {
       this.checkedInstructions[index] = !this.checkedInstructions[index];
     },
     
-    deleteRecipe() {
+    async deleteRecipe() {
       if (confirm(`Are you sure you want to delete "${this.recipe.name}"? This action cannot be undone.`)) {
-        Toast.info('Delete functionality coming soon!', 'Not Implemented');
+        try {
+          const response = await authService.fetchWithAuth(`${API_URL}/recipes/${this.recipeId}`, {
+            method: 'DELETE'
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to delete recipe');
+          }
+          
+          const result = await response.json();
+          sessionStorage.setItem('successMessage', result.message || 'Recipe deleted successfully!');
+          
+          // Redirect to book page if we have a bookId, otherwise to home
+          if (this.bookId) {
+            window.location.href = `book.html?id=${this.bookId}`;
+          } else {
+            window.location.href = '../index.html';
+          }
+        } catch (error) {
+          console.error('Error deleting recipe:', error);
+          Toast.error('Failed to delete recipe. Please try again.', 'Error');
+        }
       }
     }
   }));

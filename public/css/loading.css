@@ -1,0 +1,337 @@
+/* Loading states - spinners and skeletons */
+
+/* Loading spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(125, 165, 101, 0.2);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Loading container */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  min-height: 300px;
+}
+
+.loading-text {
+  margin-top: 1rem;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+/* Skeleton loaders */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e8e8e8 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Skeleton card */
+.skeleton-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  border: 1px solid var(--border);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 200px;
+  width: 100%;
+  flex: 1 1 300px;
+  max-width: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.skeleton-title {
+  height: 20px;
+  width: 60%;
+  flex-shrink: 0;
+}
+
+.skeleton-text {
+  height: 14px;
+  width: 85%;
+  flex-shrink: 0;
+}
+
+.skeleton-text-short {
+  height: 14px;
+  width: 40%;
+  flex-shrink: 0;
+}
+
+/* Skeleton grid */
+.skeleton-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  padding: 0;
+}
+
+
+
+/* Skeleton recipe detail */
+.skeleton-recipe-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.skeleton-recipe-header {
+  margin-bottom: 2rem;
+}
+
+.skeleton-recipe-title {
+  height: 36px;
+  width: 60%;
+  margin-bottom: 1rem;
+}
+
+.skeleton-recipe-description {
+  height: 20px;
+  width: 80%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-recipe-meta {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.skeleton-meta-item {
+  height: 20px;
+  width: 100px;
+}
+
+.skeleton-section {
+  margin: 2rem 0;
+}
+
+.skeleton-section-title {
+  height: 28px;
+  width: 200px;
+  margin-bottom: 1rem;
+}
+
+.skeleton-list-item {
+  height: 18px;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-list-item:last-child {
+  width: 85%;
+}
+
+/* Book page skeleton loading */
+.loading-state-wrapper {
+  padding: 2rem 0;
+  min-height: 500px;
+}
+
+/* Skeleton book info card */
+.skeleton-book-info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin: 0 auto 2rem;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.skeleton-book-icon-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-book-info-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeleton-book-title-large {
+  height: 32px;
+  width: 40%;
+  max-width: 300px;
+}
+
+.skeleton-book-description-text {
+  height: 20px;
+  width: 60%;
+  max-width: 450px;
+}
+
+.skeleton-book-stats {
+  height: 18px;
+  width: 120px;
+  margin-top: 0.5rem;
+}
+
+/* Skeleton recipes grid */
+.skeleton-recipes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: flex-start;
+}
+
+.skeleton-recipe-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex: 1 1 300px;
+  max-width: calc(33.333% - 1rem);
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-recipe-image {
+  width: 100%;
+  height: 180px;
+  flex-shrink: 0;
+}
+
+.skeleton-recipe-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.skeleton-recipe-title {
+  height: 24px;
+  width: 70%;
+}
+
+.skeleton-recipe-desc {
+  height: 16px;
+  width: 100%;
+}
+
+.skeleton-recipe-desc-short {
+  height: 16px;
+  width: 85%;
+}
+
+/* Hide content while loading */
+[x-cloak] {
+  display: none !important;
+}
+
+/* Loading state for specific sections */
+.loading-state {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Fade in animation for loaded content */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .skeleton-card {
+    flex: 1 1 calc(50% - 0.75rem);
+    max-width: calc(50% - 0.75rem);
+  }
+  
+  .skeleton-recipe-card {
+    flex: 1 1 calc(50% - 0.75rem);
+    max-width: calc(50% - 0.75rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .skeleton-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+  
+  .skeleton-recipe-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+  
+  .skeleton-book-info-card {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .skeleton-book-icon-large {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .skeleton-book-title-large {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .skeleton-book-description-text {
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  .skeleton-book-stats {
+    margin: 0.5rem auto 0;
+  }
+}

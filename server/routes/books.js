@@ -1,34 +1,48 @@
 const express = require('express');
 const router = express.Router();
-const { readJsonFile, writeJsonFile, getDataPath } = require('../utils/fileUtils');
+const { authenticateUser } = require('../middleware/auth');
 const { validateBook } = require('../utils/validators');
 const { asyncHandler, createError } = require('../middleware/errorHandler');
+const {
+  getAllBooks,
+  getBook,
+  createBook,
+  updateBook,
+  deleteBook,
+  getRecipesByBook
+} = require('../services/firestoreService');
 
-const booksPath = getDataPath('books.json');
-const recipesPath = getDataPath('recipes.json');
+// Helper to get userId from authenticated request
+function getUserId(req) {
+  return req.user.uid;
+}
+
+// Apply authentication to all routes
+router.use(authenticateUser);
 
 // Get all recipe books
 router.get('/', asyncHandler(async (req, res) => {
-  const books = await readJsonFile(booksPath);
+  const userId = getUserId(req);
+  const books = await getAllBooks(userId);
   res.json(books);
 }));
 
 // Get recipes for a specific book
 router.get('/:bookId', asyncHandler(async (req, res) => {
   const { bookId } = req.params;
-  const allRecipes = await readJsonFile(recipesPath);
-  const bookRecipes = allRecipes[bookId];
+  const userId = getUserId(req);
   
-  if (!bookRecipes) {
-    throw createError('Recipe book not found', 404);
-  }
-  
-  res.json(bookRecipes);
+  // Get recipes in this book
+  // Note: We don't verify book existence first to avoid race conditions
+  // If the book doesn't exist, this will simply return an empty array
+  const recipes = await getRecipesByBook(userId, bookId);
+  res.json(recipes);
 }));
 
-// Create a new recipe book (currently just returns success without persisting)
+// Create a new recipe book
 router.post('/', asyncHandler(async (req, res) => {
-  const { name, description, image } = req.body;
+  const { name, description, image, id } = req.body;
+  const userId = getUserId(req);
   
   // Validate request body
   const validation = validateBook(req.body);
@@ -36,15 +50,13 @@ router.post('/', asyncHandler(async (req, res) => {
     throw createError(validation.errors.join(', '), 400);
   }
   
-  // TODO: Replace with actual book creation logic
-  // For now, return first book ID as test data
-  const books = await readJsonFile(booksPath);
-  const testBookId = books.length > 0 ? books[0].id : 'italian';
+  const newBook = await createBook(userId, { name, description, image, id });
   
   res.status(201).json({ 
     message: `Recipe book "${name}" has been added successfully!`,
     success: true,
-    id: testBookId
+    id: newBook.id,
+    book: newBook
   });
 }));
 
@@ -52,6 +64,7 @@ router.post('/', asyncHandler(async (req, res) => {
 router.put('/:bookId', asyncHandler(async (req, res) => {
   const { name, description, image } = req.body;
   const { bookId } = req.params;
+  const userId = getUserId(req);
   
   // Validate request body
   const validation = validateBook(req.body);
@@ -59,32 +72,40 @@ router.put('/:bookId', asyncHandler(async (req, res) => {
     throw createError(validation.errors.join(', '), 400);
   }
   
-  // Read existing books
-  const books = await readJsonFile(booksPath);
-  
-  // Find the book to update
-  const bookIndex = books.findIndex(b => b.id === bookId);
-  
-  if (bookIndex === -1) {
-    throw createError('Recipe book not found', 404);
+  try {
+    const updatedBook = await updateBook(userId, bookId, { name, description, image });
+    
+    res.json({ 
+      message: `Recipe book "${name}" has been updated successfully!`,
+      success: true,
+      book: updatedBook
+    });
+  } catch (error) {
+    if (error.message === 'Book not found') {
+      throw createError('Recipe book not found', 404);
+    }
+    throw error;
   }
+}));
+
+// Delete a recipe book
+router.delete('/:bookId', asyncHandler(async (req, res) => {
+  const { bookId } = req.params;
+  const userId = getUserId(req);
   
-  // Update the book
-  books[bookIndex] = {
-    ...books[bookIndex],
-    name,
-    description,
-    image
-  };
-  
-  // Write back to file
-  await writeJsonFile(booksPath, books);
-  
-  res.json({ 
-    message: `Recipe book "${name}" has been updated successfully!`,
-    success: true,
-    book: books[bookIndex]
-  });
+  try {
+    await deleteBook(userId, bookId);
+    
+    res.json({ 
+      message: 'Recipe book has been deleted successfully!',
+      success: true
+    });
+  } catch (error) {
+    if (error.message === 'Book not found') {
+      throw createError('Recipe book not found', 404);
+    }
+    throw error;
+  }
 }));
 
 module.exports = router;

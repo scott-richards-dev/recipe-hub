@@ -10,41 +10,110 @@
   <link rel="stylesheet" href="../css/header.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/form.css">
+  <link rel="stylesheet" href="../css/loading.css">
   <link rel="stylesheet" href="../css/toast.css">
+  <link rel="stylesheet" href="../css/auth.css">
   <link rel="stylesheet" href="../css/responsive.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    /* Form skeleton styles */
+    .form-skeleton {
+      opacity: 1;
+      pointer-events: none;
+    }
+    
+    .skeleton-input {
+      height: 44px;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    
+    .skeleton-textarea {
+      height: 120px;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    
+    .skeleton-label {
+      height: 18px;
+      width: 120px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .skeleton-emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .skeleton-emoji {
+      height: 48px;
+      width: 100%;
+      border-radius: 8px;
+    }
+  </style>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <!-- App Scripts -->
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth-init.js"></script>
   <script src="../js/toast.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <nav class="breadcrumb" aria-label="Breadcrumb" x-data="addBookForm">
-        <a href="../index.html" aria-label="Home">
-          <svg class="breadcrumb-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <div class="header-content">
+        <a href="../index.html" class="brand" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 1rem;">
+          <svg class="logo" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <!-- Open Recipe Book -->
             <g class="recipe-book">
+              <!-- Left page -->
               <path d="M 8 12 L 8 36 Q 8 38 10 38 L 22 38 Q 24 38 24 36 L 24 12 Q 24 10 22 10 L 10 10 Q 8 10 8 12 Z" 
                     fill="#ffffff" stroke="#7da565" stroke-width="2"/>
+              <!-- Right page -->
               <path d="M 24 12 L 24 36 Q 24 38 26 38 L 38 38 Q 40 38 40 36 L 40 12 Q 40 10 38 10 L 26 10 Q 24 10 24 12 Z" 
                     fill="#7da565" stroke="#7da565" stroke-width="2"/>
+              <!-- Binding -->
               <rect x="23" y="10" width="2" height="28" fill="#7da565"/>
+              <!-- Recipe lines on left page -->
               <line x1="12" y1="16" x2="20" y2="16" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
               <line x1="12" y1="20" x2="20" y2="20" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
               <line x1="12" y1="24" x2="18" y2="24" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <!-- Chef hat icon on right page -->
               <circle cx="32" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
               <path d="M 28 24 L 28 26 L 36 26 L 36 24" fill="#ffffff" opacity="0.9"/>
               <line x1="28" y1="30" x2="36" y2="30" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
             </g>
           </svg>
+          <div class="brand-text">
+            <h1>Recipe Hub</h1>
+          </div>
         </a>
-        <template x-if="isEditMode && bookId">
-          <span>
-            <span class="separator">/</span>
-            <a :href="`book.html?id=${bookId}`" class="breadcrumb-link"><span x-text="formData.name"></span></a>
-          </span>
-        </template>
-        <span class="separator">/</span>
-        <span class="current-page" x-text="isEditMode ? 'Edit' : 'Create Book'">Create Book</span>
-      </nav>
+        <!-- User Menu -->
+        <div x-data="userMenu" class="user-menu" x-show="isAuthenticated" x-cloak>
+          <button @click="toggleDropdown" class="user-button" :aria-label="'User menu for ' + userName" :aria-expanded="showDropdown">
+            <div class="user-avatar" x-text="userInitials"></div>
+            <div class="user-button-text">
+              <span class="user-button-name" x-text="userName"></span>
+            </div>
+            <svg class="user-button-chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div x-show="showDropdown" @click.away="closeDropdown" class="user-dropdown" x-cloak>
+            <div class="user-info">
+              <div class="user-info-name" x-text="userName"></div>
+              <div class="user-info-email" x-text="userEmail"></div>
+            </div>
+            <button @click="signOut" class="user-dropdown-item signout">Sign Out</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -56,7 +125,33 @@
           <p x-text="isEditMode ? 'Update your recipe book details' : 'Create a new recipe book to organize your favorite recipes'">Create a new recipe book to organize your favorite recipes</p>
         </div>
 
-        <form @submit.prevent="submitForm" class="form-container">
+        <!-- Loading skeleton for edit mode -->
+        <div x-show="loading && isEditMode" class="form-container form-skeleton" x-cloak>
+          <div class="skeleton skeleton-label"></div>
+          <div class="skeleton skeleton-input"></div>
+          
+          <div class="skeleton skeleton-label"></div>
+          <div class="skeleton skeleton-textarea"></div>
+          
+          <div class="skeleton skeleton-label"></div>
+          <div class="skeleton-emoji-grid">
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+            <div class="skeleton skeleton-emoji"></div>
+          </div>
+          <div class="skeleton skeleton-input"></div>
+        </div>
+
+        <form @submit.prevent="submitForm" class="form-container" x-show="!loading">
           <div class="form-group">
             <label for="bookName" class="form-label">Book Name *</label>
             <input 

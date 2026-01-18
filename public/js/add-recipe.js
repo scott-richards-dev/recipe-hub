@@ -8,13 +8,13 @@ document.addEventListener('alpine:init', () => {
       description: '',
       cookTime: '',
       servings: '',
-      bookIds: [],
+      bookId: '',
+      originalSource: '',
       ingredients: [{ amount: '', metric: '', name: '' }],
       instructions: ['']
     },
     books: [],
     submitting: false,
-    selectedBookId: '',
     draggedIngredientIndex: null,
     dragOverIngredientIndex: null,
     draggedInstructionIndex: null,
@@ -22,20 +22,31 @@ document.addEventListener('alpine:init', () => {
     isEditMode: false,
     recipeId: null,
     returnBookId: null,
-    bookName: '',
+    loading: false,
     advancedIngredientMode: true,
     ingredientSections: [{ section: '', items: [{ amount: '', metric: '', name: '' }] }],
     instructionSections: [{ section: '', items: [''] }],
+    showVersionModal: false,
+    versionNotes: '',
+    pendingData: null,
     
     async init() {
       const params = new URLSearchParams(window.location.search);
       this.recipeId = params.get('id');
       this.returnBookId = params.get('book');
       
+      // Set loading state immediately if in edit mode to show skeleton first
+      if (this.recipeId) {
+        this.isEditMode = true;
+        this.loading = true;
+      }
+      
+      // Check auth first
+      await initAuthenticatedPage();
+      
       await this.loadBooks();
       
       if (this.recipeId) {
-        this.isEditMode = true;
         await this.loadRecipeData();
       } else if (this.returnBookId) {
         this.preselectBook();
@@ -44,7 +55,7 @@ document.addEventListener('alpine:init', () => {
     
     async loadBooks() {
       try {
-        const response = await fetch(`${API_URL}/books`);
+        const response = await authService.fetchWithAuth(`${API_URL}/books`);
         this.books = await response.json();
       } catch (error) {
         console.error('Error loading books:', error);
@@ -52,11 +63,7 @@ document.addEventListener('alpine:init', () => {
     },
     
     preselectBook() {
-      this.formData.bookIds.push(this.returnBookId);
-      const book = this.books.find(b => b.id === this.returnBookId);
-      if (book) {
-        this.bookName = book.name;
-      }
+      this.formData.bookId = this.returnBookId;
     },
     
     // Check if recipe has advanced mode data (amount, unit, name structure)
@@ -117,15 +124,17 @@ document.addEventListener('alpine:init', () => {
     },
     
     async loadRecipeData() {
+      this.loading = true;
       try {
-        const response = await fetch(`${API_URL}/recipes/${this.recipeId}`);
+        const response = await authService.fetchWithAuth(`${API_URL}/recipes/${this.recipeId}`);
         if (response.ok) {
           const recipe = await response.json();
           this.formData.name = recipe.name;
           this.formData.description = recipe.description;
           this.formData.cookTime = recipe.cookTime;
           this.formData.servings = recipe.servings?.toString() || '';
-          this.formData.bookIds = recipe.bookIds || [];
+          this.formData.bookId = recipe.bookId || '';
+          this.formData.originalSource = recipe.originalSource || '';
           
           // Check if recipe uses sections
           const hasIngredientSections = recipe.ingredients?.length > 0 && recipe.ingredients[0]?.section !== undefined;
@@ -191,15 +200,6 @@ document.addEventListener('alpine:init', () => {
             const items = recipe.instructions?.length > 0 ? recipe.instructions : [''];
             this.instructionSections = [{ section: '', items }];
           }
-          
-          // Load book name for breadcrumb
-          const bookIdToShow = this.returnBookId || (this.formData.bookIds.length > 0 ? this.formData.bookIds[0] : null);
-          if (bookIdToShow) {
-            const book = this.books.find(b => b.id === bookIdToShow);
-            if (book) {
-              this.bookName = book.name;
-            }
-          }
         } else {
           Toast.error('Recipe not found', 'Error', { duration: 3000 });
           setTimeout(() => window.location.href = '../index.html', 1500);
@@ -207,6 +207,8 @@ document.addEventListener('alpine:init', () => {
       } catch (error) {
         console.error('Error loading recipe data:', error);
         Toast.error('Failed to load recipe data', 'Error', { duration: 3000 });
+      } finally {
+        this.loading = false;
       }
     },
     
@@ -339,28 +341,15 @@ document.addEventListener('alpine:init', () => {
       }
     },
     
-    // Book selection methods
-    toggleBookSelection() {
-      if (this.selectedBookId && !this.formData.bookIds.includes(this.selectedBookId)) {
-        this.formData.bookIds.push(this.selectedBookId);
-      }
-      this.selectedBookId = '';
-    },
-    
-    removeBook(bookId) {
-      const index = this.formData.bookIds.indexOf(bookId);
-      if (index > -1) {
-        this.formData.bookIds.splice(index, 1);
-      }
-    },
-    
-    getBookName(bookId) {
-      const book = this.books.find(b => b.id === bookId);
-      return book ? `${book.image} ${book.name}` : '';
-    },
+
     
     // Drag and drop for ingredients
     startDragIngredient(event, index) {
+      // Only allow drag if it started from the drag handle
+      if (!event.target.classList.contains('drag-handle')) {
+        event.preventDefault();
+        return;
+      }
       this.draggedIngredientIndex = index;
       event.dataTransfer.effectAllowed = 'move';
     },
@@ -387,6 +376,11 @@ document.addEventListener('alpine:init', () => {
     
     // Drag and drop for instructions
     startDragInstruction(event, index) {
+      // Only allow drag if it started from the drag handle
+      if (!event.target.classList.contains('drag-handle')) {
+        event.preventDefault();
+        return;
+      }
       this.draggedInstructionIndex = index;
       event.dataTransfer.effectAllowed = 'move';
     },
@@ -450,10 +444,32 @@ document.addEventListener('alpine:init', () => {
         return;
       }
       
+      // If editing, show modal to get version notes
+      if (this.isEditMode) {
+        this.submitting = false;
+        this.showVersionModal = true;
+        this.pendingData = cleanedData;
+        return;
+      }
+      
       await this.saveRecipe(cleanedData);
     },
     
+    async submitWithNotes() {
+      if (this.submitting) return;
+      this.submitting = true;
+      
+      await this.saveRecipe(this.pendingData);
+      // Modal will be hidden by redirect in saveRecipe, or if there's an error, reset state
+      this.showVersionModal = false;
+    },
+    
     validateRecipeData(cleanedData, ingredientSections, instructionSections) {
+      if (!cleanedData.bookId || cleanedData.bookId.trim() === '') {
+        Toast.error('Please assign the recipe to a book.', 'Validation Error', { duration: 5000 });
+        return false;
+      }
+      
       if (cleanedData.ingredients.length === 0) {
         Toast.error('Please add at least one ingredient.', 'Validation Error', { duration: 5000 });
         return false;
@@ -488,10 +504,15 @@ document.addEventListener('alpine:init', () => {
         const url = this.isEditMode ? `${API_URL}/recipes/${this.recipeId}` : `${API_URL}/recipes`;
         const method = this.isEditMode ? 'PUT' : 'POST';
         
-        const response = await fetch(url, {
+        // Include version notes for edits
+        const requestData = this.isEditMode 
+          ? { ...cleanedData, versionNotes: this.versionNotes || 'Updated recipe' }
+          : cleanedData;
+        
+        const response = await authService.fetchWithAuth(url, {
           method,
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(cleanedData)
+          body: JSON.stringify(requestData)
         });
         
         const data = await response.json();
@@ -504,7 +525,7 @@ document.addEventListener('alpine:init', () => {
           
           const redirectId = this.isEditMode ? this.recipeId : data.id;
           if (redirectId) {
-            const bookId = this.returnBookId || (this.formData.bookIds.length > 0 ? this.formData.bookIds[0] : '');
+            const bookId = this.returnBookId || this.formData.bookId;
             window.location.href = bookId 
               ? `recipe.html?id=${redirectId}&book=${bookId}`
               : `recipe.html?id=${redirectId}`;
@@ -532,7 +553,7 @@ document.addEventListener('alpine:init', () => {
     cancel() {
       if (this.isEditMode && this.recipeId) {
         // Redirect back to recipe page
-        const bookId = this.returnBookId || (this.formData.bookIds.length > 0 ? this.formData.bookIds[0] : '');
+        const bookId = this.returnBookId || this.formData.bookId;
         window.location.href = bookId 
           ? `recipe.html?id=${this.recipeId}&book=${bookId}`
           : `recipe.html?id=${this.recipeId}`;

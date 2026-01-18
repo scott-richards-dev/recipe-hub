@@ -100,10 +100,5 @@ const Toast = {
   }
 };
 
-  warning(message, title = 'Warning', options = {}) {
-    return this.show({ type: 'warning', title, message, ...options });
-  }
-};
-
 // Make Toast globally available
 window.Toast = Toast;

@@ -15,14 +15,19 @@ document.addEventListener('alpine:init', () => {
     stats: { additions: 0, deletions: 0, changes: 0 },
     versionInfoHTML: '',
     comparisonHTML: '',
+    isLoading: true,
     
     async init() {
+      // Check auth first
+      await initAuthenticatedPage();
+      
       const urlParams = new URLSearchParams(window.location.search);
       this.recipeId = urlParams.get('recipeId');
       this.bookId = urlParams.get('bookId');
       const v1 = urlParams.get('v1');
       const v2 = urlParams.get('v2');
       
+      this.isLoading = true;
       if (this.bookId) {
         await this.loadBookName();
       }
@@ -30,11 +35,12 @@ document.addEventListener('alpine:init', () => {
       if (this.recipeId) {
         await this.loadVersions(v1, v2);
       }
+      this.isLoading = false;
     },
     
     async loadBookName() {
       try {
-        const booksResponse = await fetch(`${API_URL}/books`);
+        const booksResponse = await authService.fetchWithAuth(`${API_URL}/books`);
         const books = await booksResponse.json();
         const book = books.find(b => b.id === this.bookId);
         if (book) {
@@ -45,13 +51,32 @@ document.addEventListener('alpine:init', () => {
       }
     },
     
+    getVersionDisplayText(version) {
+      const notes = version.notes || 'No notes';
+      return `v${version.version} - ${notes}`;
+    },
+    
+    formatTimestamp(timestamp) {
+      if (!timestamp) return 'Unknown date';
+      // Handle Firestore timestamp object
+      if (timestamp._seconds) {
+        return new Date(timestamp._seconds * 1000).toLocaleString();
+      }
+      // Handle regular timestamp
+      return new Date(timestamp).toLocaleString();
+    },
+    
     async loadVersions(v1 = null, v2 = null) {
       try {
-        const response = await fetch(`/api/versions/recipe/${this.recipeId}`);
+        const response = await authService.fetchWithAuth(`/api/versions/recipe/${this.recipeId}`);
         if (!response.ok) throw new Error('Failed to load versions');
         
         this.allVersions = await response.json();
-        this.allVersions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        this.allVersions.sort((a, b) => {
+          const timeA = a.timestamp?._seconds || new Date(a.timestamp).getTime() / 1000;
+          const timeB = b.timestamp?._seconds || new Date(b.timestamp).getTime() / 1000;
+          return timeB - timeA;
+        });
         
         if (this.allVersions.length > 0) {
           this.recipeName = this.allVersions[0].data.name;
@@ -86,10 +111,10 @@ document.addEventListener('alpine:init', () => {
     },
     
     displayVersionInfo() {
-      const v1Date = new Date(this.version1Data.timestamp).toLocaleString();
-      const v2Date = new Date(this.version2Data.timestamp).toLocaleString();
-      const v1Notes = this.version1Data.notes ? `<div class="version-notes">${this.version1Data.notes}</div>` : '';
-      const v2Notes = this.version2Data.notes ? `<div class="version-notes">${this.version2Data.notes}</div>` : '';
+      const v1Date = this.formatTimestamp(this.version1Data.timestamp);
+      const v2Date = this.formatTimestamp(this.version2Data.timestamp);
+      const v1Notes = this.version1Data.notes ? `<div class="version-notes">${this.escapeHtml(this.version1Data.notes)}</div>` : '';
+      const v2Notes = this.version2Data.notes ? `<div class="version-notes">${this.escapeHtml(this.version2Data.notes)}</div>` : '';
       
       this.versionInfoHTML = `
         <div class="version-info-card">
@@ -123,12 +148,20 @@ document.addEventListener('alpine:init', () => {
       this.comparisonHTML = html;
     },
     
+    formatFieldValue(value) {
+      if (value === undefined || value === null || value === '') {
+        return '—';
+      }
+      return String(value);
+    },
+    
     compareMetadata() {
       const fields = [
         { label: 'Recipe Name', key: 'name' },
         { label: 'Description', key: 'description' },
         { label: 'Cook Time', key: 'cookTime' },
         { label: 'Servings', key: 'servings' },
+        { label: 'Original Source', key: 'originalSource' },
         { label: 'View Count', key: 'viewCount' }
       ];
       
@@ -141,6 +174,8 @@ document.addEventListener('alpine:init', () => {
         const value1 = this.version1Data.data[field.key];
         const value2 = this.version2Data.data[field.key];
         const changed = value1 !== value2;
+        const displayValue1 = this.formatFieldValue(value1);
+        const displayValue2 = this.formatFieldValue(value2);
         
         if (changed) {
           hasChanges = true;
@@ -150,14 +185,14 @@ document.addEventListener('alpine:init', () => {
             <div class="diff-line deletion">
               <div class="line-number">${lineNumber}</div>
               <div class="line-marker">-</div>
-              <div class="line-content"><strong>${field.label}:</strong> ${this.escapeHtml(String(value1))}</div>
+              <div class="line-content"><strong>${field.label}:</strong> ${this.escapeHtml(displayValue1)}</div>
             </div>
           `;
           rightContent += `
             <div class="diff-line addition">
               <div class="line-number">${lineNumber}</div>
               <div class="line-marker">+</div>
-              <div class="line-content"><strong>${field.label}:</strong> ${this.escapeHtml(String(value2))}</div>
+              <div class="line-content"><strong>${field.label}:</strong> ${this.escapeHtml(displayValue2)}</div>
             </div>
           `;
         } else {
@@ -165,14 +200,14 @@ document.addEventListener('alpine:init', () => {
             <div class="diff-line unchanged">
               <div class="line-number">${lineNumber}</div>
               <div class="line-marker"></div>
-              <div class="line-content"><strong>${field.label}:</strong> ${this.escapeHtml(String(value1))}</div>
+              <div class="line-content"><strong>${field.label}:</strong> ${this.escapeHtml(displayValue1)}</div>
             </div>
           `;
           rightContent += `
             <div class="diff-line unchanged">
               <div class="line-number">${lineNumber}</div>
               <div class="line-marker"></div>
-              <div class="line-content"><strong>${field.label}:</strong> ${this.escapeHtml(String(value1))}</div>
+              <div class="line-content"><strong>${field.label}:</strong> ${this.escapeHtml(displayValue1)}</div>
             </div>
           `;
         }

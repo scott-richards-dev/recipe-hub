@@ -32,10 +32,14 @@ function validateBook(bookData) {
  */
 function validateRecipe(recipeData) {
   const errors = [];
-  const { name, ingredients, instructions } = recipeData;
+  const { name, ingredients, instructions, bookId } = recipeData;
 
   if (!name || typeof name !== 'string' || name.trim() === '') {
     errors.push('name is required and must be a non-empty string');
+  }
+
+  if (!bookId || typeof bookId !== 'string' || bookId.trim() === '') {
+    errors.push('a book must be assigned to the recipe');
   }
 
   if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {

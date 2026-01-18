@@ -13,6 +13,51 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Back to Book Button */
+.back-to-book-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
+
+.btn-back-to-book {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.btn-back-to-book:hover {
+  background: var(--surface-alt);
+  border-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.btn-back-to-book:active {
+  transform: scale(0.98);
+}
+
+.btn-arrow-left {
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+
+.btn-back-to-book:hover .btn-arrow-left {
+  transform: translateX(-2px);
+}
+
 .recipe-header {
   padding: 1.5rem 3rem 3rem;
   text-align: center;
@@ -310,6 +355,28 @@
   max-width: 700px;
   margin: 0 auto;
   font-weight: 400;
+}
+
+.recipe-source {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0.75rem auto 0;
+  font-weight: 400;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.recipe-source a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.recipe-source a:hover {
+  opacity: 1;
+  text-decoration: underline;
 }
 
 /* Recipe Content */

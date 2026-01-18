@@ -10,17 +10,29 @@
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/empty-state.css">
   <link rel="stylesheet" href="css/add-button.css">
   <link rel="stylesheet" href="css/toast.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/loading.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <!-- App Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/toast.js"></script>
+  <script src="js/app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="container">
       <div class="header-content">
-        <div class="brand">
+        <a href="index.html" class="brand" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 1rem;">
           <svg class="logo" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <!-- Open Recipe Book -->
             <g class="recipe-book">
@@ -45,15 +57,89 @@
           <div class="brand-text">
             <h1>Recipe Hub</h1>
           </div>
+        </a>
+        <!-- User Menu -->
+        <div x-data="userMenu" class="user-menu" x-show="isAuthenticated" x-cloak>
+          <button @click="toggleDropdown" class="user-button" :aria-label="'User menu for ' + userName" :aria-expanded="showDropdown">
+            <div class="user-avatar" x-text="userInitials"></div>
+            <div class="user-button-text">
+              <span class="user-button-name" x-text="userName"></span>
+            </div>
+            <svg class="user-button-chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div x-show="showDropdown" @click.away="closeDropdown" class="user-dropdown" x-cloak>
+            <div class="user-info">
+              <div class="user-info-name" x-text="userName"></div>
+              <div class="user-info-email" x-text="userEmail"></div>
+            </div>
+            <button @click="signOut" class="user-dropdown-item signout">Sign Out</button>
+          </div>
         </div>
       </div>
     </div>
   </header>
 
   <main>
+    <!-- Main Content (requires authentication) -->
     <section class="books-section" x-data="recipeBooks">
       <div class="container">
-        <div class="grid">
+        <!-- Loading state -->
+        <div x-show="isLoading" class="skeleton-grid">
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text-short"></div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text-short"></div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text-short"></div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text-short"></div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text-short"></div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text-short"></div>
+          </div>
+        </div>
+        
+        <!-- Empty state when no books -->
+        <div x-show="!isLoading && !error && books.length === 0" class="empty-state" x-cloak>
+          <div class="empty-state-icon">📚</div>
+          <h2 class="empty-state-title">No Recipe Books Yet</h2>
+          <p class="empty-state-description">Create a book to organize your recipes.</p>
+          <button @click="window.location.href='pages/add-book.html'" class="empty-state-button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Create Your First Book
+          </button>
+        </div>
+
+        <div class="grid" x-show="!isLoading" x-cloak>
           <template x-if="error">
             <p x-text="error"></p>
           </template>
@@ -67,11 +153,9 @@
           </template>
         </div>
       </div>
-    </section>
-  </main>
 
-<!-- Floating Add Button -->
-  <div x-data="addButton">
+      <!-- Floating Add Button -->
+      <div x-data="addButton" x-show="books.length > 0" x-cloak>
     <div class="fab-overlay" :class="{'show': showActions}" @click="closeActions"></div>
     <div class="fab-container">
       <div class="fab-actions" :class="{'show': showActions}">
@@ -92,7 +176,7 @@
       </button>
     </div>
   </div>
-
-  <script src="js/app.js"></script>
+    </section>
+  </main>
 </body>
 </html>

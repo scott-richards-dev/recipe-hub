@@ -10,47 +10,208 @@
   <link rel="stylesheet" href="../css/header.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/form.css">
+  <link rel="stylesheet" href="../css/loading.css">
   <link rel="stylesheet" href="../css/toast.css">
+  <link rel="stylesheet" href="../css/auth.css">
   <link rel="stylesheet" href="../css/responsive.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    @media (max-width: 768px) {
+      .modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+      }
+      .modal-content {
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 85vh;
+      }
+      .modal-header {
+        padding: 1.25rem 1rem;
+      }
+      .modal-body {
+        padding: 1rem;
+      }
+      .modal-footer {
+        padding: 1rem;
+        flex-direction: column-reverse;
+      }
+      .modal-footer button {
+        width: 100%;
+      }
+    }
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--text-primary);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .modal-close:hover {
+      background-color: var(--bg-hover);
+    }
+    .modal-body {
+      padding: 1.5rem;
+    }
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+
+    /* Form skeleton styles */
+    .form-skeleton {
+      opacity: 1;
+      pointer-events: none;
+    }
+    
+    .skeleton-input {
+      height: 44px;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    
+    .skeleton-textarea {
+      height: 80px;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    
+    .skeleton-header {
+      height: 28px;
+      width: 200px;
+      margin-bottom: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .skeleton-label {
+      height: 18px;
+      width: 120px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .skeleton-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .skeleton-row .skeleton-input {
+      margin-bottom: 0;
+    }
+    
+    .skeleton-list-item {
+      height: 44px;
+      width: 100%;
+      margin-bottom: 0.75rem;
+    }
+  </style>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <!-- App Scripts -->
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth-init.js"></script>
   <script src="../js/toast.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <nav class="breadcrumb" aria-label="Breadcrumb" x-data="addRecipeForm">
-        <a href="../index.html" aria-label="Home">
-          <svg class="breadcrumb-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <div class="header-content">
+        <a href="../index.html" class="brand" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 1rem;">
+          <svg class="logo" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <!-- Open Recipe Book -->
             <g class="recipe-book">
+              <!-- Left page -->
               <path d="M 8 12 L 8 36 Q 8 38 10 38 L 22 38 Q 24 38 24 36 L 24 12 Q 24 10 22 10 L 10 10 Q 8 10 8 12 Z" 
                     fill="#ffffff" stroke="#7da565" stroke-width="2"/>
+              <!-- Right page -->
               <path d="M 24 12 L 24 36 Q 24 38 26 38 L 38 38 Q 40 38 40 36 L 40 12 Q 40 10 38 10 L 26 10 Q 24 10 24 12 Z" 
                     fill="#7da565" stroke="#7da565" stroke-width="2"/>
+              <!-- Binding -->
               <rect x="23" y="10" width="2" height="28" fill="#7da565"/>
+              <!-- Recipe lines on left page -->
               <line x1="12" y1="16" x2="20" y2="16" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
               <line x1="12" y1="20" x2="20" y2="20" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
               <line x1="12" y1="24" x2="18" y2="24" stroke="#7da565" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <!-- Chef hat icon on right page -->
               <circle cx="32" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
               <path d="M 28 24 L 28 26 L 36 26 L 36 24" fill="#ffffff" opacity="0.9"/>
               <line x1="28" y1="30" x2="36" y2="30" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
             </g>
           </svg>
+          <div class="brand-text">
+            <h1>Recipe Hub</h1>
+          </div>
         </a>
-        <template x-if="isEditMode && returnBookId && bookName">
-          <span>
-            <span class="separator">/</span>
-            <a :href="`book.html?id=${returnBookId}`" class="breadcrumb-link"><span x-text="bookName"></span></a>
-          </span>
-        </template>
-        <template x-if="isEditMode && recipeId">
-          <span>
-            <span class="separator">/</span>
-            <a :href="returnBookId ? `recipe.html?id=${recipeId}&book=${returnBookId}` : `recipe.html?id=${recipeId}`" class="breadcrumb-link"><span x-text="formData.name"></span></a>
-          </span>
-        </template>
-        <span class="separator">/</span>
-        <span class="current-page" x-text="isEditMode ? 'Edit' : 'Create Recipe'">Create Recipe</span>
-      </nav>
+        <!-- User Menu -->
+        <div x-data="userMenu" class="user-menu" x-show="isAuthenticated" x-cloak>
+          <button @click="toggleDropdown" class="user-button" :aria-label="'User menu for ' + userName" :aria-expanded="showDropdown">
+            <div class="user-avatar" x-text="userInitials"></div>
+            <div class="user-button-text">
+              <span class="user-button-name" x-text="userName"></span>
+            </div>
+            <svg class="user-button-chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div x-show="showDropdown" @click.away="closeDropdown" class="user-dropdown" x-cloak>
+            <div class="user-info">
+              <div class="user-info-name" x-text="userName"></div>
+              <div class="user-info-email" x-text="userEmail"></div>
+            </div>
+            <button @click="signOut" class="user-dropdown-item signout">Sign Out</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -62,7 +223,45 @@
           <p x-text="isEditMode ? 'Update your recipe details' : 'Share your favorite recipe with the collection'">Share your favorite recipe with the collection</p>
         </div>
 
-        <form @submit.prevent="submitForm" class="form-container">
+        <!-- Loading skeleton for edit mode -->
+        <div x-show="loading && isEditMode" class="form-container form-skeleton" x-cloak>
+          <div class="skeleton skeleton-header"></div>
+          
+          <div class="skeleton skeleton-label"></div>
+          <div class="skeleton skeleton-input"></div>
+          
+          <div class="skeleton skeleton-label"></div>
+          <div class="skeleton skeleton-textarea"></div>
+          
+          <div class="skeleton skeleton-label"></div>
+          <div class="skeleton skeleton-input"></div>
+          
+          <div class="skeleton skeleton-label"></div>
+          <div class="skeleton skeleton-input"></div>
+          
+          <div class="skeleton-row">
+            <div style="flex: 1;">
+              <div class="skeleton skeleton-label"></div>
+              <div class="skeleton skeleton-input"></div>
+            </div>
+            <div style="flex: 1;">
+              <div class="skeleton skeleton-label"></div>
+              <div class="skeleton skeleton-input"></div>
+            </div>
+          </div>
+
+          <div class="skeleton skeleton-header"></div>
+          <div class="skeleton skeleton-list-item"></div>
+          <div class="skeleton skeleton-list-item"></div>
+          <div class="skeleton skeleton-list-item"></div>
+
+          <div class="skeleton skeleton-header"></div>
+          <div class="skeleton skeleton-list-item"></div>
+          <div class="skeleton skeleton-list-item"></div>
+          <div class="skeleton skeleton-list-item"></div>
+        </div>
+
+        <form @submit.prevent="submitForm" class="form-container" x-show="!loading">
           <h2 class="form-zone-header">Recipe Details</h2>
           
           <div class="form-group">
@@ -91,37 +290,33 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="bookIds">Add to Books</label>
+            <label class="form-label" for="bookId">Recipe Book *</label>
             <select 
-              id="bookIds"
-              x-model="selectedBookId"
-              @change="toggleBookSelection"
+              id="bookId"
+              x-model="formData.bookId"
               class="form-input"
+              required
             >
               <option value="">Select a book...</option>
               <template x-for="book in books" :key="book.id">
                 <option 
                   :value="book.id" 
                   x-text="`${book.image} ${book.name}`"
-                  :disabled="formData.bookIds.includes(book.id)"
                 ></option>
               </template>
             </select>
-            <div x-show="formData.bookIds.length > 0" class="selected-books">
-              <template x-for="bookId in formData.bookIds" :key="bookId">
-                <span class="selected-book-tag">
-                  <span x-text="getBookName(bookId)"></span>
-                  <button 
-                    type="button" 
-                    @click="removeBook(bookId)"
-                    class="tag-remove"
-                    aria-label="Remove book"
-                  >
-                    &times;
-                  </button>
-                </span>
-              </template>
-            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="originalSource" class="form-label">Original Source</label>
+            <input 
+              type="text" 
+              id="originalSource" 
+              x-model="formData.originalSource"
+              class="form-input"
+              placeholder="Site URL, Cookbook Name, Family"
+              maxlength="200"
+            />
           </div>
 
           <div class="form-row">
@@ -283,9 +478,6 @@
                   <div 
                     class="ingredient-item"
                     :class="{ 'dragging': draggedIngredientIndex === index, 'drag-over': dragOverIngredientIndex === index }"
-                    draggable="true"
-                    @dragstart="startDragIngredient($event, index)"
-                    @dragend="endDragIngredient"
                     @dragover.prevent="dragOverIngredient(index)"
                     @drop="dropIngredient(index)"
                   >
@@ -306,7 +498,13 @@
                     >
                       &times;
                     </button>
-                    <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+                    <span 
+                      class="drag-handle" 
+                      draggable="true"
+                      @dragstart="startDragIngredient($event, index)"
+                      @dragend="endDragIngredient"
+                      title="Drag to reorder"
+                    >⋮⋮</span>
                   </div>
                 </template>
               </div>
@@ -319,9 +517,6 @@
                   <div 
                     class="ingredient-item ingredient-item-advanced"
                     :class="{ 'dragging': draggedIngredientIndex === index, 'drag-over': dragOverIngredientIndex === index }"
-                    draggable="true"
-                    @dragstart="startDragIngredient($event, index)"
-                    @dragend="endDragIngredient"
                     @dragover.prevent="dragOverIngredient(index)"
                     @drop="dropIngredient(index)"
                   >
@@ -354,10 +549,18 @@
                       @click="removeIngredient(index)"
                       class="btn-remove"
                       aria-label="Remove ingredient"
-                      tabindex="-1"                      :disabled="ingredientSections[0].items.length === 1"                    >
+                      tabindex="-1"
+                      :disabled="ingredientSections[0].items.length === 1"
+                    >
                       &times;
                     </button>
-                    <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+                    <span 
+                      class="drag-handle" 
+                      draggable="true"
+                      @dragstart="startDragIngredient($event, index)"
+                      @dragend="endDragIngredient"
+                      title="Drag to reorder"
+                    >⋮⋮</span>
                   </div>
                 </template>
               </div>
@@ -462,9 +665,6 @@
                   <div 
                     class="instruction-item"
                     :class="{ 'dragging': draggedInstructionIndex === index, 'drag-over': dragOverInstructionIndex === index }"
-                    draggable="true"
-                    @dragstart="startDragInstruction($event, index)"
-                    @dragend="endDragInstruction"
                     @dragover.prevent="dragOverInstruction(index)"
                     @drop="dropInstruction(index)"
                   >
@@ -475,18 +675,24 @@
                       required
                       rows="2"
                     ></textarea>
-                <button 
-                  type="button" 
-                  @click="removeInstruction(index)"
-                  class="btn-remove"
-                  :disabled="instructionSections[0].items.length === 1"
-                  aria-label="Remove instruction"
-                  tabindex="-1"
-                >
-                  &times;
-                </button>
-                <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              </div>
+                    <button 
+                      type="button" 
+                      @click="removeInstruction(index)"
+                      class="btn-remove"
+                      :disabled="instructionSections[0].items.length === 1"
+                      aria-label="Remove instruction"
+                      tabindex="-1"
+                    >
+                      &times;
+                    </button>
+                    <span 
+                      class="drag-handle" 
+                      draggable="true"
+                      @dragstart="startDragInstruction($event, index)"
+                      @dragend="endDragInstruction"
+                      title="Drag to reorder"
+                    >⋮⋮</span>
+                  </div>
                 </template>
               </div>
             </template>
@@ -529,6 +735,33 @@
             </button>
           </div>
         </form>
+
+        <!-- Version Notes Modal -->
+        <div x-show="showVersionModal" @click.self="showVersionModal = false" class="modal-overlay" x-cloak>
+      <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+          <h2>Version Notes</h2>
+          <button @click="showVersionModal = false" class="modal-close" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="margin-bottom: 1rem; color: var(--text-muted);">What changed in this version? These notes will help you track changes over time.</p>
+          <div class="form-group">
+            <label for="versionNotes" class="form-label">Changes Made</label>
+            <textarea 
+              id="versionNotes" 
+              x-model="versionNotes"
+              class="form-input"
+              rows="4"
+              placeholder="e.g., Adjusted baking time, added new spice, improved instructions..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button @click="showVersionModal = false" class="btn btn-secondary" type="button">Cancel</button>
+          <button @click="submitWithNotes" class="btn btn-primary" type="button" :disabled="submitting">Update Recipe</button>
+        </div>
+      </div>
+    </div>
       </div>
     </section>
   </main>

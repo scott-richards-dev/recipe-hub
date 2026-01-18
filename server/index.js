@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const { initializeFirebase } = require('./config/firebase');
 const recipesRouter = require('./routes/recipes');
 const booksRouter = require('./routes/books');
 const compareRouter = require('./routes/compare');
@@ -9,6 +11,16 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Initialize Firestore
+try {
+  initializeFirebase();
+  console.log('✓ Firebase/Firestore initialized');
+} catch (error) {
+  console.error('Failed to initialize Firebase:', error.message);
+  console.error('Please check your environment variables or .env file');
+  process.exit(1);
+}
 
 // Middleware
 app.use(cors());
@@ -36,3 +48,4 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
