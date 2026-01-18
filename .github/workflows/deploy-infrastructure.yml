@@ -2,14 +2,6 @@ name: Deploy Infrastructure
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        default: 'prod'
-        type: choice
-        options:
-          - prod
 
 permissions:
   id-token: write
@@ -37,7 +29,7 @@ jobs:
           inlineScript: |
             az deployment group what-if \
               --name github-deploy-${{ github.run_id }}-${{ github.run_attempt }} \
-              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --resource-group rg-recipe-hub-prod \
               --parameters ./infra/main.bicepparam
 
       - name: Deploy Bicep template
@@ -47,7 +39,7 @@ jobs:
           inlineScript: |
             az deployment group create \
               --name github-deploy-${{ github.run_id }}-${{ github.run_attempt }} \
-              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --resource-group rg-recipe-hub-prod \
               --parameters ./infra/main.bicepparam
 
       - name: Get deployment outputs
@@ -59,12 +51,12 @@ jobs:
             deploymentName=github-deploy-${{ github.run_id }}-${{ github.run_attempt }}
             
             webAppName=$(az deployment group show \
-              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --resource-group rg-recipe-hub-prod \
               --name $deploymentName \
               --query properties.outputs.webAppName.value -o tsv)
             
             webAppUrl=$(az deployment group show \
-              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --resource-group rg-recipe-hub-prod \
               --name $deploymentName \
               --query properties.outputs.webAppUrl.value -o tsv)
             
@@ -75,7 +67,7 @@ jobs:
         run: |
           echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Environment**: ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Resource Group**: rg-recipe-hub-${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: prod" >> $GITHUB_STEP_SUMMARY
+          echo "- **Resource Group**: rg-recipe-hub-prod" >> $GITHUB_STEP_SUMMARY
           echo "- **Web App Name**: ${{ steps.bicep-outputs.outputs.webAppName }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Web App URL**: ${{ steps.bicep-outputs.outputs.webAppUrl }}" >> $GITHUB_STEP_SUMMARY

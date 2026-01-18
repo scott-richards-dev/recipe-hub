@@ -9,14 +9,6 @@ on:
       - '.github/workflows/deploy-infrastructure.yml'
       - '**.md'
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        default: 'prod'
-        type: choice
-        options:
-          - prod
 
 permissions:
   id-token: write
@@ -61,8 +53,8 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az webapp deploy \
-              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
-              --name app-recipe-hub-${{ github.event.inputs.environment }} \
+              --resource-group rg-recipe-hub-prod \
+              --name app-recipe-hub-prod \
               --src-path deployment.zip \
               --type zip
 
@@ -71,6 +63,6 @@ jobs:
         run: |
           echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Environment**: ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Web App Name**: app-recipe-hub-${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Web App URL**: https://app-recipe-hub-${{ github.event.inputs.environment }}.azurewebsites.net" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: prod" >> $GITHUB_STEP_SUMMARY
+          echo "- **Web App Name**: app-recipe-hub-prod" >> $GITHUB_STEP_SUMMARY
+          echo "- **Web App URL**: https://app-recipe-hub-prod.azurewebsites.net" >> $GITHUB_STEP_SUMMARY
