@@ -80,6 +80,9 @@ document.addEventListener('alpine:init', () => {
     isLoading: true,
     
     async init() {
+      // Wait for auth to initialize before checking state
+      await authService.init();
+      
       // Subscribe to auth state changes
       authService.onAuthStateChanged(async (user) => {
         this.isAuthenticated = !!user;
