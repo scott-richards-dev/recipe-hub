@@ -37,6 +37,40 @@
   background: var(--background);
 }
 
+/* Books Header - Main index page */
+.books-header {
+  text-align: center;
+  padding: 1.5rem 1.5rem 1.25rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+}
+
+.books-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  line-height: 1;
+}
+
+.books-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.books-description {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* Book Header */
 .book-header {
   text-align: center;

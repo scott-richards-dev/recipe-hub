@@ -85,6 +85,13 @@
     <!-- Main Content (requires authentication) -->
     <section class="books-section" x-data="recipeBooks">
       <div class="container">
+        <!-- Page Header -->
+        <div class="books-header">
+          <div class="books-icon">📚</div>
+          <h2 class="books-title">My Recipe Books</h2>
+          <p class="books-description">Browse your collection of recipe books</p>
+        </div>
+        
         <!-- Loading state -->
         <div x-show="isLoading" class="skeleton-grid">
           <div class="skeleton-card">
