@@ -36,6 +36,7 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az deployment group what-if \
+              --name github-deploy-${{ github.run_id }}-${{ github.run_attempt }} \
               --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
               --template-file ./infra/main.bicep \
               --parameters environmentName=${{ github.event.inputs.environment }} \
@@ -48,6 +49,7 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az deployment group create \
+              --name github-deploy-${{ github.run_id }}-${{ github.run_attempt }} \
               --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
               --template-file ./infra/main.bicep \
               --parameters environmentName=${{ github.event.inputs.environment }} \
@@ -60,9 +62,7 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            deploymentName=$(az deployment group list \
-              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
-              --query "[0].name" -o tsv)
+            deploymentName=github-deploy-${{ github.run_id }}-${{ github.run_attempt }}
             
             webAppName=$(az deployment group show \
               --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
