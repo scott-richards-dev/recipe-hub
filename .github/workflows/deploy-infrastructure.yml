@@ -1,0 +1,76 @@
+name: Deploy Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - prod
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Bicep template
+        uses: azure/CLI@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az deployment group create \
+              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --template-file ./infra/main.bicep \
+              --parameters environmentName=${{ github.event.inputs.environment }} \
+              --parameters location=${{ secrets.AZURE_LOCATION }} \
+              --parameters keyVaultName=${{ secrets.AZURE_KEYVAULT_NAME }}
+
+      - name: Get deployment outputs
+        id: bicep-outputs
+        uses: azure/CLI@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            deploymentName=$(az deployment group list \
+              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --query "[0].name" -o tsv)
+            
+            webAppName=$(az deployment group show \
+              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --name $deploymentName \
+              --query properties.outputs.webAppName.value -o tsv)
+            
+            webAppUrl=$(az deployment group show \
+              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --name $deploymentName \
+              --query properties.outputs.webAppUrl.value -o tsv)
+            
+            echo "webAppName=$webAppName" >> $GITHUB_OUTPUT
+            echo "webAppUrl=$webAppUrl" >> $GITHUB_OUTPUT
+
+      - name: Summary
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Resource Group**: rg-recipe-hub-${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Web App Name**: ${{ steps.bicep-outputs.outputs.webAppName }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Web App URL**: ${{ steps.bicep-outputs.outputs.webAppUrl }}" >> $GITHUB_STEP_SUMMARY
