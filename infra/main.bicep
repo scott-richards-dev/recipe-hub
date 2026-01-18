@@ -35,7 +35,6 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   sku: {
     name: appServicePlanSku.name
     tier: appServicePlanSku.tier
-    capacity: appServicePlanSku.capacity
   }
   kind: 'linux'
   properties: {
