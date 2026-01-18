@@ -30,31 +30,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Verify Identity and Permissions
-        uses: azure/CLI@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "=== Current Identity ==="
-            az account show --query "{subscription:name, user:user.name}" -o table
-            
-            echo ""
-            echo "=== Service Principal Object ID ==="
-            spObjectId=$(az ad sp show --id ${{ secrets.AZURE_CLIENT_ID }} --query id -o tsv)
-            echo "Object ID: $spObjectId"
-            
-            echo ""
-            echo "=== Role Assignments for this Identity ==="
-            az role assignment list --assignee $spObjectId --all -o table
-            
-            echo ""
-            echo "=== Key Vault Permissions Check ==="
-            kvName="${{ secrets.AZURE_KEYVAULT_NAME }}"
-            rgName="rg-recipe-hub-${{ github.event.inputs.environment }}"
-            
-            echo "Checking permissions on Key Vault: $kvName"
-            az role assignment list --scope "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/$rgName/providers/Microsoft.KeyVault/vaults/$kvName" --assignee $spObjectId -o table
-
       - name: Run What-If analysis
         uses: azure/CLI@v2
         with:
@@ -63,10 +38,7 @@ jobs:
             az deployment group what-if \
               --name github-deploy-${{ github.run_id }}-${{ github.run_attempt }} \
               --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
-              --template-file ./infra/main.bicep \
-              --parameters environmentName=${{ github.event.inputs.environment }} \
-              --parameters location=${{ secrets.AZURE_LOCATION }} \
-              --parameters keyVaultName=${{ secrets.AZURE_KEYVAULT_NAME }}
+              --parameters ./infra/main.bicepparam
 
       - name: Deploy Bicep template
         uses: azure/CLI@v2
@@ -76,10 +48,7 @@ jobs:
             az deployment group create \
               --name github-deploy-${{ github.run_id }}-${{ github.run_attempt }} \
               --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
-              --template-file ./infra/main.bicep \
-              --parameters environmentName=${{ github.event.inputs.environment }} \
-              --parameters location=${{ secrets.AZURE_LOCATION }} \
-              --parameters keyVaultName=${{ secrets.AZURE_KEYVAULT_NAME }}
+              --parameters ./infra/main.bicepparam
 
       - name: Get deployment outputs
         id: bicep-outputs

@@ -23,7 +23,7 @@ param keyVaultName string
 @description('Node.js version for the runtime stack')
 param nodeVersion string = '20-lts'
 
-// Reference to existing Key Vault
+// Reference to existing Key Vault (must be in the same resource group)
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
   name: keyVaultName
 }
