@@ -224,7 +224,7 @@ document.addEventListener('alpine:init', () => {
         this.recipe = await response.json();
         document.title = `${this.recipe.name} - Recipe Hub`;
         
-        this.viewCount = this.recipe.viewCount || Math.floor(Math.random() * 5000) + 100;
+        this.viewCount = this.recipe.viewCount || null;
         
         await this.checkVersions();
       } catch (error) {

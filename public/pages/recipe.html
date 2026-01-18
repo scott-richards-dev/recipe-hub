@@ -189,7 +189,7 @@
               </div>
               <div class="metadata-item" title="View Count">
                 <span class="metadata-icon">👀</span>
-                <span x-text="viewCount.toLocaleString()" class="metadata-value"></span>
+                <span x-text="viewCount ? viewCount.toLocaleString() : '—'" class="metadata-value"></span>
               </div>
             </div>
           </div>
