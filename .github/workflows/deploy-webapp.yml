@@ -1,0 +1,76 @@
+name: Deploy Web App
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'infra/**'
+      - '.github/workflows/deploy-infrastructure.yml'
+      - '**.md'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - prod
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create deployment package
+        run: |
+          mkdir -p deployment
+          cp -r public deployment/
+          cp -r server deployment/
+          cp package*.json deployment/
+          cd deployment
+          zip -r ../deployment.zip .
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/CLI@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az webapp deploy \
+              --resource-group rg-recipe-hub-${{ github.event.inputs.environment }} \
+              --name app-recipe-hub-${{ github.event.inputs.environment }} \
+              --src-path deployment.zip \
+              --type zip
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Web App Name**: app-recipe-hub-${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Web App URL**: https://app-recipe-hub-${{ github.event.inputs.environment }}.azurewebsites.net" >> $GITHUB_STEP_SUMMARY

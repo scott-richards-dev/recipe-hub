@@ -161,9 +161,9 @@ class AuthService {
   }
 
   /**
-   * Make authenticated API request
+   * Make authenticated API request with automatic retry on token expiration
    */
-  async fetchWithAuth(url, options = {}) {
+  async fetchWithAuth(url, options = {}, retryCount = 0) {
     const token = await this.getAuthToken();
     
     if (!token) {
@@ -175,19 +175,52 @@ class AuthService {
       'Authorization': `Bearer ${token}`
     };
 
-    const response = await fetch(url, {
-      ...options,
-      headers
-    });
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers
+      });
 
-    // Handle 401 Unauthorized
-    if (response.status === 401) {
-      console.error('Authentication failed, redirecting to login');
-      this.signOut();
-      throw new Error('Authentication failed');
+      // Handle 401 Unauthorized - token might be expired
+      if (response.status === 401 && retryCount === 0) {
+        console.log('Token may be expired, refreshing and retrying...');
+        
+        // Force refresh the token
+        if (this.currentUser) {
+          try {
+            this.authToken = await this.currentUser.getIdToken(true); // Force refresh
+            sessionStorage.setItem('authToken', this.authToken);
+            
+            // Retry the request with the new token
+            return this.fetchWithAuth(url, options, retryCount + 1);
+          } catch (refreshError) {
+            console.error('Token refresh failed:', refreshError);
+            this.signOut();
+            throw new Error('Authentication failed - please sign in again');
+          }
+        } else {
+          console.error('Authentication failed, redirecting to login');
+          this.signOut();
+          throw new Error('Authentication failed');
+        }
+      }
+
+      // If still 401 after retry, sign out
+      if (response.status === 401) {
+        console.error('Authentication failed after retry, redirecting to login');
+        this.signOut();
+        throw new Error('Authentication failed');
+      }
+
+      return response;
+    } catch (error) {
+      // Handle network errors
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        console.error('Network error:', error);
+        throw new Error('Network connection lost. Please check your internet connection.');
+      }
+      throw error;
     }
-
-    return response;
   }
 }
 
