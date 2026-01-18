@@ -8,29 +8,41 @@ class AuthService {
     this.currentUser = null;
     this.authToken = null;
     this.authStateListeners = [];
+    this.initPromise = null;
+    this.initialized = false;
   }
 
   /**
    * Initialize auth state listener
    */
   async init() {
-    return new Promise((resolve) => {
+    // Return existing promise if already initializing
+    if (this.initPromise) {
+      return this.initPromise;
+    }
+
+    this.initPromise = new Promise((resolve) => {
       auth.onAuthStateChanged(async (user) => {
         this.currentUser = user;
         
         if (user) {
-          // Get fresh ID token
-          this.authToken = await user.getIdToken();
-          
-          // Store in sessionStorage for API calls
-          sessionStorage.setItem('authToken', this.authToken);
-          sessionStorage.setItem('userId', user.uid);
-          sessionStorage.setItem('userEmail', user.email);
-          sessionStorage.setItem('userName', user.displayName || user.email);
-          
-          // If we're on the auth page and user is authenticated, redirect
-          if (window.location.pathname === '/auth.html') {
-            this.redirectAfterLogin();
+          try {
+            // Get fresh ID token - wait for it to complete
+            this.authToken = await user.getIdToken();
+            
+            // Store in sessionStorage for API calls
+            sessionStorage.setItem('authToken', this.authToken);
+            sessionStorage.setItem('userId', user.uid);
+            sessionStorage.setItem('userEmail', user.email);
+            sessionStorage.setItem('userName', user.displayName || user.email);
+            
+            // If we're on the auth page and user is authenticated, redirect
+            if (window.location.pathname === '/auth.html') {
+              this.redirectAfterLogin();
+            }
+          } catch (error) {
+            console.error('Error getting auth token:', error);
+            this.authToken = null;
           }
         } else {
           // Clear auth data
@@ -43,9 +55,14 @@ class AuthService {
 
         // Notify listeners
         this.authStateListeners.forEach(callback => callback(user));
+        
+        // Mark as initialized and resolve
+        this.initialized = true;
         resolve(user);
       });
     });
+
+    return this.initPromise;
   }
 
   /**
@@ -113,10 +130,15 @@ class AuthService {
       return null;
     }
     
-    // Get fresh token (will use cached if not expired)
-    this.authToken = await this.currentUser.getIdToken();
-    sessionStorage.setItem('authToken', this.authToken);
-    return this.authToken;
+    try {
+      // Get fresh token (will use cached if not expired)
+      this.authToken = await this.currentUser.getIdToken();
+      sessionStorage.setItem('authToken', this.authToken);
+      return this.authToken;
+    } catch (error) {
+      console.error('Error getting auth token:', error);
+      return null;
+    }
   }
 
   /**
@@ -164,9 +186,20 @@ class AuthService {
    * Make authenticated API request with automatic retry on token expiration
    */
   async fetchWithAuth(url, options = {}, retryCount = 0) {
+    // Ensure auth is initialized before making request
+    if (!this.initialized) {
+      console.log('Waiting for authentication to initialize...');
+      await this.init();
+    }
+
     const token = await this.getAuthToken();
     
     if (!token) {
+      console.error('No auth token available', {
+        hasCurrentUser: !!this.currentUser,
+        initialized: this.initialized,
+        retryCount
+      });
       throw new Error('Not authenticated');
     }
 
@@ -215,9 +248,12 @@ class AuthService {
       return response;
     } catch (error) {
       // Handle network errors
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      if (error.name === 'TypeError') {
         console.error('Network error:', error);
-        throw new Error('Network connection lost. Please check your internet connection.');
+        // Check if it's a failed to fetch error (server not reachable)
+        if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+          throw new Error('Unable to connect to server. Please ensure the server is running.');
+        }
       }
       throw error;
     }
